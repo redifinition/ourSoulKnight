@@ -4,6 +4,7 @@ void Entity::bind_sprite(Sprite* sprite)
 {
 	m_sprite = sprite;
 	this->addChild(m_sprite);
+
 }
 
 void Entity::set_controller(My_Controller* controller)
@@ -22,3 +23,4 @@ Point Entity::get_tag_position()
 {
 	return getPosition();
 }
+

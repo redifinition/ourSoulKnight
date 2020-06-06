@@ -2,6 +2,7 @@
 #define __SAFETYMAP_SCENE_H__
 
 #include "cocos2d.h"
+
 using namespace cocos2d;
 
 class safetymap: public cocos2d::Scene
@@ -18,8 +19,8 @@ public:
 
 	CREATE_FUNC(safetymap);
 private:
-	cocos2d::TMXTiledMap *_tiledmap;//µØÍ¼ÀàÖÐÏà¹ØµØÍ¼
-	cocos2d::TMXLayer *_background;//±³¾°²ã
+	cocos2d::TMXTiledMap *_tiledmap;//åœ°å›¾ç±»ä¸­ç›¸å…³åœ°å›¾
+	cocos2d::TMXLayer *_background;//èƒŒæ™¯å±‚
 	cocos2d::Sprite *_player;
 };
 
