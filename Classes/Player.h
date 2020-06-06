@@ -19,10 +19,11 @@ public:
 	virtual bool init();
 	bool bindWeapon(Weapon* Weapon);//°ó¶¨ÎäÆ÷
 //by lq
-	void run();
+
 	void setViewPointByPlayer();
 	virtual void set_tag_position(int x, int y);
 	void setTiledMap(TMXTiledMap* map);
+
 
 private:
 //by lzy
@@ -30,8 +31,7 @@ private:
 	Vector<Weapon*> m_weaponArr;	//PlayerÐ¯´øµÄËùÓÐÎäÆ÷
 //by lq
 	TMXTiledMap* m_map;
-	TMXLayer* meta;//ï¿½ï¿½ï¿½ï¿½ï¿½×²ï¿½Äµï¿½Í¼ï¿½ï¿?
-	/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+	TMXLayer* meta;
 	Point tileCoordForPosition(Point pos);
 };
 

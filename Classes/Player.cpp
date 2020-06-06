@@ -1,12 +1,18 @@
 #include "Player.h"
 
-bool Player::init()
+Player::Player()
 {
-
 	_HP = 5;
 	_MP = 100;
 	_AC = 5;
 
+}
+
+Player::~Player() {
+
+}
+bool Player::init()
+{
 	return true;
 }
 
@@ -35,32 +41,32 @@ void Player::setViewPointByPlayer()
 		return;
 	Layer* parent = (Layer*)getParent();
 
-	//��ͼ������
+
 	Size mapTiledNum = m_map->getMapSize();
 
-	//��ͼ������Ӵ�С
+
 	Size tiledSize = m_map->getTileSize();
 
-	//��ͼ��С
+
 	Size mapSize = Size(mapTiledNum.width*tiledSize.width, mapTiledNum.height*tiledSize.height);
 
-	//��Ļ��С
+
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
-	//������
+
 	Point spritePos = getPosition();
 
 	float x = std::max(spritePos.x,visibleSize.width/2);
 	float y = std::max(spritePos.y, visibleSize.height / 2);
 
-	//��������곬��Χ����ȡ������
+	
 	x = std::min(x, mapSize.width - visibleSize.width / 2);
 	y = std::min(y, mapSize.height - visibleSize.height / 2);
 
-	//Ŀ���
+	
 	Point desPos = Point(x, y);
 
-	//��Ļ�е�
+	
 	Point centPos = Point(visibleSize.width / 2, visibleSize.height / 2);
 
 	Point viewPos = centPos - desPos;
@@ -71,18 +77,15 @@ void Player::setViewPointByPlayer()
 
 void Player::set_tag_position(int x, int y)
 {
-	/*�ж�ǰ���Ƿ񲻿�ͨ��*/
+
 	Size spriteSize = m_sprite->getContentSize();
 	Point dstPos = Point(x+spriteSize.width/2, y);
 	Point dstPos_y = Point(x + spriteSize.width / 2, y - spriteSize.height / 2);
-	//�����ΪPlayer��Ӧ���ƫ�µ�λ�ã�Ϊ���ж�Player�·��Ľ�����
 
-	/*������ǰ����ͼ����λ��*/
 	Point tiledPos = tileCoordForPosition(Point(dstPos.x, dstPos.y));
 	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
 	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
-	//�Ըþ������ڸ��ӵ�ǰ���жϣ�
-	/*��õ�ͼ���ӵ�Ψһ��ʶ*/
+
 	int tileGid = meta->getTileGIDAt(tiledPos);
 	int tiledGid_right = meta->getTileGIDAt(tiledPos_right); 
 	int tiledGid_bottom = meta->getTileGIDAt(tiledPos_bottom);
@@ -132,13 +135,11 @@ void Player::setTiledMap(TMXTiledMap* map)
 Point Player::tileCoordForPosition(Point pos) {
 	Size mapTiledNum = m_map->getMapSize();
 	Size tiledSize = m_map->getTileSize();
-
+	
 	int x = (pos.x*1.8)/ tiledSize.width;
 
-     /*y�����Ҫת��һ�£���Ϊ���ϵ��tiled��ͬ*/
 	int y = (2560-pos.y*1.8) / tiledSize.height;
 
-	/*���Ӵ��㿪ʼ*/
 	if (x > 0)
 		x--;
 	if (y > 0)

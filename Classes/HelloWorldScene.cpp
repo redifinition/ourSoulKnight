@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 #include "MyHelloWorldScene.h"
+#include "safetymapScene.h"
 //#include "SimpleAudioEngine.h"
 #include "audio.h"
 //using namespace CocosDenshion;

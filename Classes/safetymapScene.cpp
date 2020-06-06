@@ -45,9 +45,8 @@ bool safetymap::init()
 	//auto pinfo = AutoPolygon::generatePolygon("player.png");
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Player* mplayer = Player::create();
-	mplayer->bind_sprite(player_sprite);
+	mplayer->bindSprite(player_sprite);
 
-	mplayer->run();
 	mplayer->setTiledMap(_tiledmap);
 
 	TMXObjectGroup* objGroup = _tiledmap->getObjectGroup("objects");//加载对象层
