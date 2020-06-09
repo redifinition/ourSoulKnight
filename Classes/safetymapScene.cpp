@@ -61,19 +61,8 @@ bool safetymap::init()
 	//设置玩家坐标
 	mplayer->setPosition(Point(playerX,playerY));
 
+	
 
-	auto knight_animation = Animation::create();
-	char nameSize[30] = { 0 };
-	for (int i = 1; i <= 4; i++)
-	{
-		sprintf(nameSize, "turn right %d.png", i);
-		knight_animation->addSpriteFrameWithFile(nameSize);
-	}
-	knight_animation->setDelayPerUnit(0.08f);//设置动画帧时间间隔
-	knight_animation->setLoops(-1);
-	knight_animation->setRestoreOriginalFrame(true);
-	Animate* animate_knight = Animate::create(knight_animation);
-	player_sprite->runAction(animate_knight);
 
 	//创建玩家简单移动控制器
 	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
@@ -86,6 +75,22 @@ bool safetymap::init()
 	this->addChild(simple_move_controller);
 	//设置控制器到主角身上
 	mplayer->set_controller(simple_move_controller);
+	simple_move_controller->bind_sprite(player_sprite);//Bind player
+
+	/*auto knight_animation = Animation::create();
+	char nameSize[30] = { 0 };
+	for (int i = 1; i <= 4; i++)
+	{
+		sprintf(nameSize, "turn right %d.png", i);
+		knight_animation->addSpriteFrameWithFile(nameSize);
+	}
+	knight_animation->setDelayPerUnit(0.08f);//设置动画帧时间间隔
+	knight_animation->setLoops(-1);
+	knight_animation->setRestoreOriginalFrame(true);
+	Animate* animate_knight = Animate::create(knight_animation);
+	player_sprite->runAction(animate_knight);*/
+
+
 
 	this->addChild(mplayer,2);
 
