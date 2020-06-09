@@ -4,6 +4,7 @@
 #include "safetymapScene.h"
 #include "SimpleMoveController.h"
 #include "Controller.h"
+
 #include "Player.h"
 
 USING_NS_CC;
@@ -32,16 +33,16 @@ bool safetymap::init()
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	//åˆ›å»ºåœ°å›¾èƒŒæ™¯
+	//´´½¨µØÍ¼±³¾°
 
-	std::string floor_layer_file = "myfirstmap2.tmx";//åœ°å›¾æ–‡ä»¶
+	std::string floor_layer_file = "myfirstmap2.tmx";//µØÍ¼ÎÄ¼þ
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
 	
 
 
-	//æ·»åŠ player
+	//Ìí¼Óplayer
 	//auto pinfo = AutoPolygon::generatePolygon("player.png");
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Player* mplayer = Player::create();
@@ -50,46 +51,56 @@ bool safetymap::init()
 	mplayer->run();
 	mplayer->setTiledMap(_tiledmap);
 
-	TMXObjectGroup* objGroup = _tiledmap->getObjectGroup("objects");//åŠ è½½å¯¹è±¡å±‚
-
-	//åŠ è½½çŽ©å®¶åæ ‡å¯¹è±¡
+	
+	TMXObjectGroup* objGroup = _tiledmap->getObjectGroup("objects");//¼ÓÔØ¶ÔÏó²ã
+	//¼ÓÔØÍæ¼Ò×ø±ê¶ÔÏó
 	ValueMap player_point_map = objGroup->getObject("PlayerPoint");
 	float playerX = player_point_map.at("x").asFloat();
 	float playerY = player_point_map.at("y").asFloat();
 
-	//è®¾ç½®çŽ©å®¶åæ ‡
-
+	//ÉèÖÃÍæ¼Ò×ø±ê
 	mplayer->setPosition(Point(playerX,playerY));
 
+	
 
-	auto knight_animation = Animation::create();
+
+	//´´½¨Íæ¼Ò¼òµ¥ÒÆ¶¯¿ØÖÆÆ÷
+	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
+
+	//ÉèÖÃÒÆ¶¯ËÙ¶È
+	simple_move_controller->set_ixspeed(0);
+	simple_move_controller->set_iyspeed(0);
+
+	//½«¿ØÖÆÆ÷Ìí¼Óµ½³¡¾°ÖÐÈÃUpadate±»µ÷ÓÃ
+	this->addChild(simple_move_controller);
+	//ÉèÖÃ¿ØÖÆÆ÷µ½Ö÷½ÇÉíÉÏ
+	mplayer->set_controller(simple_move_controller);
+	simple_move_controller->bind_sprite(player_sprite);//Bind player
+
+	/*auto knight_animation = Animation::create();
 	char nameSize[30] = { 0 };
 	for (int i = 1; i <= 4; i++)
 	{
 		sprintf(nameSize, "turn right %d.png", i);
 		knight_animation->addSpriteFrameWithFile(nameSize);
 	}
-	knight_animation->setDelayPerUnit(0.08f);//è®¾ç½®åŠ¨ç”»å¸§æ—¶é—´é—´éš”
+	knight_animation->setDelayPerUnit(0.08f);//ÉèÖÃ¶¯»­Ö¡Ê±¼ä¼ä¸ô
 	knight_animation->setLoops(-1);
 	knight_animation->setRestoreOriginalFrame(true);
 	Animate* animate_knight = Animate::create(knight_animation);
-	player_sprite->runAction(animate_knight);
+	player_sprite->runAction(animate_knight);*/
 
-	//åˆ›å»ºçŽ©å®¶ç®€å•ç§»åŠ¨æŽ§åˆ¶å™¨
-	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
 
-	//è®¾ç½®ç§»åŠ¨é€Ÿåº¦
-	simple_move_controller->set_ixspeed(0);
-	simple_move_controller->set_iyspeed(0);
-
-	//å°†æŽ§åˆ¶å™¨æ·»åŠ åˆ°åœºæ™¯ä¸­è®©Upadateè¢«è°ƒç”¨
-	this->addChild(simple_move_controller);
-	//è®¾ç½®æŽ§åˆ¶å™¨åˆ°ä¸»è§’èº«ä¸Š
-	mplayer->set_controller(simple_move_controller);
 
 	this->addChild(mplayer,2);
 
 	this->addChild(_tiledmap);
+
+
+	
+	
+
+
 
 	return true;
 }
@@ -97,15 +108,17 @@ bool safetymap::init()
 /*void safetymap::add_player(TMXTiledMap* map)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	//åˆ›å»ºä¸€ä¸ªç²¾çµ
+	//´´½¨Ò»¸ö¾«Áé
 	Sprite* player_sprite = Sprite::create("player.png");
 	Player* mplayer = Player::create();
 	mplayer->bind_sprite(player_sprite);
 	mplayer->run();
 
-    //è®¾ç½®çŽ©å®¶åæ ‡
+    //ÉèÖÃÍæ¼Ò×ø±ê
 	mplayer->setPosition(Vec2(100, visibleSize.height / 2));
 
 	_tiledmap->addChild(mplayer);
 }*/
+
+
 
