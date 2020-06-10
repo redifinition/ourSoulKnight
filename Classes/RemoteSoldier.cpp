@@ -15,14 +15,12 @@ bool RemoteSoldier::init(EActorType soldierType, Scene* currentScene)
 {
 	if (soldierType == SHORTREMOTE)
 	{
-		setTexture("ShortRemoteSoldier.png");  //缺少素材
 		_soldierType = "ShortRemote";
 		_attack = SHORT_REMOTE_SOLDIER_ATTACK;
 		_attackRadius = SHORT_REMOTE_SOLDIER_ATTACK_RADIUS;
 	}
 	else if (soldierType == LONGREMOTE)
 	{
-		setTexture("LongRemoteSoldier.png");  //缺少素材
 		_soldierType = "LongRemote";
 		_attack = LONG_REMOTE_SOLDIER_ATTACK;
 		_attackRadius = LONG_REMOTE_SOLDIER_ATTACK_RADIUS;
@@ -36,12 +34,6 @@ bool RemoteSoldier::init(EActorType soldierType, Scene* currentScene)
 	_attackTarget = nullptr;
 	_currentScene = currentScene;
 	_bulletSpeed = SOLDIER_BULLET_SPEED;
-	auto physicsBody = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0.0f, 0.0f, 0.0f));
-	physicsBody->setDynamic(false);
-	physicsBody->setCategoryBitmask(0x01);    // 0001
-	physicsBody->setContactTestBitmask(0x02); // 0010
-	this->setPhysicsBody(physicsBody);
-	this->setTag(REMOTE_SOLDIER_TAG);
 	return true;
 }
 
@@ -54,7 +46,7 @@ void RemoteSoldier::move()
 	this->runAction(RepeatForever::create(sequence));
 }
 
-void RemoteSoldier::attack(Actor* attackTarget)
+void RemoteSoldier::attack(Entity* attackTarget)
 {
 	_attackTarget = attackTarget;
 	Vec2 attackPosition = _attackTarget->getPosition();
@@ -97,6 +89,20 @@ void RemoteSoldier::takeDamage(int damage)
 
 void RemoteSoldier::die()
 {
-	_currentScene->removeChild(this);
-	//todo:在道具类完成后补充
+	srand((unsigned)time(nullptr));
+	int random = rand() % 100;
+	if(random > 90 && random % 2 == 0)
+	{
+		Items* item = Items::create(REDBOTTLE);
+		item->setPosition(this->getPosition());
+		_currentScene->addChild(item);
+	}
+	else if(random > 90 && random % 2 != 0)
+	{
+		Items* item = Items::create(BLUEBOTTLE);
+		item->setPosition(this->getPosition());
+		_currentScene->addChild(item);
+	}
+	this->release();
+	m_sprite->release();
 }
