@@ -15,6 +15,9 @@
 #define SHORT_REMOTE_SOLDIER_TAG 10
 #define LONG_REMOTE_SOLDIER_TAG 20
 #define SOLDIER_BULLET_SPEED 100
+
+#define RED_BOTTLE 0
+#define BLUE_BOTTLE 1
 enum EActorType
 {
 	SHORTREMOTE,
@@ -22,5 +25,10 @@ enum EActorType
 	NARROWMELEE,
 	WIDEMELLE,
 	PLAYER
+};
+enum EItemsType
+{
+	REDBOTTLE,
+	BLUEBOTTLE
 };
 #endif
