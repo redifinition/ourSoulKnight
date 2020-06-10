@@ -1,51 +1,88 @@
 #include "Player.h"
 
+Player::Player()
+{
+	_HP = 5;
+	_MP = 100;
+	_AC = 5;
+	_weaponPosition = Vec2(0.5, 0.2);
+
+}
+
+Player::~Player() {
+
+}
 bool Player::init()
 {
-
-	isJumping = false;
-
 	return true;
 }
 
+//ºÍ½ÇÉ«ÎäÆ÷Ïà¹ØµÄº¯Êý
+bool Player::bindWeapon(Weapon* weapon) {
+	if (weapon == nullptr)
+	{
+		printf("m_weapon in this player is nullptr, check wether the file used to create the weapon in right dictionary.");
+		return false;
+	}
+	else
+	{
+		this->m_weaponArr.pushBack(weapon);
+		this->m_weapon = weapon;	//µ±Ç°ÎäÆ÷¾ÍÉèÖÃÎª°ó¶¨µÄÎäÆ÷
+		m_weapon->setScale(0.08);	//ÓÃÓÚ³õ´Î²âÊÔ£¬Ö®ºóÉ¾³ý£¬²»Í¬ÎäÆ÷µÄËõ·Å²»Í¬£¬ÒªÃ´°ÑËõ·Å·ÅÔÚ´´½¨º¯ÊýÀïÃæ£¬ÒªÃ´¾Í°ÑÎäÆ÷Í¼Æ¬µÄ´óÐ¡µ÷¶Ô
+		this->addChild(m_weapon);
+		if (m_weapon == nullptr)
+		{
+			log("m_weapon is nullptr");
+		}
+		Size size = m_sprite->getContentSize();
+;
+		m_weapon->setPosition(Point(size.width*getWpPos().x, size.height*getWpPos().y));
 
-void Player::run()
-{
+		return true;
+	}
+}
+
+void Player::switchWeapon() {
 
 }
 
+void Player::attack(Scene* currentScene,const Vec2& pos) {
+	m_weapon->fire(currentScene,pos);
+}
+
+//ºÍ¼üÅÌ¿ØÖÆÏà¹ØµÄº¯Êý
 void Player::setViewPointByPlayer()
 {
 	if (m_sprite == NULL)
 		return;
 	Layer* parent = (Layer*)getParent();
 
-	//ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
 	Size mapTiledNum = m_map->getMapSize();
 
-	//ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó´ï¿½Ð¡
+
 	Size tiledSize = m_map->getTileSize();
 
-	//ï¿½ï¿½Í¼ï¿½ï¿½Ð¡
+
 	Size mapSize = Size(mapTiledNum.width*tiledSize.width, mapTiledNum.height*tiledSize.height);
 
-	//ï¿½ï¿½Ä»ï¿½ï¿½Ð¡
+
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
 	Point spritePos = getPosition();
 
 	float x = std::max(spritePos.x,visibleSize.width/2);
 	float y = std::max(spritePos.y, visibleSize.height / 2);
 
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê³¬ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	
 	x = std::min(x, mapSize.width - visibleSize.width / 2);
 	y = std::min(y, mapSize.height - visibleSize.height / 2);
 
-	//Ä¿ï¿½ï¿½ï¿½
+	
 	Point desPos = Point(x, y);
 
-	//ï¿½ï¿½Ä»ï¿½Ðµï¿½
+	
 	Point centPos = Point(visibleSize.width / 2, visibleSize.height / 2);
 
 	Point viewPos = centPos - desPos;
@@ -56,18 +93,15 @@ void Player::setViewPointByPlayer()
 
 void Player::set_tag_position(int x, int y)
 {
-	/*ï¿½Ð¶ï¿½Ç°ï¿½ï¿½ï¿½Ç·ñ²»¿ï¿½Í¨ï¿½ï¿½*/
+
 	Size spriteSize = m_sprite->getContentSize();
 	Point dstPos = Point(x+spriteSize.width/2, y);
 	Point dstPos_y = Point(x + spriteSize.width / 2, y - spriteSize.height / 2);
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ÎªPlayerï¿½ï¿½Ó¦ï¿½ï¿½ï¿½Æ«ï¿½Âµï¿½Î»ï¿½Ã£ï¿½Îªï¿½ï¿½ï¿½Ð¶ï¿½Playerï¿½Â·ï¿½ï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½*/
 	Point tiledPos = tileCoordForPosition(Point(dstPos.x, dstPos.y));
 	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
 	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
-	//ï¿½Ô¸Ã¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ï¿½Óµï¿½Ç°ï¿½ï¿½ï¿½Ð¶Ï£ï¿½
-	/*ï¿½ï¿½Ãµï¿½Í¼ï¿½ï¿½ï¿½Óµï¿½Î¨Ò»ï¿½ï¿½Ê¶*/
+
 	int tileGid = meta->getTileGIDAt(tiledPos);
 	int tiledGid_right = meta->getTileGIDAt(tiledPos_right); 
 	int tiledGid_bottom = meta->getTileGIDAt(tiledPos_bottom);
@@ -117,13 +151,11 @@ void Player::setTiledMap(TMXTiledMap* map)
 Point Player::tileCoordForPosition(Point pos) {
 	Size mapTiledNum = m_map->getMapSize();
 	Size tiledSize = m_map->getTileSize();
-
+	
 	int x = (pos.x*1.8)/ tiledSize.width;
 
-     /*yï¿½ï¿½ï¿½ï¿½ï¿½Òª×ªï¿½ï¿½Ò»ï¿½Â£ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½Ïµï¿½ï¿½tiledï¿½ï¿½Í¬*/
 	int y = (2560-pos.y*1.8) / tiledSize.height;
 
-	/*ï¿½ï¿½ï¿½Ó´ï¿½ï¿½ã¿ªÊ¼*/
 	if (x > 0)
 		x--;
 	if (y > 0)

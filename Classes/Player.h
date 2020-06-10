@@ -1,27 +1,41 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
 
-
+#include "cocos2d.h"
 #include "Entity.h"
+#include "Weapon.h"
+USING_NS_CC;
 
-class Player:public Entity
-{
+
+class Player :public Entity {
+//by lzy
+	CC_SYNTHESIZE(int, _HP, HP);		
+	CC_SYNTHESIZE(int, _MP, MP);		
+	CC_SYNTHESIZE(int, _AC, AC);
+	CC_SYNTHESIZE(Vec2, _weaponPosition, WpPos);				//ÎäÆ÷¹Ì¶¨ÔÚÈËÎïÉÏµÄÏà¶ÔÎ»ÖÃ,Ä¬ÈÏÖµÎªplayerµÄÖĞĞÄ
+	CC_SYNTHESIZE(Weapon*, _currentWeapon, CurrentWeapon);
 public:
-//by lq
+	Player();
+	~Player();
 	CREATE_FUNC(Player);
 	virtual bool init();
-	void run();
+//by lzy
+	void attack(Scene* currentScene, const Vec2& pos);								//µ÷ÓÃ¹¥»÷º¯Êı,»¹ĞèÒªÌí¼ÓÁ¬·¢µÄ¹¦ÄÜ
+	bool bindWeapon(Weapon* Weapon);							//°ó¶¨ÎäÆ÷
+	virtual void switchWeapon();								//½Ó¿Ú£¬ÇĞ»»ÎäÆ÷£¬½ÇÉ«²»Í¬ÇĞ»»ÎäÆ÷µÄĞ§¹û²»Í¬
+	void pickWeapon();											//½Ó¿Ú£¬Ê°È¡ÎäÆ÷
+//by lq
 	void setViewPointByPlayer();
 	virtual void set_tag_position(int x, int y);
 	void setTiledMap(TMXTiledMap* map);
 private:
+//by lzy
+	Weapon* m_weapon;											//Playerµ±Ç°Ê¹ÓÃµÄÎäÆ÷
+	Vector<Weapon*> m_weaponArr;								//PlayerĞ¯´øµÄËùÓĞÎäÆ÷
 //by lq
 	TMXTiledMap* m_map;
-	bool isJumping;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½×²ï¿½ï¿½ï¿½Ï°ï¿½ï¿½ï¿½
-	TMXLayer* meta;//ï¿½ï¿½ï¿½ï¿½ï¿½×²ï¿½Äµï¿½Í¼ï¿½ï¿½
-	/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+	TMXLayer* meta;
 	Point tileCoordForPosition(Point pos);
-
 };
 
 #endif
