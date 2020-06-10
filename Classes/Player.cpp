@@ -5,6 +5,7 @@ Player::Player()
 	_HP = 5;
 	_MP = 100;
 	_AC = 5;
+	_weaponPosition = Vec2(0.5, 0.2);
 
 }
 
@@ -16,25 +17,40 @@ bool Player::init()
 	return true;
 }
 
+//和角色武器相关的函数
 bool Player::bindWeapon(Weapon* weapon) {
-	this->m_weapon = weapon;
-	if (m_weapon == nullptr)
+	if (weapon == nullptr)
 	{
 		printf("m_weapon in this player is nullptr, check wether the file used to create the weapon in right dictionary.");
 		return false;
 	}
 	else
 	{
+		this->m_weaponArr.pushBack(weapon);
+		this->m_weapon = weapon;	//当前武器就设置为绑定的武器
+		m_weapon->setScale(0.08);	//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调对
 		this->addChild(m_weapon);
-
+		if (m_weapon == nullptr)
+		{
+			log("m_weapon is nullptr");
+		}
 		Size size = m_sprite->getContentSize();
 ;
-		m_weapon->setPosition(Point(size.width*0.5f, size.height*0.5f));
+		m_weapon->setPosition(Point(size.width*getWpPos().x, size.height*getWpPos().y));
 
 		return true;
 	}
 }
 
+void Player::switchWeapon() {
+
+}
+
+void Player::attack(Scene* currentScene,const Vec2& pos) {
+	m_weapon->fire(currentScene,pos);
+}
+
+//和键盘控制相关的函数
 void Player::setViewPointByPlayer()
 {
 	if (m_sprite == NULL)
