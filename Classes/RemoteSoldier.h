@@ -15,7 +15,6 @@ class RemoteSoldier : public  Entity
 	CC_SYNTHESIZE(std::string, _soldierType, soldierType);
 public:
 	static RemoteSoldier* create(EActorType soldierType,Scene* currentScene);
-	void move();
 	void attack(Entity* attackTarget);
 	void takeDamage(int damage);
 	bool init(EActorType soldierType, Scene* currentScene);

@@ -37,15 +37,6 @@ bool RemoteSoldier::init(EActorType soldierType, Scene* currentScene)
 	return true;
 }
 
-void RemoteSoldier::move()
-{
-	//todo:有关边界的处理
-	auto action1 = MoveBy::create(50 / _moveSpeed, Vec2(50, 0));
-	auto action2 = MoveBy::create(50 / _moveSpeed, Vec2(-50, 0));
-	auto sequence = Sequence::create(action1, action2, nullptr);
-	this->runAction(RepeatForever::create(sequence));
-}
-
 void RemoteSoldier::attack(Entity* attackTarget)
 {
 	_attackTarget = attackTarget;
