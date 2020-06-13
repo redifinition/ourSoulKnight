@@ -5,6 +5,7 @@
 #include "SimpleMoveController.h"
 #include "Controller.h"
 #include "Player.h"
+#include "Knight.h"
 #include "Gun.h"
 
 USING_NS_CC;
@@ -35,17 +36,18 @@ bool safetymap::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	
 	//创建地图背景
-	std::string floor_layer_file = "myfirstmap2.tmx";//地图文件
+	std::string floor_layer_file = "myfirstmap3.tmx";//地图文件
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
-	
 
+	/**/
+	
 
 	//添加player
 	//auto pinfo = AutoPolygon::generatePolygon("player.png");
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
-	Player* mplayer = Player::create();
+	Knight* mplayer = Knight::create();
 	//添加初始武器
 	Gun* initialWeapon = Gun::create("broken pistol.png");
 	mplayer->bindSprite(player_sprite);
@@ -61,6 +63,21 @@ bool safetymap::init()
 
 	//设置玩家坐标
 	mplayer->setPosition(Point(playerX,playerY));
+
+	
+	Sprite* monster_sprite = Sprite::create("turn right 2.png");
+	Player* monster = Player::create();
+	monster->bindSprite(monster_sprite);
+	monster->setTiledMap(_tiledmap);
+
+	TMXObjectGroup* bulletGroup = _tiledmap->getObjectGroup("bullet");
+
+	ValueMap monster_point_map = bulletGroup->getObject("bullet1");
+	float monsterX = monster_point_map.at("x").asFloat();
+	float monsterY = monster_point_map.at("y").asFloat();
+	monster->setPosition(Point(monsterX, monsterY));
+	
+
 
 
 	auto knight_animation = Animation::create();
@@ -90,16 +107,18 @@ bool safetymap::init()
 	mplayer->set_controller(simple_move_controller);
 
 	this->addChild(mplayer,2);
+	this->addChild(monster, 2);
 
 	this->addChild(_tiledmap);
+
+	
 
 	//创建EventListener
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = [=](Touch* touch, Event* event) {
 		//Vec2 pos = Director::getInstance()->convertToGL(touch->getLocationInView());
 		
-		Vec2 pos = Director::getInstance()->convertToGL(touch->getLocationInView());
-
+		Vec2 pos = monster->getPosition();
 		//有点问题，暂时用不了：fire里的addChild()没能成功
 		//mplayer->attack(this,pos);	
 

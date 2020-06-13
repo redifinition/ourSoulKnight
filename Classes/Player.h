@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Entity.h"
 #include "Weapon.h"
+
 USING_NS_CC;
 
 
@@ -24,6 +25,7 @@ public:
 	bool bindWeapon(Weapon* Weapon);							//绑定武器
 	virtual void switchWeapon();								//接口，切换武器，角色不同切换武器的效果不同
 	void pickWeapon();											//接口，拾取武器
+	virtual void skill();										//技能
 //by lq
 	void setViewPointByPlayer();
 	virtual void set_tag_position(int x, int y);

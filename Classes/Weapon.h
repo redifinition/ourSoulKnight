@@ -17,6 +17,6 @@ public:
 	virtual void fire(Scene* currentScene,const Vec2& pos) ;
 	void hide();												//隐藏当前不使用的武器
 	void show();												//切换武器时使用
-	void trackTouch();											//使武器指向和鼠标指向一致
+	void trackTouch();//使武器指向和鼠标指向一致
 };
 #endif // !__Weapon_H__

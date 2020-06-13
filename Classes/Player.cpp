@@ -5,7 +5,7 @@ Player::Player()
 	_HP = 5;
 	_MP = 100;
 	_AC = 5;
-	_weaponPosition = Vec2(0.5, 0.2);
+	_weaponPosition = Vec2(0.8, 0.3);
 
 }
 
@@ -28,21 +28,28 @@ bool Player::bindWeapon(Weapon* weapon) {
 	{
 		this->m_weaponArr.pushBack(weapon);
 		this->m_weapon = weapon;	//当前武器就设置为绑定的武器
-		m_weapon->setScale(0.08);	//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调对
-		this->addChild(m_weapon);
 		if (m_weapon == nullptr)
 		{
 			log("m_weapon is nullptr");
 		}
+
+		
+		//设定武器位置
 		Size size = m_sprite->getContentSize();
-;
-		m_weapon->setPosition(Point(size.width*getWpPos().x, size.height*getWpPos().y));
+;		m_weapon->setPosition(Point(size.width*getWpPos().x,size.height*getWpPos().y));
+		m_weapon->setScale(0.06);	//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调对
+
+		this->addChild(m_weapon);
 
 		return true;
 	}
 }
 
 void Player::switchWeapon() {
+
+}
+
+void Player::skill() {
 
 }
 
