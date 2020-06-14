@@ -54,7 +54,28 @@ void Player::skill() {
 }
 
 void Player::attack(Scene* currentScene,const Vec2& pos) {
-	m_weapon->fire(currentScene,pos);
+	auto offset = pos - this->getPosition();
+	offset.normalize();
+	auto destination = offset * 2000;
+
+	//子弹添加到枪口的位置，暂时设置为武器锚点的位置，后期改
+	auto bullet = Sprite::create("Projectile.png");
+	bullet->setScale(1.5);
+	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
+	currentScene->addChild(bullet);
+
+	//创建子弹的动作
+	auto bulletMove = MoveBy::create(2.0f, destination);
+	auto actionRemove = RemoveSelf::create();
+
+	//日志输出touch的坐标、武器初始坐标、子弹飞行方向
+	log("Destination:x=%f, y=%f", pos.x, pos.y);
+	log("mplayer:x=%f, y=%f", this->getPositionX(), this->getPositionY());
+	log("m_sprite:x=%f, y=%f", this->getSprite()->getPositionX(), this->getSprite()->getPositionY());
+	log("Direction:x=%f, y=%f", offset.x, offset.y);
+
+	//发射子弹
+	bullet->runAction(Sequence::create(bulletMove, actionRemove, nullptr));
 }
 
 //和键盘控制相关的函数

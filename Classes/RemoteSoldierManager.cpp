@@ -54,19 +54,19 @@ void RemoteSoldierManager::update(float dt)
 			//todo:关于地图边界的问题
 			if (random == 0) //up
 			{
-				remoteSoldier->setPositionY(remoteSoldier->getPositionY + 4);
+				remoteSoldier->setPositionY(remoteSoldier->getPositionY() + 4);
 			}
 			else if (random == 1) //down
 			{
-				remoteSoldier->setPositionY(remoteSoldier->getPositionY - 4);
+				remoteSoldier->setPositionY(remoteSoldier->getPositionY() - 4);
 			}
 			else if (random == 1) //left
 			{
-				remoteSoldier->setPositionX(remoteSoldier->getPositionX - 4);
+				remoteSoldier->setPositionX(remoteSoldier->getPositionX() - 4);
 			}
 			else //right
 			{
-				remoteSoldier->setPositionX(remoteSoldier->getPositionX + 4);
+				remoteSoldier->setPositionX(remoteSoldier->getPositionX() + 4);
 			}
 		}
 	}

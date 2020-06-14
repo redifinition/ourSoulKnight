@@ -120,9 +120,9 @@ bool safetymap::init()
 		
 		Vec2 pos = monster->getPosition();
 		//有点问题，暂时用不了：fire里的addChild()没能成功
-		//mplayer->attack(this,pos);	
+		mplayer->attack(this,pos);	
 
-		auto offset = pos - mplayer->getPosition();
+		/*auto offset = pos - mplayer->getPosition();
 		offset.normalize();
 		auto destination = offset * 2000;
 

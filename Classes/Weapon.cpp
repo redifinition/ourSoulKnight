@@ -24,7 +24,3 @@ bool Weapon::init(const std::string& filename)
 void Weapon::trackTouch() {
 
 }
-void Weapon::fire(Scene* currentScene,const Vec2& pos)
-{
-
-}
