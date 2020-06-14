@@ -17,7 +17,6 @@ bool Player::init()
 	return true;
 }
 
-
 bool Player::bindSprite(Sprite*sprite) {
 	this->m_sprite = sprite;
 	if (m_sprite == nullptr)
@@ -37,6 +36,8 @@ bool Player::bindSprite(Sprite*sprite) {
 		/*添加物理碰撞模型*/
 		auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(0.0f, 0.0f, 0.0f));
 		physicsBody->setDynamic(false);
+		physicsBody->setCategoryBitmask(0x01);
+		physicsBody->setContactTestBitmask(0x04);
 		this->addComponent(physicsBody);
 
 		return true;

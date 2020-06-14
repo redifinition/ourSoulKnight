@@ -106,8 +106,7 @@ bool safetymap::init()
 	//设置碰撞掩码
 	this->m_player = mplayer;
 	this->m_monster = monster;
-	m_player->getPhysicsBody()->setCategoryBitmask(0x01);
-	m_player->getPhysicsBody()->setContactTestBitmask(0x04);
+
 	m_monster->getPhysicsBody()->setCategoryBitmask(0x02);
 	m_monster->getPhysicsBody()->setContactTestBitmask(0x04);
 
@@ -119,21 +118,6 @@ bool safetymap::init()
 	//创建EventListener
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(safetymap::onTouchBegin, this);
-	/*
-	listener->onTouchBegan = [=](Touch* touch, Event* event) {
-		Vec2 pos = monster->getPosition();
-		mplayer->attack(this,pos);			
-		return true;
-	};
-
-	listener->onTouchMoved = [](Touch* touch, Event* event) {
-
-	};
-
-	listener->onTouchEnded = [](Touch* touch, Event*event) {
-
-	};
-	*/
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	//创建contactListener
@@ -143,6 +127,7 @@ bool safetymap::init()
 
 	return true;
 }
+
 bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 	Vec2 pos = m_monster->getPosition();
 	m_player->attack(this, pos);

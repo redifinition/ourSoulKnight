@@ -13,14 +13,14 @@ public:
 	virtual bool init();
 	CREATE_FUNC(safetymap);
 private:
-	TMXTiledMap *_tiledmap;								//地图类中相关地图
-	TMXLayer *_background;								//背景层
+	TMXTiledMap *_tiledmap;									//地图类中相关地图
+	TMXLayer *_background;									//背景层
 	Sprite *_player;
 	Player* m_player;
-	Player* m_monster;									//先用player类替代
+	Player* m_monster;										//先用player类替代
 protected:
-	virtual bool onContactBegin(PhysicsContact& contact);
-	virtual bool onTouchBegin(Touch* touch, Event* event);
+	virtual bool onContactBegin(PhysicsContact& contact);	//碰撞后的回调
+	virtual bool onTouchBegin(Touch* touch, Event* event);	//点击鼠标后的回调
 
 };
 
