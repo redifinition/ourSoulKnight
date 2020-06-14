@@ -2,7 +2,7 @@
 #define __SAFETYMAP_SCENE_H__
 
 #include "cocos2d.h"
-
+#include  "allHeadFiles.h"
 using namespace cocos2d;
 
 class safetymap: public cocos2d::Scene
@@ -19,9 +19,13 @@ public:
 
 	CREATE_FUNC(safetymap);
 private:
-	cocos2d::TMXTiledMap *_tiledmap;//地图类中相关地图
-	cocos2d::TMXLayer *_background;//背景层
-	cocos2d::Sprite *_player;
+	TMXTiledMap *_tiledmap;								//地图类中相关地图
+	TMXLayer *_background;								//背景层
+	Sprite *_player;
+
+	Player* m_player;
+	Player* m_monster;									//先用player类替代
+
 };
 
 #endif // __SAFETYMAP_SCENE_H__
