@@ -17,6 +17,31 @@ bool Player::init()
 	return true;
 }
 
+
+bool Player::bindSprite(Sprite*sprite) {
+	this->m_sprite = sprite;
+	if (m_sprite == nullptr)
+	{
+		printf("m_sprite in this entity is nullptr, check wether the file used to create the sprite in right dictionary.");
+		return false;
+	}
+	else
+	{
+		this->addChild(m_sprite);
+		/*设置Player的大小和m_sprite的大小一致，否则碰撞模型会不对*/
+		Size size = m_sprite->getContentSize();
+		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
+		this->setContentSize(size);
+		this->setAnchorPoint(Vec2(0.5, 0.5));
+
+		/*添加物理碰撞模型*/
+		auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(0.0f, 0.0f, 0.0f));
+		physicsBody->setDynamic(false);
+		this->addComponent(physicsBody);
+
+		return true;
+	}
+}
 //和角色武器相关的函数
 bool Player::bindWeapon(Weapon* weapon) {
 	if (weapon == nullptr)
@@ -45,14 +70,6 @@ bool Player::bindWeapon(Weapon* weapon) {
 	}
 }
 
-void Player::switchWeapon() {
-
-}
-
-void Player::skill() {
-
-}
-
 void Player::attack(Scene* currentScene,const Vec2& pos) {
 	auto offset = pos - this->getPosition();
 	offset.normalize();
@@ -62,22 +79,33 @@ void Player::attack(Scene* currentScene,const Vec2& pos) {
 	auto bullet = Sprite::create("Projectile.png");
 	bullet->setScale(1.5);
 	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
+
+	/*添加子弹碰撞模型*/
+	auto physicsBody = PhysicsBody::createBox(bullet->getContentSize(), PhysicsMaterial(0.0f, 0.0f, 0.0f));
+	physicsBody->setDynamic(false);
+	physicsBody->setCategoryBitmask(0x04);
+	physicsBody->setContactTestBitmask(0x03);
+	bullet->setTag(10);
+	bullet->addComponent(physicsBody);
+	
+	/*把子弹加到场景里面*/
 	currentScene->addChild(bullet);
 
 	//创建子弹的动作
 	auto bulletMove = MoveBy::create(2.0f, destination);
 	auto actionRemove = RemoveSelf::create();
 
-	//日志输出touch的坐标、武器初始坐标、子弹飞行方向
-	log("Destination:x=%f, y=%f", pos.x, pos.y);
-	log("mplayer:x=%f, y=%f", this->getPositionX(), this->getPositionY());
-	log("m_sprite:x=%f, y=%f", this->getSprite()->getPositionX(), this->getSprite()->getPositionY());
-	log("Direction:x=%f, y=%f", offset.x, offset.y);
-
 	//发射子弹
 	bullet->runAction(Sequence::create(bulletMove, actionRemove, nullptr));
 }
 
+void Player::switchWeapon() {
+
+}
+
+void Player::skill() {
+
+}
 //和键盘控制相关的函数
 void Player::setViewPointByPlayer()
 {
