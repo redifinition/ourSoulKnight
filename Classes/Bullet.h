@@ -2,7 +2,6 @@
 #define __BULLET_H__
 
 #include "cocos2d.h"
-#include "Actor.h"
 #include "RemoteSoldier.h"
 #include "Constant.h"
 #include <string.h>
