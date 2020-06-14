@@ -84,7 +84,7 @@ void Player::attack(Scene* currentScene,const Vec2& pos) {
 	auto physicsBody = PhysicsBody::createBox(bullet->getContentSize(), PhysicsMaterial(0.0f, 0.0f, 0.0f));
 	physicsBody->setDynamic(false);
 	physicsBody->setCategoryBitmask(0x04);
-	physicsBody->setContactTestBitmask(0x03);
+	physicsBody->setContactTestBitmask(0x02);
 	bullet->setTag(10);
 	bullet->addComponent(physicsBody);
 	

@@ -19,8 +19,8 @@ private:
 	Player* m_player;
 	Player* m_monster;									//先用player类替代
 protected:
-	//virtual bool onContactBegin(PhysicsContact& contact);
-
+	virtual bool onContactBegin(PhysicsContact& contact);
+	virtual bool onTouchBegin(Touch* touch, Event* event);
 
 };
 
@@ -48,11 +48,12 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 }
 */
 
-/*创建contactListener
-	auto contactListener = EventListenerPhysicsContact::create();
-	contactListener->onContactBegin = CC_CALLBACK_1(safetymap::onContactBegin, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
-	*/
+/*
+创建contactListener
+auto contactListener = EventListenerPhysicsContact::create();
+contactListener->onContactBegin = CC_CALLBACK_1(safetymap::onContactBegin, this);
+_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+*/
 
 /*在场景中绑定player和monster,并设置碰撞掩码
 this->m_player = mplayer;
