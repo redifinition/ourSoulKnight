@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Entity.h"
 #include "Weapon.h"
+#include "Bullet.h"
 
 USING_NS_CC;
 

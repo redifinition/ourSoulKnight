@@ -59,11 +59,10 @@ bool Player::bindWeapon(Weapon* weapon) {
 			log("m_weapon is nullptr");
 		}
 
-		
 		//设定武器位置
 		Size size = m_sprite->getContentSize();
-;		m_weapon->setPosition(Point(size.width*getWpPos().x,size.height*getWpPos().y));
-		m_weapon->setScale(0.06);	//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调对
+;		m_weapon->setPosition(Vec2(size.width*getWpPos().x, size.height*getWpPos().y));//*getWpPos().x
+		m_weapon->setScale(0.08);	//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调对
 
 		this->addChild(m_weapon);
 
@@ -71,33 +70,18 @@ bool Player::bindWeapon(Weapon* weapon) {
 	}
 }
 
-void Player::attack(Scene* currentScene,const Vec2& pos) {
-	auto offset = pos - this->getPosition();
-	offset.normalize();
-	auto destination = offset * 2000;
+void Player::attack(Scene* _currentScene,const Vec2& pos) {
+	//攻击方向
+	auto direction = pos - this->getPosition();
+	direction.normalize();
+	Vec2 test = this->m_weapon->getPosition();
 
-	//子弹添加到枪口的位置，暂时设置为武器锚点的位置，后期改
-	auto bullet = Sprite::create("Projectile.png");
+	//创建子弹
+	auto bullet = Bullet::create(LONGREMOTE, direction, _currentScene);
 	bullet->setScale(1.5);
 	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
-
-	/*添加子弹碰撞模型*/
-	auto physicsBody = PhysicsBody::createBox(bullet->getContentSize(), PhysicsMaterial(0.0f, 0.0f, 0.0f));
-	physicsBody->setDynamic(false);
-	physicsBody->setCategoryBitmask(0x04);
-	physicsBody->setContactTestBitmask(0x02);
-	bullet->setTag(10);
-	bullet->addComponent(physicsBody);
-	
-	/*把子弹加到场景里面*/
-	currentScene->addChild(bullet);
-
-	//创建子弹的动作
-	auto bulletMove = MoveBy::create(2.0f, destination);
-	auto actionRemove = RemoveSelf::create();
-
-	//发射子弹
-	bullet->runAction(Sequence::create(bulletMove, actionRemove, nullptr));
+	_currentScene->addChild(bullet);
+	bullet->new_move();
 }
 
 void Player::switchWeapon() {
