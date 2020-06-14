@@ -18,13 +18,10 @@ bool Entity::bindSprite(Sprite*sprite) {
 	else
 	{
 		this->addChild(m_sprite);
-		
-		//this->setContentSize(Size(50,50));
 		/*设置Entity的大小和m_sprite的大小一致，否则碰撞模型会不对*/
 		Size size = m_sprite->getContentSize();
 		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
 		this->setContentSize(size);
-
 		this->setAnchorPoint(Vec2(0.5, 0.5));
 
 		return true;
