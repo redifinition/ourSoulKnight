@@ -9,11 +9,14 @@ USING_NS_CC;
 class RemoteSoldierManager : public Node
 {
 	CC_SYNTHESIZE(Scene*, _currentScene, currentScene);
+	CC_SYNTHESIZE(Entity*, _player, player);
+	CC_SYNTHESIZE(TMXTiledMap*, _map, map);
 public:
-	static RemoteSoldierManager* create(Scene* currentScene);
-	bool init(Scene* currentScene);
-
+	static RemoteSoldierManager* create(Scene* currentScene, Entity* player, TMXTiledMap* map);
+	bool init(Scene* currentScene, Entity* player, TMXTiledMap* map);
+	void attackUpdate(float dt);
 	void update(float dt);
+	Vec2 setSoldierPosition(int num);
 private:
 	void createMonsters();
 	Vector<RemoteSoldier*> m_remoteSoldierArr;
