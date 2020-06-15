@@ -24,8 +24,8 @@ public:
 //by lzy
 	bool bindSprite(Sprite* sprite);							//同时添加物理碰撞模型
 	bool bindWeapon(Weapon* Weapon);							//绑定武器
-
 	void attack(Scene* currentScene, const Vec2& pos);			//调用攻击函数,还需要添加连发的功能
+	void rotateWeapon(const Vec2& pos); 
 	virtual void switchWeapon();								//接口，切换武器，角色不同切换武器的效果不同
 	void pickWeapon();											//接口，拾取武器
 	virtual void skill();										//技能

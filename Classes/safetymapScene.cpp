@@ -130,6 +130,7 @@ bool safetymap::init()
 
 bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 	Vec2 pos = m_monster->getPosition();
+	m_player->rotateWeapon(pos);
 	m_player->attack(this, pos);
 	return true;
 }

@@ -84,6 +84,18 @@ void Player::attack(Scene* _currentScene,const Vec2& pos) {
 	bullet->new_move();
 }
 
+void Player::rotateWeapon(const Vec2& pos) {
+	auto direction = pos - this->getPosition();
+	float x = direction.x;
+	float y = direction.y;
+	if (x > 0 && y > 0) {
+		this->m_weapon->setRotation(-45.0f);
+	}
+	else if (x > 0 && y < 0) {
+		this->m_weapon->setRotation(+45.0f);
+	}
+}
+
 void Player::switchWeapon() {
 
 }

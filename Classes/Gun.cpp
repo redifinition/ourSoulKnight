@@ -10,7 +10,7 @@ Gun::Gun() {
 		log("Failed to initialize _bullet");
 	}*/
 	_bulletSpeed = 1000;
-	this->setAnchorPoint(Vec2(0.5, 0.5));
+	this->setAnchorPoint(Vec2(0.1, 0.1));
 }
 Gun::~Gun() {
 
