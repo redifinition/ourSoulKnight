@@ -274,6 +274,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 		switch (keyCode) {
 		case EventKeyboard::KeyCode::KEY_W:
 		{
+			auto y = m_sprite->getPositionY();
 			key_w = false;
 			if (right_left_flag == 1)
 			{
@@ -456,6 +457,8 @@ void SimpleMoveController::registeKeyBoardEvent()
 		}
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyBoardListener, this);
+
+	
 
 }
 
