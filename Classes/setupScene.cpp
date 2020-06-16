@@ -5,7 +5,7 @@
 #include "HelloWorldScene.h"
 #include"safetymapScene.h"
 #include"audio.h"
-
+#include"startmapScene.h"
 
 using namespace cocos2d::ui;
 USING_NS_CC;
@@ -294,7 +294,8 @@ void setup::audio_menuCloseCallback(Ref* pSender)
 
 void setup::newgame_menuCloseCallback(Ref* pSender)
 {
-	Director::getInstance()->replaceScene(safetymap::createScene());
+	Director::getInstance()->replaceScene(startmap::createScene());
 	//接口，进入到游戏安全地图中
 	//记得关掉开场音乐
 }
+

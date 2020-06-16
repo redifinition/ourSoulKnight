@@ -18,7 +18,7 @@ private:
 	bool isJumping;//标记主教是否碰撞了障碍物
 
 	TMXLayer* meta;//检测碰撞的地图层
-
+	
 	/*将像素坐标转化为地图格子坐标*/
 	Point tileCoordForPosition(Point pos);
 };

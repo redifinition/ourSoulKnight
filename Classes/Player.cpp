@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include "safetymapScene.h"
 bool Player::init()
 {
 	isJumping = false;
@@ -115,11 +115,11 @@ void Player::setTiledMap(TMXTiledMap* map)
 Point Player::tileCoordForPosition(Point pos) {
 	Size mapTiledNum = m_map->getMapSize();
 	Size tiledSize = m_map->getTileSize();
+	int x, y;
+    x = (pos.x*1.8) / tiledSize.width;
 
-	int x = (pos.x*1.8)/ tiledSize.width;
-
-     /*y坐标需要转换一下，因为坐标系和tiled不同*/
-	int y = (2560-pos.y*1.8) / tiledSize.height;
+    /*y坐标需要转换一下，因为坐标系和tiled不同*/
+	y = (mapTiledNum.height*tiledSize.height - pos.y*1.8) / tiledSize.height;
 
 	/*格子从零开始*/
 	if (x > 0)
