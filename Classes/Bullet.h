@@ -17,8 +17,6 @@ class Bullet : public cocos2d::Sprite
 public:
 	static Bullet* create(EActorType actorType,Entity* attackSource, Vec2 attackDirection, Scene* currentScene);
 	bool init(EActorType actorType, Entity* attackSource, Vec2 attackDirection, Scene* currentScene);
-	static Bullet* create(EActorType actorType, Vec2 attackDirection, Scene* currentScene);
-	bool init(EActorType actorType, Vec2 attackDirection, Scene* currentScene);
 	void move();
 	void new_move();
 };
