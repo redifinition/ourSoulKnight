@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="60" tilewidth="32" tileheight="32" nextobjectid="2">
+ <tileset firstgid="1" name="floor1" tilewidth="32" tileheight="32" tilecount="16" columns="4">
+  <image source="safetymap_floor.PNG" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="17" name="carpet" tilewidth="199" tileheight="141" tilecount="1" columns="1">
+  <image source="carpet.png" width="199" height="141"/>
+ </tileset>
+ <tileset firstgid="18" name="niudan" tilewidth="55" tileheight="115" tilecount="1" columns="1">
+  <image source="扭蛋机.png" width="55" height="115"/>
+ </tileset>
+ <tileset firstgid="19" name="floor_edge" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="floor_edge.PNG" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="20" name="box" tilewidth="32" tileheight="46" tilecount="1" columns="1">
+  <image source="box.png" width="32" height="46"/>
+ </tileset>
+ <tileset firstgid="21" name="start_door" tilewidth="128" tileheight="118" tilecount="1" columns="1">
+  <image source="start_door.png" width="128" height="118"/>
+ </tileset>
+ <tileset firstgid="22" name="black_wall" tilewidth="128" tileheight="167" spacing="1" tilecount="1" columns="1">
+  <image source="black_wall.png" width="128" height="167"/>
+ </tileset>
+ <tileset firstgid="23" name="refrigerator" tilewidth="48" tileheight="111" spacing="1" tilecount="1" columns="1">
+  <image source="refrigerator.png" width="48" height="111"/>
+ </tileset>
+ <tileset firstgid="24" name="box1" tilewidth="32" tileheight="48" spacing="1" tilecount="1" columns="1">
+  <image source="box1.png" width="32" height="48"/>
+ </tileset>
+ <tileset firstgid="25" name="start_table" tilewidth="128" tileheight="122" tilecount="1" columns="1">
+  <image source="table_start.png" width="128" height="122"/>
+ </tileset>
+ <tileset firstgid="26" name="picture" tilewidth="128" tileheight="81" tilecount="1" columns="1">
+  <image source="picture_startmap.png" width="128" height="81"/>
+ </tileset>
+ <tileset firstgid="27" name="edge1" tilewidth="32" tileheight="32" tilecount="2" columns="1">
+  <image source="edge.png" width="32" height="64"/>
+ </tileset>
+ <tileset firstgid="29" name="entrance" tilewidth="160" tileheight="131" tilecount="1" columns="1">
+  <image source="entrance.png" width="160" height="131"/>
+ </tileset>
+ <tileset firstgid="30" name="steps" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="steps.png" width="32" height="33"/>
+ </tileset>
+ <tileset firstgid="31" name="sofa" tilewidth="128" tileheight="68" tilecount="1" columns="1">
+  <image source="sofa.png" width="128" height="68"/>
+ </tileset>
+ <tileset firstgid="32" name="meta" tilewidth="32" tileheight="32" tilecount="4" columns="4">
+  <image source="meta.png" width="128" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="Collidable" type="bool" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="floor1" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztziEOACAQBLHDYDD8/7X4k6gltMn4qQIg2Qirm2F1Oyx//vz58+fvpb91+QcAAAAAAD85P/Qb+A==
+  </data>
+ </layer>
+ <layer name="carpet" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6BVsH9ZM+zSAxKQAABAZ64DAAAAAAAA8MQC9IsAEg==
+  </data>
+ </layer>
+ <layer name="floor_edge" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztwwENAAAIA6B3sH9Xa9wJGwnAb1MWAAAAAAAAALhjATAiAq0=
+  </data>
+ </layer>
+ <layer name="entrance" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzgENAAAIA6AXsX9NY3xOSEACAADAVdMOAAAAAADAcwvUGgAe
+  </data>
+ </layer>
+ <layer name="steps" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzrEJADAMwLBc0v/P7NrdBDpI4N0zAAAAsOc8/chf46/x1/hr/DX+Gn+Nv8Zf46/x1/hr/AHAnguF+wl/
+  </data>
+ </layer>
+ <layer name="edge1" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt1jEKgEAMAEH/of9/p60carPIHTJTBdIsqbJt/N0+O+DGtemYVvHseJhXoa/R1+hr9DX6Gn2NvkZf89Y3/vsz/v+3m4271e6rr9HX6Gv0NfoafY2+Rl+jr9HX6Gv0NfoA4FsnZ8cKfQ==
+  </data>
+ </layer>
+ <layer name="ranger" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20Hb6AAAAAAAAAAAAB4DCWAAAE=
+  </data>
+ </layer>
+ <layer name="black_door" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztxzENAAAIA7CpwL9UTIyEo/2aANyaZwcAAAAAAAAAaFmOBwDH
+  </data>
+ </layer>
+ <layer name="sofa" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzgENAAAIA6A3sX9LY3xTSEACwEfTDgAAAAAAAADAAQv2LQAg
+  </data>
+ </layer>
+ <layer name="start_door" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6CVsH9VE+zWAxKQAPw21wEAAAAAAAAAgGIB11YAFg==
+  </data>
+ </layer>
+ <objectgroup name="objects_knight">
+  <object id="1" name="knight" x="878" y="352" width="40" height="43"/>
+ </objectgroup>
+ <layer name="picture" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6DlsH9QC+zXAxKQAHRzHQAAAAAAAAAAeG4BiW0AGw==
+  </data>
+ </layer>
+ <layer name="box1" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIAyBjaP+iRvCcBySgCoCETgeA9yYdAAAAAAAAAE4L3eMAMg==
+  </data>
+ </layer>
+ <layer name="refrigerator" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzkERAAAIA6C1sH9TS+z0AwlIALg03wEAAAAAAAAAoGYBBmUAGA==
+  </data>
+ </layer>
+ <layer name="box" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAMAiBDrH/WdfDxgQQkALRuHQAAAAAAAAAAph6qTgAV
+  </data>
+ </layer>
+ <layer name="niudan" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzgENAAAIA6BnsH9YY3xTSEACwDXTDgAAAAAAAADAEwtfJgAT
+  </data>
+ </layer>
+ <layer name="meta" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzkEOwjAMRNEc5XP/S7JChMjuQBM0XvhJkfyr1s0YrbX2Pxw4j+W8nu/8a/7mjmiXus+3367v3nG1P7rHL/8hmasgmasgmasgmXf2zefEvmje2TefE/uieWfffE7si+YqSOYqSOYqSOYqSOYqGO97kb7lw/i833qidx0nu/tVuyHaDdFuiHZDtBui3RDthmg3RLsh2g3Rboh2Q7Qbot0Q7YZoN0S7IdoN0W6IdkO0G6LdEO2GaDdEuyHaDdGttdZadU8saxbF
+  </data>
+ </layer>
+</map>
