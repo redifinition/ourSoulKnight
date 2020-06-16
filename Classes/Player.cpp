@@ -66,6 +66,7 @@ bool Player::bindWeapon(Weapon* weapon) {
 
 		this->addChild(m_weapon);
 
+		_attack = m_weapon->getAttack();
 		return true;
 	}
 }
@@ -77,7 +78,7 @@ void Player::attack(Scene* _currentScene,const Vec2& pos) {
 	Vec2 test = this->m_weapon->getPosition();
 
 	//´´½¨×Óµ¯
-	auto bullet = Bullet::create(LONGREMOTE, direction, _currentScene);
+	auto bullet = Bullet::create(LONGREMOTE, this, direction, _currentScene);
 	bullet->setScale(1.5);
 	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
 	_currentScene->addChild(bullet);

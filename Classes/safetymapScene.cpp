@@ -79,8 +79,8 @@ bool safetymap::init()
 	monster->setPosition(Point(monsterX, monsterY));
 	
 	//创建怪物
-	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
-	this->addChild(remoteSoldierManager);
+	//RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
+	//this->addChild(remoteSoldierManager);
 
 	auto knight_animation = Animation::create();
 	char nameSize[30] = { 0 };
