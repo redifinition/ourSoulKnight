@@ -93,25 +93,25 @@ Vec2 RemoteSoldierManager::setSoldierPosition(int num)
 {
 	TMXObjectGroup* objGroup = _map->getObjectGroup("bullet");
 	float remoteSoldierX, remoteSoldierY;
-	if (num == 1) 
+	if (num == 0) 
 	{
 		ValueMap remoteSoldierMap = objGroup->getObject("remote_bullet1");
 		remoteSoldierX = remoteSoldierMap.at("x").asFloat();
 		remoteSoldierY = remoteSoldierMap.at("y").asFloat();
 	}
-	else if (num == 2)
+	else if (num == 1)
 	{
 		ValueMap remoteSoldierMap = objGroup->getObject("remote_bullet2");
 		remoteSoldierX = remoteSoldierMap.at("x").asFloat();
 		remoteSoldierY = remoteSoldierMap.at("y").asFloat();
 	}
-	else if(num == 3)
+	else if(num == 2)
 	{
 		ValueMap remoteSoldierMap = objGroup->getObject("remote_bullet3");
 		remoteSoldierX = remoteSoldierMap.at("x").asFloat();
 		remoteSoldierY = remoteSoldierMap.at("y").asFloat();
 	}
-	else if (num == 4)
+	else if (num == 3)
 	{
 		ValueMap remoteSoldierMap = objGroup->getObject("remote_bullet4");
 		remoteSoldierX = remoteSoldierMap.at("x").asFloat();
