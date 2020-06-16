@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Knight.h"
 #include "Gun.h"
+#include "RemoteSoldierManager.h"
 
 USING_NS_CC;
 
@@ -77,6 +78,10 @@ bool safetymap::init()
 	float monsterY = monster_point_map.at("y").asFloat();
 	monster->setPosition(Point(monsterX, monsterY));
 	
+	//创建怪物
+	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
+	this->addChild(remoteSoldierManager);
+
 	auto knight_animation = Animation::create();
 	char nameSize[30] = { 0 };
 	for (int i = 1; i <= 4; i++)

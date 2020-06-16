@@ -1,9 +1,9 @@
 #include "RemoteSoldierManager.h"
 
-RemoteSoldierManager* RemoteSoldierManager::create(Scene* currentScene)
+RemoteSoldierManager* RemoteSoldierManager::create(Scene* currentScene, Entity* player, TMXTiledMap* map)
 {
 	RemoteSoldierManager* remoteSoldierManager = new RemoteSoldierManager;
-	if (remoteSoldierManager && remoteSoldierManager->init(currentScene))
+	if (remoteSoldierManager && remoteSoldierManager->init(currentScene, player, map))
 	{
 		remoteSoldierManager->autorelease();
 		return remoteSoldierManager;
@@ -11,11 +11,14 @@ RemoteSoldierManager* RemoteSoldierManager::create(Scene* currentScene)
 	CC_SAFE_DELETE(remoteSoldierManager);
 	return nullptr;
 }
-bool RemoteSoldierManager::init(Scene* currentScene)
+bool RemoteSoldierManager::init(Scene* currentScene, Entity* player, TMXTiledMap* map)
 {
 	createMonsters();
 	_currentScene = currentScene;
+	_player = player;
+	_map = map;
 	this->scheduleUpdate();
+	this->schedule(CC_SCHEDULE_SELECTOR(RemoteSoldierManager::attackUpdate), 2.0f);
 	return true;
 }
 
@@ -31,14 +34,17 @@ void RemoteSoldierManager::createMonsters()
 		if (random == 0) 
 		{
 			remoteSoldier = RemoteSoldier::create(LONGREMOTE, _currentScene);
-			remoteSoldier->bindSprite(Sprite::create("LongRemoteSoldier.png"));
+			sprite = Sprite::create("LongRemoteSoldier.png");
+			remoteSoldier->bindSprite(sprite);
 		}
 		else
 		{
 			remoteSoldier = RemoteSoldier::create(SHORTREMOTE, _currentScene);
-			remoteSoldier->bindSprite(Sprite::create("ShortRemoteSoldier.png"));
+			sprite = Sprite::create("ShortRemoteSoldier.png");
+			remoteSoldier->bindSprite(sprite);
 		}
-		//remoteSoldier->setset() ³õÊ¼»¯×ø±ê
+		remoteSoldier->setPosition(this->setSoldierPosition(i));
+		this->addChild(remoteSoldier);
 		m_remoteSoldierArr.pushBack(remoteSoldier);
 	}
 }
@@ -70,4 +76,55 @@ void RemoteSoldierManager::update(float dt)
 			}
 		}
 	}
+}
+
+void RemoteSoldierManager::attackUpdate(float dt)
+{
+	for (auto remoteSoldier : m_remoteSoldierArr)
+	{
+		if (!(remoteSoldier->getalreadyDead()))
+		{
+			float difX = remoteSoldier->getPositionX() - _player->getPositionX();
+			float difY = remoteSoldier->getPositionY() - _player->getPositionY();
+			if(difX * difX + difY * difY <= LONG_REMOTE_SOLDIER_ATTACK_RADIUS* LONG_REMOTE_SOLDIER_ATTACK_RADIUS)
+				remoteSoldier->attack(_player);
+		}
+	}
+}
+
+Vec2 RemoteSoldierManager::setSoldierPosition(int num)
+{
+	TMXObjectGroup* objGroup = _map->getObjectGroup("bullet");
+	float remoteSoldierX, remoteSoldierY;
+	if (num == 0) 
+	{
+		ValueMap remoteSoldierMap = objGroup->getObject("remote_bullet1");
+		remoteSoldierX = remoteSoldierMap.at("x").asFloat();
+		remoteSoldierY = remoteSoldierMap.at("y").asFloat();
+	}
+	else if (num == 1)
+	{
+		ValueMap remoteSoldierMap = objGroup->getObject("remote_bullet2");
+		remoteSoldierX = remoteSoldierMap.at("x").asFloat();
+		remoteSoldierY = remoteSoldierMap.at("y").asFloat();
+	}
+	else if(num == 2)
+	{
+		ValueMap remoteSoldierMap = objGroup->getObject("remote_bullet3");
+		remoteSoldierX = remoteSoldierMap.at("x").asFloat();
+		remoteSoldierY = remoteSoldierMap.at("y").asFloat();
+	}
+	else if (num == 3)
+	{
+		ValueMap remoteSoldierMap = objGroup->getObject("remote_bullet4");
+		remoteSoldierX = remoteSoldierMap.at("x").asFloat();
+		remoteSoldierY = remoteSoldierMap.at("y").asFloat();
+	}
+	else
+	{
+		ValueMap remoteSoldierMap = objGroup->getObject("remote_bullet5");
+		remoteSoldierX = remoteSoldierMap.at("x").asFloat();
+		remoteSoldierY = remoteSoldierMap.at("y").asFloat();
+	}
+	return Vec2(remoteSoldierX, remoteSoldierY);
 }
