@@ -4,6 +4,8 @@
 #include "cocos2d.h"
 #include "Entity.h"
 #include "Weapon.h"
+#include "Bullet.h"
+
 USING_NS_CC;
 
 
@@ -20,10 +22,13 @@ public:
 	CREATE_FUNC(Player);
 	virtual bool init();
 //by lzy
-	void attack(Scene* currentScene, const Vec2& pos);								//调用攻击函数,还需要添加连发的功能
+	bool bindSprite(Sprite* sprite);							//同时添加物理碰撞模型
 	bool bindWeapon(Weapon* Weapon);							//绑定武器
+	void attack(Scene* currentScene, const Vec2& pos);			//调用攻击函数,还需要添加连发的功能
+	void rotateWeapon(const Vec2& pos); 
 	virtual void switchWeapon();								//接口，切换武器，角色不同切换武器的效果不同
 	void pickWeapon();											//接口，拾取武器
+	virtual void skill();										//技能
 //by lq
 	void setViewPointByPlayer();
 	virtual void set_tag_position(int x, int y);

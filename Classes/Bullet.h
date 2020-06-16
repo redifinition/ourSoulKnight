@@ -2,7 +2,6 @@
 #define __BULLET_H__
 
 #include "cocos2d.h"
-#include "Actor.h"
 #include "RemoteSoldier.h"
 #include "Constant.h"
 #include <string.h>
@@ -18,7 +17,10 @@ class Bullet : public cocos2d::Sprite
 public:
 	static Bullet* create(EActorType actorType,Entity* attackSource, Vec2 attackDirection, Scene* currentScene);
 	bool init(EActorType actorType, Entity* attackSource, Vec2 attackDirection, Scene* currentScene);
+	static Bullet* create(EActorType actorType, Vec2 attackDirection, Scene* currentScene);
+	bool init(EActorType actorType, Vec2 attackDirection, Scene* currentScene);
 	void move();
+	void new_move();
 };
 #endif 
 

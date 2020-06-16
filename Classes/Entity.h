@@ -25,7 +25,7 @@ public:
 	Entity();
 	~Entity();
 //by lzy
-	bool bindSprite(Sprite* sprite);
+	bool bindSprite(Sprite* sprite);	
 //by lq
 	void set_controller(My_Controller* controller);
 	virtual void set_tag_position(int x, int y);
