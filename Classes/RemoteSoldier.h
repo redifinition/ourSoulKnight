@@ -16,9 +16,9 @@ class RemoteSoldier : public  Entity
 public:
 	static RemoteSoldier* create(EActorType soldierType,Scene* currentScene);
 	void attack(Entity* attackTarget);
-	void takeDamage(int damage);
+	virtual void takeDamage(int damage);
 	bool init(EActorType soldierType, Scene* currentScene);
 private:
-	 void die();
+	virtual void die();
 };
 #endif

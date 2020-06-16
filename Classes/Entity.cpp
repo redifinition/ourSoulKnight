@@ -34,7 +34,6 @@ void Entity::set_controller(My_Controller* controller)
 	m_controller->set_controller_listener(this);
 }
 
-
 void Entity::set_tag_position(int x, int y)
 {
 	setPosition(Point(x, y));
@@ -43,5 +42,22 @@ void Entity::set_tag_position(int x, int y)
 Point Entity::get_tag_position()
 {
 	return getPosition();
+}
+
+void Entity::takeDamage(int damage)
+{
+	_HP -= damage;
+	if (_HP <= 0)
+	{
+		_alreadyDead = true;
+		this->die();
+	}
+}
+
+void Entity::die()
+{
+	this->release();
+	m_sprite->release();
+	//留个接口，用于返回安全地图
 }
 
