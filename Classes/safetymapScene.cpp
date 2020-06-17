@@ -5,6 +5,7 @@
 #include "SimpleMoveController.h"
 #include "Controller.h"
 #include "Player.h"
+#include "Knight.h"
 #include "Gun.h"
 #include "RemoteSoldierManager.h"
 
@@ -31,23 +32,24 @@ bool safetymap::init()
 	{
 		return false;
 	}
+	// 初始化Physics
+	if (!Scene::initWithPhysics())
+	{
+		return false;
+	}
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	
 	//创建地图背景
-	std::string floor_layer_file = "myfirstmap2.tmx";//地图文件
+	std::string floor_layer_file = "myfirstmap3.tmx";//地图文件
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
-	
 
-
-	//添加player
-	//auto pinfo = AutoPolygon::generatePolygon("player.png");
+	//添加player并绑定武器
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
-	Player* mplayer = Player::create();
-	//添加初始武器
+	Knight* mplayer = Knight::create();
 	Gun* initialWeapon = Gun::create("broken pistol.png");
 	mplayer->bindSprite(player_sprite);
 	mplayer->bindWeapon(initialWeapon);
@@ -62,8 +64,21 @@ bool safetymap::init()
 
 	//设置玩家坐标
 	mplayer->setPosition(Point(playerX,playerY));
-	//log("playerposition:x=%f, y=%f", playerX, playerY);
 
+  //log("playerposition:x=%f, y=%f", playerX, playerY);
+	//添加一个测试用的monster
+	Sprite* monster_sprite = Sprite::create("turn right 2.png");
+	Player* monster = Player::create();
+	monster->bindSprite(monster_sprite);
+	monster->setTiledMap(_tiledmap);
+
+	TMXObjectGroup* bulletGroup = _tiledmap->getObjectGroup("bullet");
+
+	ValueMap monster_point_map = bulletGroup->getObject("bullet1");
+	float monsterX = monster_point_map.at("x").asFloat();
+	float monsterY = monster_point_map.at("y").asFloat();
+	monster->setPosition(Point(monsterX, monsterY));
+	
 	//创建怪物
 	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
 	this->addChild(remoteSoldierManager, 4);
@@ -95,62 +110,55 @@ bool safetymap::init()
 	//设置控制器到主角身上
 	mplayer->set_controller(simple_move_controller);
 
+	//设置碰撞掩码
+	this->m_player = mplayer;
+	this->m_monster = monster;
+
+	m_monster->getPhysicsBody()->setCategoryBitmask(0x02);
+	m_monster->getPhysicsBody()->setContactTestBitmask(0x04);
+
+	this->addChild(monster,2);
 	this->addChild(mplayer,2);
 
 	this->addChild(_tiledmap);
 
 	//创建EventListener
 	auto listener = EventListenerTouchOneByOne::create();
-	listener->onTouchBegan = [=](Touch* touch, Event* event) {
-		//Vec2 pos = Director::getInstance()->convertToGL(touch->getLocationInView());
-		
-		Vec2 pos = Director::getInstance()->convertToGL(touch->getLocationInView());
-
-		//有点问题，暂时用不了：fire里的addChild()没能成功
-		//mplayer->attack(this,pos);	
-
-		auto offset = pos - mplayer->getPosition();
-		offset.normalize();
-		auto destination = offset * 2000;
-
-		//子弹添加到枪口的位置，暂时设置为武器锚点的位置，后期改
-		auto bullet = Sprite::create("Projectile.png");
-		bullet->setScale(1.5);
-		bullet->setPosition(Vec2(mplayer->getPositionX(), mplayer->getPositionY()));
-		this->addChild(bullet);
-
-		//创建子弹的动作
-		auto bulletMove = MoveBy::create(2.0f, destination);
-		auto actionRemove = RemoveSelf::create();
-
-		//日志输出touch的坐标、武器初始坐标、子弹飞行方向
-		log("Touch:x=%f, y=%f", pos.x, pos.y);
-		log("Weapon:x=%f, y=%f", this->getPositionX(), this->getPositionY());
-		log("mplayer:x=%f, y=%f", mplayer->getPositionX(), mplayer->getPositionY());
-		log("m_sprite:x=%f, y=%f", mplayer->getsprite()->getPositionX(), mplayer->getsprite()->getPositionY());
-		log("Direction:x=%f, y=%f", offset.x, offset.y);
-
-		//发射子弹
-		bullet->runAction(Sequence::create(bulletMove, actionRemove, nullptr));
-	
-		/*auto bullet = Sprite::create("Projectile.png");
-		bullet->setScale(0.5);
-		bullet->setPosition(Vec2(mplayer->getPositionX(), mplayer->getPositionY()));
-		this->addChild(bullet);*/
-		
-		return true;
-	};
-
-	listener->onTouchMoved = [](Touch* touch, Event* event) {
-
-	};
-
-	listener->onTouchEnded = [](Touch* touch, Event*event) {
-
-	};
-
+	listener->onTouchBegan = CC_CALLBACK_2(safetymap::onTouchBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
+	//创建contactListener
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(safetymap::onContactBegin, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+
+	return true;
+}
+
+bool safetymap::onTouchBegin(Touch* touch, Event* event) {
+	Vec2 pos = m_monster->getPosition();
+	m_player->rotateWeapon(pos);
+	m_player->attack(this, pos);
+	return true;
+}
+
+bool safetymap::onContactBegin(PhysicsContact& contact) {
+
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+
+	if (nodeA && nodeB)
+	{
+		if (nodeA->getTag() == 10)
+		{
+			nodeA->removeFromParentAndCleanup(true);
+		}
+		else if (nodeB->getTag() == 10)
+		{
+			nodeB->removeFromParentAndCleanup(true);
+		}
+
+	}
 
 	return true;
 }

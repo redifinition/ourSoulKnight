@@ -5,7 +5,7 @@ Player::Player()
 	_HP = 5;
 	_MP = 100;
 	_AC = 5;
-	_weaponPosition = Vec2(0.5, 0.2);
+	_weaponPosition = Vec2(0.8, 0.3);
 
 }
 
@@ -17,6 +17,32 @@ bool Player::init()
 	return true;
 }
 
+bool Player::bindSprite(Sprite*sprite) {
+	this->m_sprite = sprite;
+	if (m_sprite == nullptr)
+	{
+		printf("m_sprite in this entity is nullptr, check wether the file used to create the sprite in right dictionary.");
+		return false;
+	}
+	else
+	{
+		this->addChild(m_sprite);
+		/*设置Player的大小和m_sprite的大小一致，否则碰撞模型会不对*/
+		Size size = m_sprite->getContentSize();
+		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
+		this->setContentSize(size);
+		this->setAnchorPoint(Vec2(0.5, 0.5));
+
+		/*添加物理碰撞模型*/
+		auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(0.0f, 0.0f, 0.0f));
+		physicsBody->setDynamic(false);
+		physicsBody->setCategoryBitmask(0x01);
+		physicsBody->setContactTestBitmask(0x04);
+		this->addComponent(physicsBody);
+
+		return true;
+	}
+}
 //和角色武器相关的函数
 bool Player::bindWeapon(Weapon* weapon) {
 	if (weapon == nullptr)
@@ -28,17 +54,45 @@ bool Player::bindWeapon(Weapon* weapon) {
 	{
 		this->m_weaponArr.pushBack(weapon);
 		this->m_weapon = weapon;	//当前武器就设置为绑定的武器
-		m_weapon->setScale(0.08);	//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调对
-		this->addChild(m_weapon);
 		if (m_weapon == nullptr)
 		{
 			log("m_weapon is nullptr");
 		}
+
+		//设定武器位置
 		Size size = m_sprite->getContentSize();
-;
-		m_weapon->setPosition(Point(size.width*getWpPos().x, size.height*getWpPos().y));
+;		m_weapon->setPosition(Vec2(size.width*getWpPos().x, size.height*getWpPos().y));//*getWpPos().x
+		m_weapon->setScale(0.08);	//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调对
+
+		this->addChild(m_weapon);
 
 		return true;
+	}
+}
+
+void Player::attack(Scene* _currentScene,const Vec2& pos) {
+	//攻击方向
+	auto direction = pos - this->getPosition();
+	direction.normalize();
+	Vec2 test = this->m_weapon->getPosition();
+
+	//创建子弹
+	auto bullet = Bullet::create(LONGREMOTE, direction, _currentScene);
+	bullet->setScale(1.5);
+	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
+	_currentScene->addChild(bullet);
+	bullet->new_move();
+}
+
+void Player::rotateWeapon(const Vec2& pos) {
+	auto direction = pos - this->getPosition();
+	float x = direction.x;
+	float y = direction.y;
+	if (x > 0 && y > 0) {
+		this->m_weapon->setRotation(-45.0f);
+	}
+	else if (x > 0 && y < 0) {
+		this->m_weapon->setRotation(+45.0f);
 	}
 }
 
@@ -46,10 +100,9 @@ void Player::switchWeapon() {
 
 }
 
-void Player::attack(Scene* currentScene,const Vec2& pos) {
-	m_weapon->fire(currentScene,pos);
-}
+void Player::skill() {
 
+}
 //和键盘控制相关的函数
 void Player::setViewPointByPlayer()
 {
