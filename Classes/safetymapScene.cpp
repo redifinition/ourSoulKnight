@@ -62,11 +62,12 @@ bool safetymap::init()
 
 	//设置玩家坐标
 	mplayer->setPosition(Point(playerX,playerY));
-
+	//log("playerposition:x=%f, y=%f", playerX, playerY);
 
 	//创建怪物
 	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
-	this->addChild(remoteSoldierManager);
+	this->addChild(remoteSoldierManager, 4);
+	//log("remoteSoldierManager:x=%f, y=%f", remoteSoldierManager->getPositionX(), remoteSoldierManager->getPositionY());
 
 	auto knight_animation = Animation::create();
 	char nameSize[30] = { 0 };
@@ -126,7 +127,7 @@ bool safetymap::init()
 		log("Touch:x=%f, y=%f", pos.x, pos.y);
 		log("Weapon:x=%f, y=%f", this->getPositionX(), this->getPositionY());
 		log("mplayer:x=%f, y=%f", mplayer->getPositionX(), mplayer->getPositionY());
-		log("m_sprite:x=%f, y=%f", mplayer->getSprite()->getPositionX(), mplayer->getSprite()->getPositionY());
+		log("m_sprite:x=%f, y=%f", mplayer->getsprite()->getPositionX(), mplayer->getsprite()->getPositionY());
 		log("Direction:x=%f, y=%f", offset.x, offset.y);
 
 		//发射子弹
