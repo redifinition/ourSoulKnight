@@ -43,21 +43,3 @@ Point Entity::get_tag_position()
 {
 	return getPosition();
 }
-
-void Entity::takeDamage(int damage)
-{
-	_HP -= damage;
-	if (_HP <= 0)
-	{
-		_alreadyDead = true;
-		this->die();
-	}
-}
-
-void Entity::die()
-{
-	this->release();
-	m_sprite->release();
-	//留个接口，用于返回安全地图
-}
-

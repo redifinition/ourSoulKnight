@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Knight.h"
 #include "Gun.h"
+#include "Bullet.h"
 #include "RemoteSoldierManager.h"
 
 USING_NS_CC;
@@ -68,6 +69,7 @@ bool safetymap::init()
 	//添加一个测试用的monster
 	Sprite* monster_sprite = Sprite::create("turn right 2.png");
 	Player* monster = Player::create();
+	monster->setTag(-2);
 	monster->bindSprite(monster_sprite);
 	monster->setTiledMap(_tiledmap);
 
@@ -120,6 +122,7 @@ bool safetymap::init()
 
 	this->addChild(_tiledmap);
 
+
 	//创建EventListener
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(safetymap::onTouchBegin, this);
@@ -134,9 +137,17 @@ bool safetymap::init()
 }
 
 bool safetymap::onTouchBegin(Touch* touch, Event* event) {
-	Vec2 pos = m_monster->getPosition();
-	m_player->rotateWeapon(pos);
-	m_player->attack(this, pos);
+	auto target = this->m_monster;
+	try
+	{
+		Vec2 pos = target->getPosition();
+		m_player->rotateWeapon(pos);
+		m_player->attack(this, pos);
+	}
+	catch (const std::exception&)
+	{
+
+	}
 	return true;
 }
 
@@ -147,12 +158,29 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 
 	if (nodeA && nodeB)
 	{
-		if (nodeA->getTag() == 10)
+		if (nodeA->getTag() > 0)
 		{
+			if (nodeB->getTag() == -1)
+			{
+				this->m_player->takeDamage(nodeA->getTag());
+			}
+			else if (nodeB->getTag() == -2)
+			{
+				this->m_monster->takeDamage(nodeA->getTag());
+			}
 			nodeA->removeFromParentAndCleanup(true);
+
 		}
-		else if (nodeB->getTag() == 10)
+		else if (nodeB->getTag() > 0)
 		{
+			if (nodeA->getTag() == -1)
+			{
+				this->m_player->takeDamage(nodeB->getTag());
+			}
+			else if (nodeA->getTag() == -2)
+			{
+				this->m_monster->takeDamage(nodeB->getTag());
+			}
 			nodeB->removeFromParentAndCleanup(true);
 		}
 

@@ -2,7 +2,7 @@
 #include <math.h>
 
 Gun::Gun() {
-	_attack = 5;
+	_attack = 2;
 	_attackMode = 1;
 	_mpConsumption = 1;
 	/*_bullet = Sprite::create("Resources/Projectile.png");

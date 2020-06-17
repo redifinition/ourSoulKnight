@@ -104,6 +104,23 @@ void Player::switchWeapon() {
 void Player::skill() {
 
 }
+
+void Player::takeDamage(int damage)
+{
+	_HP -= damage;
+	if (_HP <= 0)
+	{
+		_alreadyDead = true;
+		this->die();
+	}
+}
+
+void Player::die()
+{
+	
+	this->removeFromParentAndCleanup(true);
+}
+
 //和键盘控制相关的函数
 void Player::setViewPointByPlayer()
 {

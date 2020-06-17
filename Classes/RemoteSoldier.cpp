@@ -34,6 +34,7 @@ bool RemoteSoldier::init(EActorType soldierType, Scene* currentScene)
 	_attackTarget = nullptr;
 	_currentScene = currentScene;
 	_bulletSpeed = SOLDIER_BULLET_SPEED;
+	setTag(-2);
 	return true;
 }
 
