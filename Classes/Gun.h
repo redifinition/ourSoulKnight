@@ -2,12 +2,15 @@
 #define __Gun_H__
 
 #include "Weapon.h"
+#include "Bullet.h"
+#include "Constant.h"
 
 USING_NS_CC;
 
 class Gun :public Weapon {
-	CC_SYNTHESIZE(Sprite*, _bullet, Bullet);
 	CC_SYNTHESIZE(float, _bulletSpeed, BulletSpeed);			//子弹速度，单位是像素点
+	CC_SYNTHESIZE(EActorType, _bulletType, BulletType);			//武器使用的子弹类型，近战则没有
+
 public:
 	Gun();													//用于初始化武器的属性，之后放到各个武器的类里面去
 	~Gun();													//析构函数好像没啥用，先放在这

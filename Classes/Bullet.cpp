@@ -53,7 +53,46 @@ void Bullet::move()
 
 
 //用于玩家攻击时子弹的运动
+Bullet* Bullet::create(EActorType actorType, Weapon* attackSource, Vec2 attackDirection, Scene* currentScene)
+{
+	Bullet* bullet = new Bullet;
+	if (bullet && bullet->init(actorType, attackSource, attackDirection, currentScene))
+	{
+		bullet->autorelease();
+		return bullet;
+	}
+	CC_SAFE_DELETE(bullet);
+	return nullptr;
+}
 
+bool Bullet::init(EActorType actorType, Weapon* attackSource, Vec2 attackDirection, Scene* currentScene)
+{
+	if (actorType == SHORTREMOTE)
+	{
+		_bulletType = "ShortRemote";
+		setTexture("ShortRemoteBullet.png");
+	}
+	else if (actorType == LONGREMOTE)
+	{
+		_bulletType = "LongRemote";
+		setTexture("LongRemoteBullet.png");
+	}
+	else
+		return false;
+	_damage = attackSource->getAttack();
+	_attackDirection = attackDirection;
+	_currentScene = currentScene;
+
+	//设置子弹的碰撞模型
+	auto physicsBody = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0.0f, 0.0f, 0.0f));
+	physicsBody->setDynamic(false);
+	physicsBody->setCategoryBitmask(0x04);
+	physicsBody->setContactTestBitmask(0x02);
+	this->setTag(_damage);
+	this->addComponent(physicsBody);
+
+	return true;
+}
 void Bullet::new_move()
 {
 	Vec2 destination = _attackDirection * 2000;

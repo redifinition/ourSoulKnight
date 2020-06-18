@@ -138,15 +138,14 @@ bool safetymap::init()
 
 bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 	auto target = this->m_monster;
-	try
+	if(!target->getalreadyDead())
 	{
 		Vec2 pos = target->getPosition();
 		m_player->rotateWeapon(pos);
 		m_player->attack(this, pos);
 	}
-	catch (const std::exception&)
-	{
-
+	else {
+		m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
 	}
 	return true;
 }

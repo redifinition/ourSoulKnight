@@ -5,11 +5,8 @@ Gun::Gun() {
 	_attack = 2;
 	_attackMode = 1;
 	_mpConsumption = 1;
-	/*_bullet = Sprite::create("Resources/Projectile.png");
-	if (_bullet = nullptr) {
-		log("Failed to initialize _bullet");
-	}*/
 	_bulletSpeed = 1000;
+	_bulletType = LONGREMOTE;
 	this->setAnchorPoint(Vec2(0.1, 0.1));
 }
 Gun::~Gun() {
@@ -36,28 +33,15 @@ bool Gun::init(const std::string& filename)
 	return true;
 }
 
-void Gun::fire(Scene* currentScene,const Vec2& pos) {
-	//计算飞行方向和距离
-	auto offset = pos - this->getPosition();
-	offset.normalize();
-	auto destination = offset * 2000;
+void Gun::fire(Scene* _currentScene,const Vec2& pos) {
+	//攻击方向
+	auto direction = pos - this->getParent()->getPosition();
+	direction.normalize();
 
-	//子弹添加到枪口的位置，暂时设置为武器锚点的位置，后期改
-	auto bullet = Sprite::create("Projectile.png");
-	bullet->setScale(0.5);
-	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
-	currentScene->addChild(bullet, 3);
-
-	//创建子弹的动作
-	auto bulletMove = MoveBy::create(2.0f, destination);
-	auto actionRemove = RemoveSelf::create();
-	
-	//日志输出touch的坐标、武器初始坐标、子弹飞行方向
-	log("Touch:x=%f, y=%f", pos.x, pos.y);
-	log("Weapon:x=%f, y=%f", this->getPositionX(), this->getPositionY());
-	log("Bullet:x=%f, y=%f", bullet->getPositionX(), bullet->getPositionY());
-	log("Direction:x=%f, y=%f", offset.x, offset.y);
-
-	//发射子弹
-	bullet->runAction(Sequence::create(bulletMove, actionRemove, nullptr));
+	//创建子弹
+	auto bullet = Bullet::create(_bulletType, this, direction, _currentScene);
+	bullet->setScale(1.5);
+	bullet->setPosition(this->getParent()->getPosition());
+	_currentScene->addChild(bullet);
+	bullet->new_move();
 }

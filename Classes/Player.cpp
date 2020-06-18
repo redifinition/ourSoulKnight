@@ -6,6 +6,7 @@ Player::Player()
 	_MP = 100;
 	_AC = 5;
 	_weaponPosition = Vec2(0.8, 0.3);
+	_alreadyDead = false;
 
 }
 
@@ -71,18 +72,21 @@ bool Player::bindWeapon(Weapon* weapon) {
 	}
 }
 
-void Player::attack(Scene* _currentScene,const Vec2& pos) {
+void Player::attack(Scene* currentScene,const Vec2& pos) {
+	this->m_weapon->fire(currentScene, pos);
+	/*
 	//攻击方向
 	auto direction = pos - this->getPosition();
 	direction.normalize();
 	Vec2 test = this->m_weapon->getPosition();
 
 	//创建子弹
-	auto bullet = Bullet::create(LONGREMOTE, this, direction, _currentScene);
+	auto bullet = Bullet::create(LONGREMOTE, this, direction, currentScene);
 	bullet->setScale(1.5);
 	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
-	_currentScene->addChild(bullet);
+	currentScene->addChild(bullet);
 	bullet->new_move();
+	*/
 }
 
 void Player::rotateWeapon(const Vec2& pos) {
@@ -117,8 +121,9 @@ void Player::takeDamage(int damage)
 
 void Player::die()
 {
+
+	this->setVisible(false);
 	
-	this->removeFromParentAndCleanup(true);
 }
 
 //和键盘控制相关的函数
