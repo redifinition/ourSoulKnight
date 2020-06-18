@@ -13,7 +13,7 @@ class Player :public Entity {
 //by lzy	
 	CC_SYNTHESIZE(int, _MP, MP);		
 	CC_SYNTHESIZE(int, _AC, AC);
-	CC_SYNTHESIZE(Vec2, _weaponPosition, WpPos);				//ÎäÆ÷¹Ì¶¨ÔÚÈËÎïÉÏµÄÏà¶ÔÎ»ÖÃ,Ä¬ÈÏÖµÎªplayerµÄÖĞĞÄ
+	CC_SYNTHESIZE(Vec2, _weaponPosition, WpPos);				//æ­¦å™¨å›ºå®šåœ¨äººç‰©ä¸Šçš„ç›¸å¯¹ä½ç½®,é»˜è®¤å€¼ä¸ºplayerçš„ä¸­å¿ƒ
 	CC_SYNTHESIZE(Weapon*, _currentWeapon, CurrentWeapon);
 public:
 	Player();
@@ -21,26 +21,34 @@ public:
 	CREATE_FUNC(Player);
 	virtual bool init();
 
-	//¹¦ÄÜÄ£¿é
-	bool bindSprite(Sprite* sprite);							//°ó¶¨¾«Áé¶ÔÏó
-	bool bindWeapon(Weapon* Weapon);							//°ó¶¨ÎäÆ÷
-	virtual void die();											//½ÇÉ«ËÀÍö£¬É¾³ı½ÇÉ«²¢·µ»Ø°²È«µØÍ¼
-	virtual void takeDamage(int damage);						//ÊÜ»÷ÅĞ¶¨£¬²¢µôÑª
-	void attack(Scene* currentScene, const Vec2& pos);			//¹¥»÷º¯Êı
-	void rotateWeapon(const Vec2& pos);							//ÎäÆ÷¸úËæ¹¥»÷·½Ïò
-	virtual void switchWeapon();								//½Ó¿Ú£¬ÇĞ»»ÎäÆ÷£¬½ÇÉ«²»Í¬ÇĞ»»ÎäÆ÷µÄĞ§¹û²»Í¬
-	void pickWeapon();											//½Ó¿Ú£¬Ê°È¡ÎäÆ÷
-	virtual void skill();										//¼¼ÄÜ
+	//åŠŸèƒ½æ¨¡å—
+	bool bindSprite(Sprite* sprite);							//ç»‘å®šç²¾çµå¯¹è±¡
+	bool bindWeapon(Weapon* Weapon);							//ç»‘å®šæ­¦å™¨
+	virtual void die();											//è§’è‰²æ­»äº¡ï¼Œåˆ é™¤è§’è‰²å¹¶è¿”å›å®‰å…¨åœ°å›¾
+	virtual void takeDamage(int damage);						//å—å‡»åˆ¤å®šï¼Œå¹¶æ‰è¡€
+	void attack(Scene* currentScene, const Vec2& pos);			//æ”»å‡»å‡½æ•°
+	void rotateWeapon(const Vec2& pos);							//æ­¦å™¨è·Ÿéšæ”»å‡»æ–¹å‘
+	virtual void switchWeapon();								//æ¥å£ï¼Œåˆ‡æ¢æ­¦å™¨ï¼Œè§’è‰²ä¸åŒåˆ‡æ¢æ­¦å™¨çš„æ•ˆæœä¸åŒ
+	void pickWeapon();											//æ¥å£ï¼Œæ‹¾å–æ­¦å™¨
+	virtual void skill();										//æŠ€èƒ½
 
 
 	void setViewPointByPlayer();
 	virtual void set_tag_position(int x, int y);
 	void setTiledMap(TMXTiledMap* map);
 private:
-	Weapon* m_weapon;											//Playerµ±Ç°Ê¹ÓÃµÄÎäÆ÷
-	Vector<Weapon*> m_weaponArr;								//PlayerĞ¯´øµÄËùÓĞÎäÆ÷
+	Weapon* m_weapon;											//Playerå½“å‰ä½¿ç”¨çš„æ­¦å™¨
+	Vector<Weapon*> m_weaponArr;								//Playeræºå¸¦çš„æ‰€æœ‰æ­¦å™¨
 	TMXTiledMap* m_map;
+
+	bool isJumping;//æ ‡è®°ä¸»æ•™æ˜¯å¦ç¢°æ’äº†éšœç¢ç‰©
+
+	TMXLayer* meta;//æ£€æµ‹ç¢°æ’çš„åœ°å›¾å±‚
+	
+	/*å°†åƒç´ åæ ‡è½¬åŒ–ä¸ºåœ°å›¾æ ¼å­åæ ‡*/
+	bool isJumping;
 	TMXLayer* meta;
+
 	Point tileCoordForPosition(Point pos);
 };
 
