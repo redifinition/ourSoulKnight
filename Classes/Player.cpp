@@ -1,51 +1,159 @@
 #include "Player.h"
 #include "safetymapScene.h"
+
+Player::Player()
+{
+	_HP = 5;
+	_MP = 100;
+	_AC = 5;
+	_weaponPosition = Vec2(0.8, 0.3);
+	_alreadyDead = false;
+
+}
+
+Player::~Player() {
+
+}
 bool Player::init()
 {
-
-	isJumping = false;
-
 	return true;
 }
 
+bool Player::bindSprite(Sprite*sprite) {
+	this->m_sprite = sprite;
+	if (m_sprite == nullptr)
+	{
+		printf("m_sprite in this entity is nullptr, check wether the file used to create the sprite in right dictionary.");
+		return false;
+	}
+	else
+	{
+		this->addChild(m_sprite);
+		/*设置Player的大小和m_sprite的大小一致，否则碰撞模型会不对*/
+		Size size = m_sprite->getContentSize();
+		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
+		this->setContentSize(size);
+		this->setAnchorPoint(Vec2(0.5, 0.5));
 
-void Player::run()
-{
+		/*添加物理碰撞模型*/
+		auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(0.0f, 0.0f, 0.0f));
+		physicsBody->setDynamic(false);
+		physicsBody->setCategoryBitmask(0x01);
+		physicsBody->setContactTestBitmask(0x04);
+		this->addComponent(physicsBody);
+
+		return true;
+	}
+}
+//和角色武器相关的函数
+bool Player::bindWeapon(Weapon* weapon) {
+	if (weapon == nullptr)
+	{
+		printf("m_weapon in this player is nullptr, check wether the file used to create the weapon in right dictionary.");
+		return false;
+	}
+	else
+	{
+		this->m_weaponArr.pushBack(weapon);
+		this->m_weapon = weapon;	//当前武器就设置为绑定的武器
+		if (m_weapon == nullptr)
+		{
+			log("m_weapon is nullptr");
+		}
+
+		//设定武器位置
+		Size size = m_sprite->getContentSize();
+;		m_weapon->setPosition(Vec2(size.width*getWpPos().x, size.height*getWpPos().y));//*getWpPos().x
+		m_weapon->setScale(0.08);	//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调对
+
+		this->addChild(m_weapon);
+
+		_attack = m_weapon->getAttack();
+		return true;
+	}
+}
+
+void Player::attack(Scene* currentScene,const Vec2& pos) {
+	this->m_weapon->fire(currentScene, pos);
+	/*
+	//攻击方向
+	auto direction = pos - this->getPosition();
+	direction.normalize();
+	Vec2 test = this->m_weapon->getPosition();
+
+	//创建子弹
+	auto bullet = Bullet::create(LONGREMOTE, this, direction, currentScene);
+	bullet->setScale(1.5);
+	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
+	currentScene->addChild(bullet);
+	bullet->new_move();
+	*/
+}
+
+void Player::rotateWeapon(const Vec2& pos) {
+	auto direction = pos - this->getPosition();
+	float x = direction.x;
+	float y = direction.y;
+	if (x > 0 && y > 0) {
+		this->m_weapon->setRotation(-45.0f);
+	}
+	else if (x > 0 && y < 0) {
+		this->m_weapon->setRotation(+45.0f);
+	}
+}
+
+void Player::switchWeapon() {
 
 }
 
+void Player::skill() {
+
+}
+
+void Player::takeDamage(int damage)
+{
+	_HP -= damage;
+	if (_HP <= 0)
+	{
+		_alreadyDead = true;
+		this->die();
+	}
+}
+
+void Player::die()
+{
+
+	this->setVisible(false);
+	
+}
+
+//和键盘控制相关的函数
 void Player::setViewPointByPlayer()
 {
 	if (m_sprite == NULL)
 		return;
 	Layer* parent = (Layer*)getParent();
 
-	//��ͼ������
 	Size mapTiledNum = m_map->getMapSize();
-
-	//��ͼ������Ӵ��?
+  
 	Size tiledSize = m_map->getTileSize();
 
-	//��ͼ��С
 	Size mapSize = Size(mapTiledNum.width*tiledSize.width, mapTiledNum.height*tiledSize.height);
 
-	//��Ļ��С
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
-	//������
 	Point spritePos = getPosition();
 
 	float x = std::max(spritePos.x,visibleSize.width/2);
 	float y = std::max(spritePos.y, visibleSize.height / 2);
 
-	//��������곬��Χ����ȡ������?
+
+	//锟斤拷锟斤拷锟斤拷锟斤拷瓿拷锟轿э拷锟斤拷锟饺★拷锟斤拷锟斤拷锟?
 	x = std::min(x, mapSize.width - visibleSize.width / 2);
 	y = std::min(y, mapSize.height - visibleSize.height / 2);
 
-	//Ŀ���?
 	Point desPos = Point(x, y);
 
-	//��Ļ�е�
 	Point centPos = Point(visibleSize.width / 2, visibleSize.height / 2);
 
 	Point viewPos = centPos - desPos;
@@ -56,18 +164,15 @@ void Player::setViewPointByPlayer()
 
 void Player::set_tag_position(int x, int y)
 {
-	/*�ж�ǰ���Ƿ񲻿�ͨ��*/
+
 	Size spriteSize = m_sprite->getContentSize();
 	Point dstPos = Point(x+spriteSize.width/2, y);
 	Point dstPos_y = Point(x + spriteSize.width / 2, y - spriteSize.height / 2);
-	//�����ΪPlayer��Ӧ���ƫ�µ�λ�ã�Ϊ���ж�Player�·��Ľ�����
 
-	/*������ǰ����ͼ����λ��*/
 	Point tiledPos = tileCoordForPosition(Point(dstPos.x, dstPos.y));
 	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
 	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
-	//�Ըþ������ڸ��ӵ�ǰ���жϣ�
-	/*��õ�ͼ���ӵ�Ψһ���*/
+  
 	int tileGid = meta->getTileGIDAt(tiledPos);
 	int tiledGid_right = meta->getTileGIDAt(tiledPos_right); 
 	int tiledGid_bottom = meta->getTileGIDAt(tiledPos_bottom);
@@ -117,10 +222,11 @@ void Player::setTiledMap(TMXTiledMap* map)
 Point Player::tileCoordForPosition(Point pos) {
 	Size mapTiledNum = m_map->getMapSize();
 	Size tiledSize = m_map->getTileSize();
+
 	int x, y;
     x = (pos.x*1.8) / tiledSize.width;
 
-    /*y������Ҫת��һ�£���Ϊ����ϵ��tiled��ͬ*/
+    /*y坐标需要转换一下，因为坐标系和tiled不同*/
 	y = (mapTiledNum.height*tiledSize.height - pos.y*1.8) / tiledSize.height;
 	
 	if (x > 0)
