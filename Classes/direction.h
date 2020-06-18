@@ -4,5 +4,5 @@
 static int knight_ixspeed = 0;
 static int knight_iyspeed = 0;
 
-
 #endif 
+#pragma once

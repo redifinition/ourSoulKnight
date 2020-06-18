@@ -19,4 +19,6 @@ public:
 	virtual void fire(Scene* currentScene,const Vec2& pos);
 
 };
+
 #endif
+#pragma once

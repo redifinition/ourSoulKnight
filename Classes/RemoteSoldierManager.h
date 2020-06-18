@@ -21,4 +21,6 @@ private:
 	void createMonsters();
 	Vector<RemoteSoldier*> m_remoteSoldierArr;
 };
+
 #endif
+#pragma once

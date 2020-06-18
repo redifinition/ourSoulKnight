@@ -28,4 +28,7 @@ public:
 	virtual void set_tag_position(int x, int y);
 	virtual Point get_tag_position();
 };
+
 #endif
+#pragma once
+

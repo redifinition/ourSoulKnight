@@ -24,5 +24,6 @@ public:
 	void new_move();
 
 };
-#endif 
 
+#endif 
+#pragma once

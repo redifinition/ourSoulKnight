@@ -1,14 +1,7 @@
 #include "HelloWorldScene.h"
 #include "MyHelloWorldScene.h"
-#include "audio.h"
 #include "safetymapScene.h"
-#include "SimpleMoveController.h"
-#include "Controller.h"
-#include "Player.h"
-#include "Knight.h"
-#include "Gun.h"
-#include "Bullet.h"
-#include "RemoteSoldierManager.h"
+#include "audio.h"
 
 USING_NS_CC;
 
@@ -43,7 +36,7 @@ bool safetymap::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	
 	//创建地图背景
-	std::string floor_layer_file = "myfirstmap3.tmx";//地图文件
+	std::string floor_layer_file = "myfirstmap22.tmx";//地图文件
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
@@ -66,7 +59,6 @@ bool safetymap::init()
 	//设置玩家坐标
 	mplayer->setPosition(Point(playerX,playerY));
 
-  //log("playerposition:x=%f, y=%f", playerX, playerY);
 	//添加一个测试用的monster
 	Sprite* monster_sprite = Sprite::create("turn right 2.png");
 	Player* monster = Player::create();
@@ -82,14 +74,12 @@ bool safetymap::init()
 	monster->setPosition(Point(monsterX, monsterY));
 	
 	//创建怪物
-<<<<<<< HEAD
 	//RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
 	//this->addChild(remoteSoldierManager);
-=======
 	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
 	this->addChild(remoteSoldierManager, 4);
 	//log("remoteSoldierManager:x=%f, y=%f", remoteSoldierManager->getPositionX(), remoteSoldierManager->getPositionY());
->>>>>>> 8e07233f0bc8d43ede9016613c81a30357c89193
+
 
 	auto knight_animation = Animation::create();
 	char nameSize[30] = { 0 };

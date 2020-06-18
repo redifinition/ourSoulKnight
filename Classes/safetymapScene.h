@@ -25,6 +25,7 @@ protected:
 };
 
 #endif // __SAFETYMAP_SCENE_H__
+#pragma once
 
 /*
 bool safetymap::onContactBegin(PhysicsContact& contact) {

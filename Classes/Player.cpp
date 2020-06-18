@@ -111,11 +111,18 @@ void Player::skill() {
 
 void Player::takeDamage(int damage)
 {
-	_HP -= damage;
-	if (_HP <= 0)
+	if (_AC > 0)
 	{
-		_alreadyDead = true;
-		this->die();
+		_AC -= damage;
+	}
+	else 
+	{
+		_HP -= damage;
+		if (_HP <= 0)
+		{
+			_alreadyDead = true;
+			this->die();
+		}
 	}
 }
 
