@@ -13,10 +13,10 @@ RemoteSoldierManager* RemoteSoldierManager::create(Scene* currentScene, Entity* 
 }
 bool RemoteSoldierManager::init(Scene* currentScene, Entity* player, TMXTiledMap* map)
 {
-	createMonsters();
 	_currentScene = currentScene;
 	_player = player;
 	_map = map;
+	createMonsters();
 	this->scheduleUpdate();
 	this->schedule(CC_SCHEDULE_SELECTOR(RemoteSoldierManager::attackUpdate), 2.0f);
 	return true;
@@ -26,11 +26,11 @@ void RemoteSoldierManager::createMonsters()
 {
 	RemoteSoldier* remoteSoldier = nullptr;
 	Sprite* sprite = nullptr;
-
+	srand((unsigned)time(nullptr));
 	for (int i = 0; i < MAX_REMOTE_SOLDIER_NUM; i++)
 	{
-		srand((unsigned)time(nullptr));
 		int random = rand() % 2;
+		log("random:%d", random);
 		if (random == 0) 
 		{
 			remoteSoldier = RemoteSoldier::create(LONGREMOTE, _currentScene);
@@ -55,8 +55,8 @@ void RemoteSoldierManager::update(float dt)
 	{
 		if(!(remoteSoldier->getalreadyDead()))
 		{
-			srand((unsigned)time(nullptr));
 			int random = rand() % 4;
+			//log("random:%d", random);
 			//todo:关于地图边界的问题
 			if (random == 0) //up
 			{
@@ -66,7 +66,7 @@ void RemoteSoldierManager::update(float dt)
 			{
 				remoteSoldier->setPositionY(remoteSoldier->getPositionY() - 4);
 			}
-			else if (random == 1) //left
+			else if (random == 2) //left
 			{
 				remoteSoldier->setPositionX(remoteSoldier->getPositionX() - 4);
 			}
@@ -74,6 +74,7 @@ void RemoteSoldierManager::update(float dt)
 			{
 				remoteSoldier->setPositionX(remoteSoldier->getPositionX() + 4);
 			}
+			//log("remoteSoldier:x=%f, y=%f", remoteSoldier->getPositionX(), remoteSoldier->getPositionY());
 		}
 	}
 }
@@ -101,6 +102,7 @@ Vec2 RemoteSoldierManager::setSoldierPosition(int num)
 		ValueMap remoteSoldierMap = objGroup->getObject("remote_bullet1");
 		remoteSoldierX = remoteSoldierMap.at("x").asFloat();
 		remoteSoldierY = remoteSoldierMap.at("y").asFloat();
+		//log("startremoteSoldier:x=%f, y=%f", remoteSoldierX, remoteSoldierY);
 	}
 	else if (num == 1)
 	{

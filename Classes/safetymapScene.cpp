@@ -66,6 +66,7 @@ bool safetymap::init()
 	//设置玩家坐标
 	mplayer->setPosition(Point(playerX,playerY));
 
+  //log("playerposition:x=%f, y=%f", playerX, playerY);
 	//添加一个测试用的monster
 	Sprite* monster_sprite = Sprite::create("turn right 2.png");
 	Player* monster = Player::create();
@@ -81,8 +82,14 @@ bool safetymap::init()
 	monster->setPosition(Point(monsterX, monsterY));
 	
 	//创建怪物
+<<<<<<< HEAD
 	//RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
 	//this->addChild(remoteSoldierManager);
+=======
+	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
+	this->addChild(remoteSoldierManager, 4);
+	//log("remoteSoldierManager:x=%f, y=%f", remoteSoldierManager->getPositionX(), remoteSoldierManager->getPositionY());
+>>>>>>> 8e07233f0bc8d43ede9016613c81a30357c89193
 
 	auto knight_animation = Animation::create();
 	char nameSize[30] = { 0 };
