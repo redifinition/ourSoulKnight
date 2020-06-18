@@ -5,7 +5,6 @@ Player::Player()
 	_HP = 5;
 	_MP = 100;
 	_AC = 5;
-	_weaponPosition = Vec2(0.8, 0.3);
 	_alreadyDead = false;
 
 }
@@ -73,7 +72,10 @@ bool Player::bindWeapon(Weapon* weapon) {
 }
 
 void Player::attack(Scene* currentScene,const Vec2& pos) {
-	this->m_weapon->fire(currentScene, pos);
+	if (_MP - m_weapon->getMpConsume() >= 0) {
+		_MP -= m_weapon->getMpConsume();
+		this->m_weapon->fire(currentScene, pos);
+	}
 	/*
 	//¹¥»÷·½Ïò
 	auto direction = pos - this->getPosition();

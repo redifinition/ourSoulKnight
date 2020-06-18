@@ -7,7 +7,6 @@ Knight::Knight()
 	_MP = 100;
 	_AC = 5;
 	_weaponPosition = Vec2(0.8, 0.3);
-
 }
 
 Knight::~Knight() {

@@ -44,7 +44,7 @@ bool safetymap::init()
 	//添加player并绑定武器
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Knight* mplayer = Knight::create();
-	Gun* initialWeapon = Gun::create("broken pistol.png");
+	ShotGun* initialWeapon = ShotGun::create("broken pistol.png");
 	mplayer->bindSprite(player_sprite);
 	mplayer->bindWeapon(initialWeapon);
 	mplayer->setTiledMap(_tiledmap);

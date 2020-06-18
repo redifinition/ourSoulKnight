@@ -9,8 +9,8 @@ public:
 	static ShotGun* create(const std::string& filename);
 	virtual bool init(const std::string& filename);
 	
-	Vec2 increaseBy30Degree(const Vec2& pos);
-	Vec2 reduceBy30Degree(const Vec2& pos);
+	Vec2 increaseBy15Degree(const Vec2& pos);					//改变子弹的发射角度 +30°
+	Vec2 reduceBy15Degree(const Vec2& pos);						//改变子弹的发射角度 -30°
 	virtual void fire(Scene* currentScene, const Vec2& pos);
 	
 };

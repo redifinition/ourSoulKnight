@@ -1,7 +1,7 @@
 #include "ShotGun.h"
 
 ShotGun::ShotGun() {
-	_attack = 3;
+	_attack = 2;
 	_attackMode = 1;
 	_mpConsumption = 2;
 	_bulletSpeed = 1000;
@@ -39,28 +39,30 @@ void ShotGun::fire(Scene* _currentScene, const Vec2& pos) {
 	auto direction = pos - this->getParent()->getPosition();
 	direction.normalize();
 
-	direction = reduceBy30Degree(reduceBy30Degree(direction));
+	direction = reduceBy15Degree(reduceBy15Degree(direction));
 	//创建子弹
-	for (int i = 0; i < 5; i++, direction = increaseBy30Degree(direction)) {
+	for (int i = 0; i < 5; i++, direction = increaseBy15Degree(direction)) {
 		auto bullet1 = Bullet::create(_bulletType, this, direction, _currentScene);
 		bullet1->setScale(1.5);
 		bullet1->setPosition(this->getParent()->getPosition());
 		_currentScene->addChild(bullet1);
 		bullet1->new_move();
+		//break;
 	}
 	
 }
 
-Vec2 ShotGun::increaseBy30Degree(const Vec2& pos) {
+//改变子弹方向，具体的角度改三角函数里的值计可
+Vec2 ShotGun::increaseBy15Degree(const Vec2& pos) {
 	Vec2 new_pos(0, 0);
-	new_pos.x = 0.5*(sqrt(3)*pos.x - pos.y);
-	new_pos.y = 0.5*(pos.x - sqrt(3)*pos.y);
+	new_pos.x = cos(PI / 12)*pos.x - sin(PI / 12)*pos.y;
+	new_pos.y = sin(PI / 12)*pos.x + cos(PI / 12)*pos.y;
 	return new_pos;
 
 }
-Vec2 ShotGun::reduceBy30Degree(const Vec2& pos) {
+Vec2 ShotGun::reduceBy15Degree(const Vec2& pos) {
 	Vec2 new_pos(0, 0);
-	new_pos.x = 0.5*(sqrt(3)*pos.x + pos.y);
-	new_pos.y = 0.5*(pos.x + sqrt(3)*pos.y);
+	new_pos.x = cos(PI / 12)*pos.x + sin(PI / 12)*pos.y;
+	new_pos.y = -sin(PI / 12)*pos.x + cos(PI / 12)*pos.y;
 	return new_pos;
 }

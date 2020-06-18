@@ -34,6 +34,7 @@ bool Gun::init(const std::string& filename)
 }
 
 void Gun::fire(Scene* _currentScene,const Vec2& pos) {
+
 	//¹¥»÷·½Ïò
 	auto direction = pos - this->getParent()->getPosition();
 	direction.normalize();
