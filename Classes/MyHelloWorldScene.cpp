@@ -1,7 +1,7 @@
 #include "MyHelloWorldScene.h"
 #include"setupScene.h"
 #include"AppDelegate.h"
-
+#include "startmapScene.h"
 
 #include "ui/CocosGUI.h"
 #include "cocos2d.h"
@@ -95,7 +95,6 @@ bool MyHelloWorld::init()
 	this->addChild(menu1, 1);
 
 
-
 	return true;
 }
 
@@ -108,5 +107,6 @@ void MyHelloWorld::menuCloseCallback(Ref* pSender)
 void MyHelloWorld::newgame_menuCloseCallback(Ref* pSender)
 {
 	//接口，进入到游戏安全地图中
+	Director::getInstance()->replaceScene(startmap::createScene());
 }
 

@@ -7,18 +7,18 @@ using namespace cocos2d;
 class Entity :public Node,public ControllerListener
 {
 public:
-//by lq
-	void bind_sprite(Sprite* sprite);//掳贸露篓脪禄赂枚戮芦脕茅露脭脧贸
-	//脡猫脰脙驴脴脰脝脝梅
+	void bind_sprite(Sprite* sprite);//绑定一个精灵对象
+
+	//设置控制器
 	void set_controller(My_Controller* controller);
-	//脢碌脧脰SimpleMoveListener碌脛路陆路篓
+
+	//实现SimpleMoveListener的方法
 	virtual void set_tag_position(int x, int y);
 	virtual Point get_tag_position();
 protected:
-//by lq
 	Sprite* m_sprite;
 	My_Controller* m_controller;
-
+ 
 };
 
 

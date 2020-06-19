@@ -2,9 +2,7 @@
 #include "safetymapScene.h"
 bool Player::init()
 {
-
 	isJumping = false;
-
 	return true;
 }
 
@@ -20,32 +18,32 @@ void Player::setViewPointByPlayer()
 		return;
 	Layer* parent = (Layer*)getParent();
 
-	//ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//µØÍ¼·½¿éÊý
 	Size mapTiledNum = m_map->getMapSize();
 
-	//ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó´ï¿½Ð?
+	//µØÍ¼µ¥¸ö¸ñ×Ó´óÐ¡
 	Size tiledSize = m_map->getTileSize();
 
-	//ï¿½ï¿½Í¼ï¿½ï¿½Ð¡
+	//µØÍ¼´óÐ¡
 	Size mapSize = Size(mapTiledNum.width*tiledSize.width, mapTiledNum.height*tiledSize.height);
 
-	//ï¿½ï¿½Ä»ï¿½ï¿½Ð¡
+	//ÆÁÄ»´óÐ¡
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//Ö÷½Ç×ø±ê
 	Point spritePos = getPosition();
 
 	float x = std::max(spritePos.x,visibleSize.width/2);
 	float y = std::max(spritePos.y, visibleSize.height / 2);
 
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê³¬ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+	//Èç¹ûÖ÷½Ç×ø±ê³¬³ö·¶Î§£¬ÔòÈ¡Ö÷½Ç×ø±ê
 	x = std::min(x, mapSize.width - visibleSize.width / 2);
 	y = std::min(y, mapSize.height - visibleSize.height / 2);
 
-	//Ä¿ï¿½ï¿½ï¿?
+	//Ä¿±êµã
 	Point desPos = Point(x, y);
 
-	//ï¿½ï¿½Ä»ï¿½Ðµï¿½
+	//ÆÁÄ»ÖÐµã
 	Point centPos = Point(visibleSize.width / 2, visibleSize.height / 2);
 
 	Point viewPos = centPos - desPos;
@@ -56,18 +54,18 @@ void Player::setViewPointByPlayer()
 
 void Player::set_tag_position(int x, int y)
 {
-	/*ï¿½Ð¶ï¿½Ç°ï¿½ï¿½ï¿½Ç·ñ²»¿ï¿½Í¨ï¿½ï¿½*/
+	/*ÅÐ¶ÏÇ°ÃæÊÇ·ñ²»¿ÉÍ¨ÐÐ*/
 	Size spriteSize = m_sprite->getContentSize();
 	Point dstPos = Point(x+spriteSize.width/2, y);
 	Point dstPos_y = Point(x + spriteSize.width / 2, y - spriteSize.height / 2);
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ÎªPlayerï¿½ï¿½Ó¦ï¿½ï¿½ï¿½Æ«ï¿½Âµï¿½Î»ï¿½Ã£ï¿½Îªï¿½ï¿½ï¿½Ð¶ï¿½Playerï¿½Â·ï¿½ï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//¸Ã×ø±êÎªPlayer¶ÔÓ¦×ø±êÆ«ÏÂµÄÎ»ÖÃ£¬ÎªÁËÅÐ¶ÏPlayerÏÂ·½µÄ½¨ÖþÎï
 
-	/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½*/
+	/*»ñµÃÖ÷½ÇÇ°·½µØÍ¼¸ñ×ÓÎ»ÖÃ*/
 	Point tiledPos = tileCoordForPosition(Point(dstPos.x, dstPos.y));
 	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
 	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
-	//ï¿½Ô¸Ã¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ï¿½Óµï¿½Ç°ï¿½ï¿½ï¿½Ð¶Ï£ï¿½
-	/*ï¿½ï¿½Ãµï¿½Í¼ï¿½ï¿½ï¿½Óµï¿½Î¨Ò»ï¿½ï¿½Ê*/
+	//¶Ô¸Ã¾«ÁéËùÔÚ¸ñ×ÓµÄÇ°·½ÅÐ¶Ï£»
+	/*»ñµÃµØÍ¼¸ñ×ÓµÄÎ¨Ò»±êÊ¶*/
 	int tileGid = meta->getTileGIDAt(tiledPos);
 	int tiledGid_right = meta->getTileGIDAt(tiledPos_right); 
 	int tiledGid_bottom = meta->getTileGIDAt(tiledPos_bottom);
@@ -101,6 +99,7 @@ void Player::set_tag_position(int x, int y)
 		if (proper.asString().compare("true") == 0)
 			return;
 	}
+	
 	Entity::set_tag_position(x, y);
 
 	setViewPointByPlayer();
@@ -122,7 +121,8 @@ Point Player::tileCoordForPosition(Point pos) {
 
     /*y×ø±êÐèÒª×ª»»Ò»ÏÂ£¬ÒòÎª×ø±êÏµºÍtiled²»Í¬*/
 	y = (mapTiledNum.height*tiledSize.height - pos.y*1.8) / tiledSize.height;
-	
+
+	/*¸ñ×Ó´ÓÁã¿ªÊ¼*/
 	if (x > 0)
 		x--;
 	if (y > 0)
@@ -130,3 +130,4 @@ Point Player::tileCoordForPosition(Point pos) {
 
 	return Point(x, y);
 }
+

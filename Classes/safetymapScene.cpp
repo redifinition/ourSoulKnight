@@ -1,5 +1,4 @@
-#include "HelloWorldScene.h"
-#include "MyHelloWorldScene.h"
+
 #include "audio.h"
 #include "safetymapScene.h"
 #include "SimpleMoveController.h"
@@ -34,6 +33,15 @@ bool safetymap::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	//创建地图背景
+
+
+	/*play game music*/
+	audio_home->stopBackgroundMusic();
+	audio_game->playBackgroundMusic("game_music.mp3", true);
+
+	/*auto tryab = Sprite::create("reservation.png");
+	tryab->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+	this->addChild(tryab, 5);*/
 
 	std::string floor_layer_file = "myfirstmap2.tmx";//地图文件
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
@@ -77,48 +85,16 @@ bool safetymap::init()
 	mplayer->set_controller(simple_move_controller);
 	simple_move_controller->bind_sprite(player_sprite);//Bind player
 
-	/*auto knight_animation = Animation::create();
-	char nameSize[30] = { 0 };
-	for (int i = 1; i <= 4; i++)
-	{
-		sprintf(nameSize, "turn right %d.png", i);
-		knight_animation->addSpriteFrameWithFile(nameSize);
-	}
-	knight_animation->setDelayPerUnit(0.08f);//设置动画帧时间间隔
-	knight_animation->setLoops(-1);
-	knight_animation->setRestoreOriginalFrame(true);
-	Animate* animate_knight = Animate::create(knight_animation);
-	player_sprite->runAction(animate_knight);*/
 
 
 
-	this->addChild(mplayer,2);
+	_tiledmap->addChild(mplayer,2);
 
 	this->addChild(_tiledmap);
 
 
 	
-	
-
-
-
 	return true;
 }
-
-/*void safetymap::add_player(TMXTiledMap* map)
-{
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-	//创建一个精灵
-	Sprite* player_sprite = Sprite::create("player.png");
-	Player* mplayer = Player::create();
-	mplayer->bind_sprite(player_sprite);
-	mplayer->run();
-
-    //设置玩家坐标
-	mplayer->setPosition(Vec2(100, visibleSize.height / 2));
-
-	_tiledmap->addChild(mplayer);
-}*/
-
 
 

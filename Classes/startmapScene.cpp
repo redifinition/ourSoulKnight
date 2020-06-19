@@ -1,7 +1,7 @@
 #include "KnightInformationScene.h"
 #include "startmapScene.h"
 #include "audio.h"
-
+#include "HelloWorldScene.h"
 
 USING_NS_CC;
 
@@ -31,8 +31,10 @@ bool startmap::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	/*stop the start music*/
+
 	audio_begin->stopBackgroundMusic();
-	audio_home->playBackgroundMusic("home_music.mp3");
+	audio_home->playBackgroundMusic("home_music.mp3",true);
+	//SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(float(audio_percent) / 100);
 
 	std::string floor_layer_file = "safetymap.tmx";//µØÍ¼ÎÄ¼þ
 	_safetymap = TMXTiledMap::create(floor_layer_file);
@@ -66,7 +68,26 @@ bool startmap::init()
 	this->addChild(menu1, -1);//just a virtual button which is unvisible
 	
 
+	/*create button which send player to home scene*/
+	auto home_button = MenuItemImage::create(
+		"home_button1.png",
+		"home_button2.png",
+		CC_CALLBACK_1(startmap::menuCloseCallbackHome, this));
+	if (home_button == nullptr ||
+		home_button->getContentSize().width <= 0 ||
+		home_button->getContentSize().height <= 0)
+	{
+		problemLoading("'home_button1.png' and 'home_button2.png'");
+	}
+	else
+	{
+		
+		home_button->setPosition(Vec2(visibleSize.width /10 + origin.x, visibleSize.height / 10 + origin.y));
 
+	}
+	auto menu2 = Menu::create(home_button, NULL);
+	menu2->setPosition(Vec2::ZERO);
+	this->addChild(menu2, 1);//just a virtual button which is unvisible
 
 	this->addChild(_safetymap,0);
 	return true;
@@ -76,4 +97,9 @@ bool startmap::init()
 void startmap::menuCloseCallback(cocos2d::Ref* pSender)
 {
 	Director::getInstance()->replaceScene(KnightInformation::createScene());
+}
+
+void startmap::menuCloseCallbackHome(cocos2d::Ref* pSender)
+{
+	Director::getInstance()->replaceScene(HelloWorld::createScene());
 }

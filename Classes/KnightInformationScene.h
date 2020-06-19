@@ -16,6 +16,7 @@ public:
 	// implement the "static create()" method manually
 	//bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event);
 	void menuCloseCallback(cocos2d::Ref* pSender);
+	void close_menuCloseCallback(cocos2d::Ref* pSender);
 	CREATE_FUNC(KnightInformation);
 private:
 

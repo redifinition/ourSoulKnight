@@ -1,6 +1,6 @@
 #ifndef _KnightSTARTMAP_SCENE_H_
 #define _KnightSTARTMAP_SCENE_H_
-
+#include"Player.h"
 #include "cocos2d.h"
 using namespace cocos2d;
 
@@ -11,12 +11,15 @@ public:
 
 	virtual bool init();
 
-	void startgame();
+	void menuCloseCallback(Ref* pSender);
 	CREATE_FUNC(KnightStartMap);
+	void start_menuCloseCallback(Ref* pSender);
+	void home_menuCloseCallback(Ref* pSender);
+	void update(float dt);
 private:
 	cocos2d::TMXTiledMap *_tiledmap;//地图类中相关地图
 	cocos2d::TMXLayer *_background;//背景层
-	cocos2d::Sprite *_player;
+	Player* mplayer;
 
 
 };
