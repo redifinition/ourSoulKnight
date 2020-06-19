@@ -27,6 +27,11 @@ bool KnightStartMap::init()
 	{
 		return false;
 	}
+	if (!Scene::initWithPhysics())
+	{
+		return false;
+	}
+
 	this->scheduleUpdate();
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -83,6 +88,7 @@ bool KnightStartMap::init()
 	auto knight_animate_run = Animate::create(knight_animate);
 	player_sprite->runAction(knight_animate_run);
 
+	this->m_player = mplayer;
 	_tiledmap->addChild(mplayer,23);//10or23£¿
 
 
@@ -166,8 +172,8 @@ void KnightStartMap::menuCloseCallback(Ref* pSender)
 void KnightStartMap::update(float dt)
 {
 	
-	auto player_x = mplayer->getPositionX();
-	auto player_y = mplayer->getPositionY();
+	auto player_x = this->m_player->getPositionX();
+	auto player_y = this->m_player->getPositionY();
 	int x = player_x * 1.8 / 32;
 	int y = (1920 - player_y * 1.8) / 32;
 	if (x <= 21 && x >= 18 &&(y==7))

@@ -18,6 +18,7 @@ class Entity :public Node,public ControllerListener
 	CC_SYNTHESIZE(int, _bulletSpeed, bulletSpeed);
 	CC_SYNTHESIZE(Scene*, _currentScene, currentScene);
 	CC_SYNTHESIZE(Sprite*, m_sprite, Sprite);
+	CC_SYNTHESIZE(TMXTiledMap*, m_map, CurrentMap);					//主角所在的地图
 	CC_SYNTHESIZE(My_Controller*, m_controller, m_controller);
 public:
 	Entity();
