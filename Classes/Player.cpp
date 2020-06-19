@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "safetymapScene.h"
 
 Player::Player()
 {
@@ -27,13 +28,14 @@ bool Player::bindSprite(Sprite*sprite) {
 	else
 	{
 		this->addChild(m_sprite);
-		/*ÉèÖÃPlayerµÄ´óÐ¡ºÍm_spriteµÄ´óÐ¡Ò»ÖÂ£¬·ñÔòÅö×²Ä£ÐÍ»á²»¶Ô*/
+
+		//è®¾ç½®Playerçš„å¤§å°å’Œm_spriteçš„å¤§å°ä¸€è‡´ï¼Œå¦åˆ™ç¢°æ’žæ¨¡åž‹ä¼šä¸å¯¹
 		Size size = m_sprite->getContentSize();
 		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
 		this->setContentSize(size);
 		this->setAnchorPoint(Vec2(0.5, 0.5));
 
-		/*Ìí¼ÓÎïÀíÅö×²Ä£ÐÍ*/
+		//æ·»åŠ ç‰©ç†ç¢°æ’žæ¨¡åž‹
 		auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(0.0f, 0.0f, 0.0f));
 		physicsBody->setDynamic(false);
 		physicsBody->setCategoryBitmask(0x01);
@@ -43,7 +45,7 @@ bool Player::bindSprite(Sprite*sprite) {
 		return true;
 	}
 }
-//ºÍ½ÇÉ«ÎäÆ÷Ïà¹ØµÄº¯Êý
+//å’Œè§’è‰²æ­¦å™¨ç›¸å…³çš„å‡½æ•°
 bool Player::bindWeapon(Weapon* weapon) {
 	if (weapon == nullptr)
 	{
@@ -53,16 +55,16 @@ bool Player::bindWeapon(Weapon* weapon) {
 	else
 	{
 		this->m_weaponArr.pushBack(weapon);
-		this->m_weapon = weapon;	//µ±Ç°ÎäÆ÷¾ÍÉèÖÃÎª°ó¶¨µÄÎäÆ÷
+		this->m_weapon = weapon;	//å½“å‰æ­¦å™¨å°±è®¾ç½®ä¸ºç»‘å®šçš„æ­¦å™¨
 		if (m_weapon == nullptr)
 		{
 			log("m_weapon is nullptr");
 		}
 
-		//Éè¶¨ÎäÆ÷Î»ÖÃ
+		//è®¾å®šæ­¦å™¨ä½ç½®
 		Size size = m_sprite->getContentSize();
 ;		m_weapon->setPosition(Vec2(size.width*getWpPos().x, size.height*getWpPos().y));//*getWpPos().x
-		m_weapon->setScale(0.08);	//ÓÃÓÚ³õ´Î²âÊÔ£¬Ö®ºóÉ¾³ý£¬²»Í¬ÎäÆ÷µÄËõ·Å²»Í¬£¬ÒªÃ´°ÑËõ·Å·ÅÔÚ´´½¨º¯ÊýÀïÃæ£¬ÒªÃ´¾Í°ÑÎäÆ÷Í¼Æ¬µÄ´óÐ¡µ÷¶Ô
+		m_weapon->setScale(0.08);	//ç”¨äºŽåˆæ¬¡æµ‹è¯•ï¼Œä¹‹åŽåˆ é™¤ï¼Œä¸åŒæ­¦å™¨çš„ç¼©æ”¾ä¸åŒï¼Œè¦ä¹ˆæŠŠç¼©æ”¾æ”¾åœ¨åˆ›å»ºå‡½æ•°é‡Œé¢ï¼Œè¦ä¹ˆå°±æŠŠæ­¦å™¨å›¾ç‰‡çš„å¤§å°è°ƒå¯¹
 
 		this->addChild(m_weapon);
 
@@ -77,12 +79,12 @@ void Player::attack(Scene* currentScene,const Vec2& pos) {
 		this->m_weapon->fire(currentScene, pos);
 	}
 	/*
-	//¹¥»÷·½Ïò
+	//æ”»å‡»æ–¹å‘
 	auto direction = pos - this->getPosition();
 	direction.normalize();
 	Vec2 test = this->m_weapon->getPosition();
 
-	//´´½¨×Óµ¯
+	//åˆ›å»ºå­å¼¹
 	auto bullet = Bullet::create(LONGREMOTE, this, direction, currentScene);
 	bullet->setScale(1.5);
 	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
@@ -135,39 +137,33 @@ void Player::die()
 	
 }
 
-//ºÍ¼üÅÌ¿ØÖÆÏà¹ØµÄº¯Êý
+//å’Œé”®ç›˜æŽ§åˆ¶ç›¸å…³çš„å‡½æ•°
 void Player::setViewPointByPlayer()
 {
 	if (m_sprite == NULL)
 		return;
 	Layer* parent = (Layer*)getParent();
 
-
 	Size mapTiledNum = m_map->getMapSize();
-
-
+  
 	Size tiledSize = m_map->getTileSize();
-
 
 	Size mapSize = Size(mapTiledNum.width*tiledSize.width, mapTiledNum.height*tiledSize.height);
 
-
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-
 
 	Point spritePos = getPosition();
 
 	float x = std::max(spritePos.x,visibleSize.width/2);
 	float y = std::max(spritePos.y, visibleSize.height / 2);
 
-	
+
+	//é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·ç“¿î„Šæ‹·é”Ÿè½¿Ñæ‹·é”Ÿæ–¤æ‹·é”Ÿé¥ºâ˜…æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿ?
 	x = std::min(x, mapSize.width - visibleSize.width / 2);
 	y = std::min(y, mapSize.height - visibleSize.height / 2);
 
-	
 	Point desPos = Point(x, y);
 
-	
 	Point centPos = Point(visibleSize.width / 2, visibleSize.height / 2);
 
 	Point viewPos = centPos - desPos;
@@ -186,7 +182,7 @@ void Player::set_tag_position(int x, int y)
 	Point tiledPos = tileCoordForPosition(Point(dstPos.x, dstPos.y));
 	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
 	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
-
+  
 	int tileGid = meta->getTileGIDAt(tiledPos);
 	int tiledGid_right = meta->getTileGIDAt(tiledPos_right); 
 	int tiledGid_bottom = meta->getTileGIDAt(tiledPos_bottom);
@@ -236,11 +232,13 @@ void Player::setTiledMap(TMXTiledMap* map)
 Point Player::tileCoordForPosition(Point pos) {
 	Size mapTiledNum = m_map->getMapSize();
 	Size tiledSize = m_map->getTileSize();
+
+	int x, y;
+    x = (pos.x*1.8) / tiledSize.width;
+
+    /*yåæ ‡éœ€è¦è½¬æ¢ä¸€ä¸‹ï¼Œå› ä¸ºåæ ‡ç³»å’Œtiledä¸åŒ*/
+	y = (mapTiledNum.height*tiledSize.height - pos.y*1.8) / tiledSize.height;
 	
-	int x = (pos.x*1.8)/ tiledSize.width;
-
-	int y = (2560-pos.y*1.8) / tiledSize.height;
-
 	if (x > 0)
 		x--;
 	if (y > 0)

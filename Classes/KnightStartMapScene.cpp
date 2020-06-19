@@ -30,26 +30,21 @@ bool KnightStartMap::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-
-
 	std::string floor_layer_file = "safetymap.tmx";//地图文件
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
 
-
-
 	//添加player
-	//auto pinfo = AutoPolygon::generatePolygon("player.png");
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Player* mplayer = Player::create();
-	mplayer->bind_sprite(player_sprite);
+	mplayer->bindSprite(player_sprite);
 
-	mplayer->run();
 	mplayer->setTiledMap(_tiledmap);
 
+	//加载对象层
+	TMXObjectGroup* objGroup = _tiledmap->getObjectGroup("objects_knight");
 
-	TMXObjectGroup* objGroup = _tiledmap->getObjectGroup("objects_knight");//加载对象层
 	//加载玩家坐标对象
 	ValueMap player_point_map = objGroup->getObject("knight");
 	float playerX = player_point_map.at("x").asFloat();
@@ -57,9 +52,6 @@ bool KnightStartMap::init()
 
 	//设置玩家坐标
 	mplayer->setPosition(Point(playerX, playerY));
-
-
-
 
 	//创建玩家简单移动控制器
 	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
@@ -70,9 +62,10 @@ bool KnightStartMap::init()
 
 	//将控制器添加到场景中让Upadate被调用
 	this->addChild(simple_move_controller);
+
 	//设置控制器到主角身上
 	mplayer->set_controller(simple_move_controller);
-	simple_move_controller->bind_sprite(player_sprite);//Bind player
+	simple_move_controller->bind_sprite(player_sprite);
 
 	auto x = mplayer->getPositionX();
 	auto y = mplayer->getPositionY();
@@ -84,11 +77,9 @@ bool KnightStartMap::init()
 		startgame();
 	}
 
-
 	_tiledmap->addChild(mplayer, 10);
 
 	this->addChild(_tiledmap);
-
 
 	return true;
 }

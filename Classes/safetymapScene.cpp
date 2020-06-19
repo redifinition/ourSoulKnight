@@ -3,6 +3,7 @@
 #include "safetymapScene.h"
 #include "audio.h"
 
+
 USING_NS_CC;
 
 Scene* safetymap::createScene()
@@ -34,14 +35,16 @@ bool safetymap::init()
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	
+
 	//创建地图背景
-	std::string floor_layer_file = "myfirstmap22.tmx";//地图文件
+	std::string floor_layer_file = "advantureMap_test.tmx";//地图文件
+
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
 
 	//添加player并绑定武器
+
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Knight* mplayer = Knight::create();
 	ShotGun* initialWeapon = ShotGun::create("broken pistol.png");
@@ -49,9 +52,9 @@ bool safetymap::init()
 	mplayer->bindWeapon(initialWeapon);
 	mplayer->setTiledMap(_tiledmap);
 
-	TMXObjectGroup* objGroup = _tiledmap->getObjectGroup("objects");//加载对象层
+	
+	TMXObjectGroup* objGroup = _tiledmap->getObjectGroup("objects");
 
-	//加载玩家坐标对象
 	ValueMap player_point_map = objGroup->getObject("PlayerPoint");
 	float playerX = player_point_map.at("x").asFloat();
 	float playerY = player_point_map.at("y").asFloat();
@@ -74,25 +77,22 @@ bool safetymap::init()
 	monster->setPosition(Point(monsterX, monsterY));
 	
 	//创建怪物
-	//RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
-	//this->addChild(remoteSoldierManager);
 	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
 	this->addChild(remoteSoldierManager, 4);
 	//log("remoteSoldierManager:x=%f, y=%f", remoteSoldierManager->getPositionX(), remoteSoldierManager->getPositionY());
 
-
-	auto knight_animation = Animation::create();
+	/*auto knight_animation = Animation::create();
 	char nameSize[30] = { 0 };
 	for (int i = 1; i <= 4; i++)
 	{
 		sprintf(nameSize, "turn right %d.png", i);
 		knight_animation->addSpriteFrameWithFile(nameSize);
 	}
-	knight_animation->setDelayPerUnit(0.08f);//设置动画帧时间间隔
+	knight_animation->setDelayPerUnit(0.08f);//���ö���֡ʱ����
 	knight_animation->setLoops(-1);
 	knight_animation->setRestoreOriginalFrame(true);
 	Animate* animate_knight = Animate::create(knight_animation);
-	player_sprite->runAction(animate_knight);
+	player_sprite->runAction(animate_knight);*/
 
 	//创建玩家简单移动控制器
 	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
@@ -106,7 +106,8 @@ bool safetymap::init()
 
 	//设置控制器到主角身上
 	mplayer->set_controller(simple_move_controller);
-
+	simple_move_controller->bind_sprite(player_sprite);//Bind player
+  
 	//设置碰撞掩码
 	this->m_player = mplayer;
 	this->m_monster = monster;
@@ -118,7 +119,6 @@ bool safetymap::init()
 	this->addChild(mplayer,2);
 
 	this->addChild(_tiledmap);
-
 
 	//创建EventListener
 	auto listener = EventListenerTouchOneByOne::create();
@@ -188,15 +188,17 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 /*void safetymap::add_player(TMXTiledMap* map)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	//创建一个精灵
+	//����һ����
 	Sprite* player_sprite = Sprite::create("player.png");
 	Player* mplayer = Player::create();
 	mplayer->bind_sprite(player_sprite);
 	mplayer->run();
 
-    //设置玩家坐标
+    //����������
 	mplayer->setPosition(Vec2(100, visibleSize.height / 2));
 
 	_tiledmap->addChild(mplayer);
 }*/
+
+
 
