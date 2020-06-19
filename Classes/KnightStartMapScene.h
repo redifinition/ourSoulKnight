@@ -19,7 +19,7 @@ public:
 private:
 	cocos2d::TMXTiledMap *_tiledmap;//地图类中相关地图
 	cocos2d::TMXLayer *_background;//背景层
-	Player* mplayer;
+	Player* m_player;
 
 
 };

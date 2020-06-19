@@ -42,8 +42,8 @@ bool safetymap::init()
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
-	this->addChild(_tiledmap);
-	log("map size:(%d, %d)", _tiledmap->getContentSize().width,_tiledmap->getContentSize().height);
+
+	log("map size:(%f, %f)", _tiledmap->getContentSize().width,_tiledmap->getContentSize().height);
 
 	//添加player并绑定武�?
 
@@ -78,10 +78,9 @@ bool safetymap::init()
 	float monsterY = monster_point_map.at("y").asFloat();
 	monster->setPosition(Point(monsterX, monsterY));
 	
-	log("player pos0:(%d, %d)", playerX, playerY);
 	//创建怪物
-	//RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
-	//this->addChild(remoteSoldierManager, 4);
+	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
+	_tiledmap->addChild(remoteSoldierManager, 4);
 
 	//创建玩家简单移动控制器
 	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
@@ -104,14 +103,18 @@ bool safetymap::init()
 	m_monster->getPhysicsBody()->setCategoryBitmask(0x02);
 	m_monster->getPhysicsBody()->setContactTestBitmask(0x04);
 	
-	/*_tiledmap->addChild(mplayer,2);
-	_tiledmap->addChild(monster, 2);
-	*/
-	
-	this->addChild(monster,2);
-	this->addChild(mplayer,2);
-	
 
+	this->addChild(_tiledmap);
+
+	_tiledmap->addChild(mplayer,2);
+	_tiledmap->addChild(monster, 2);
+	
+	//this->addChild(monster,2);
+	//this->addChild(mplayer,2);
+	log("player pos0:(%f, %f)", playerX, playerY);
+	log("monster pos0:(%f, %f)", monsterX, monsterY);
+
+	
 	//创建EventListener
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(safetymap::onTouchBegin, this);

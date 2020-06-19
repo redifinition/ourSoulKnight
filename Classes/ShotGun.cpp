@@ -34,7 +34,7 @@ bool ShotGun::init(const std::string& filename)
 	return true;
 }
 
-void ShotGun::fire(Scene* _currentScene, const Vec2& pos) {
+void ShotGun::fire(Scene* _currentScene, const Vec2& pos, Entity* player) {
 	//¹¥»÷·½Ïò
 	auto direction = pos - this->getParent()->getPosition();
 	direction.normalize();
@@ -45,8 +45,8 @@ void ShotGun::fire(Scene* _currentScene, const Vec2& pos) {
 		auto bullet1 = Bullet::create(_bulletType, this, direction, _currentScene);
 		bullet1->setScale(1.5);
 		bullet1->setPosition(this->getParent()->getPosition());
-		log("bullet pos:(%d, %d)", this->getParent()->getPositionX(), this->getParent()->getPositionY());
-		_currentScene->addChild(bullet1);
+		log("bullet pos:(%f, %f)", this->getParent()->getPositionX(), this->getParent()->getPositionY());
+		player->getCurrentMap()->addChild(bullet1);
 		bullet1->new_move();
 		//break;
 	}

@@ -54,9 +54,9 @@ void RemoteSoldier::attack(Entity* attackTarget)
 		bullet1->setPosition(this->getPosition());
 		bullet2->setPosition(this->getPosition());
 		bullet3->setPosition(this->getPosition());
-		_currentScene->addChild(bullet1);
-		_currentScene->addChild(bullet2);
-		_currentScene->addChild(bullet3);
+		attackTarget->getCurrentMap()->addChild(bullet1);
+		attackTarget->getCurrentMap()->addChild(bullet2);
+		attackTarget->getCurrentMap()->addChild(bullet3);
 		bullet1->move();
 		bullet2->move();
 		bullet3->move();
@@ -65,7 +65,7 @@ void RemoteSoldier::attack(Entity* attackTarget)
 	{
 		auto bullet = Bullet::create(LONGREMOTE, this, direction, _currentScene);
 		bullet->setPosition(this->getPosition());
-		_currentScene->addChild(bullet);
+		attackTarget->getCurrentMap()->addChild(bullet);
 		bullet->move();
 	}
 }

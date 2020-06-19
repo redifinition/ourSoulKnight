@@ -13,6 +13,6 @@ void Weapon::show() {
 	this->setVisible(true);
 }
 
-void Weapon::fire(Scene* _currentScene, const Vec2& pos) {
+void Weapon::fire(Scene* _currentScene, const Vec2& pos, Entity* player) {
 
 }

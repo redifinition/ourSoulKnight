@@ -13,6 +13,7 @@ class Player :public Entity {
 	CC_SYNTHESIZE(int, _AC, AC);
 	CC_SYNTHESIZE(Vec2, _weaponPosition, WpPos);				//武器固定在人物上的相对位�?默认值为player的中�?
 	CC_SYNTHESIZE(Weapon*, _currentWeapon, CurrentWeapon);
+	
 public:
 	Player();
 	~Player();
@@ -36,8 +37,7 @@ public:
 	void bind_scene(Scene* scene);
 private:
 	Weapon* m_weapon;											//Player当前使用的武�?
-	Vector<Weapon*> m_weaponArr;								//Player携带的所有武�?
-	TMXTiledMap* m_map;											//主角所在的地图
+	Vector<Weapon*> m_weaponArr;								//Player携带的所有武�?										
 	TMXLayer* meta;												//检测碰撞的地图�?
 	Point tileCoordForPosition(Point pos);						//将像素坐标转化为地图格子坐标
 };

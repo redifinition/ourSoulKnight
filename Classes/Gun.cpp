@@ -33,7 +33,7 @@ bool Gun::init(const std::string& filename)
 	return true;
 }
 
-void Gun::fire(Scene* _currentScene,const Vec2& pos) {
+void Gun::fire(Scene* _currentScene, const Vec2& pos, Entity* player) {
 
 	//¹¥»÷·½Ïò
 	auto direction = pos - this->getParent()->getPosition();
@@ -43,6 +43,6 @@ void Gun::fire(Scene* _currentScene,const Vec2& pos) {
 	auto bullet = Bullet::create(_bulletType, this, direction, _currentScene);
 	bullet->setScale(1.5);
 	bullet->setPosition(this->getParent()->getPosition());
-	_currentScene->addChild(bullet);
+	player->getCurrentMap()->addChild(bullet);
 	bullet->new_move();
 }
