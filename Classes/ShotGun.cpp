@@ -31,6 +31,7 @@ bool ShotGun::init(const std::string& filename)
 	if (!Sprite::initWithFile(filename)) {
 		return false;
 	}
+	this->setScale(0.15);
 	return true;
 }
 

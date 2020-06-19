@@ -61,7 +61,7 @@ bool Player::bindWeapon(Weapon* weapon) {
 		//设定武器位置
 		Size size = m_sprite->getContentSize();
 		m_weapon->setPosition(Vec2(size.width*getWpPos().x, size.height*getWpPos().y));//*getWpPos().x
-		m_weapon->setScale(0.08);	//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调�?
+			//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调�?
 
 		this->addChild(m_weapon);
 
@@ -76,19 +76,6 @@ void Player::attack(Scene* currentScene,const Vec2& pos) {
 		this->m_weapon->fire(currentScene, pos, this);
 		log("player pos:(%f,%f)", this->getPositionX(), this->getPositionY());
 	}
-	/*
-	//攻击方向
-	auto direction = pos - this->getPosition();
-	direction.normalize();
-	Vec2 test = this->m_weapon->getPosition();
-
-	//创建子弹
-	auto bullet = Bullet::create(LONGREMOTE, this, direction, currentScene);
-	bullet->setScale(1.5);
-	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
-	currentScene->addChild(bullet);
-	bullet->new_move();
-	*/
 }
 
 void Player::rotateWeapon(const Vec2& pos) {
@@ -101,6 +88,10 @@ void Player::rotateWeapon(const Vec2& pos) {
 	else if (x > 0 && y < 0) {
 		this->m_weapon->setRotation(+45.0f);
 	}
+}
+
+void Player::resetWeaponPos() {
+	this->m_weapon->setRotation(0.0f);
 }
 
 void Player::switchWeapon() {

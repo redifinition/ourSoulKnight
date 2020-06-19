@@ -30,6 +30,7 @@ bool Gun::init(const std::string& filename)
 	if (!Sprite::initWithFile(filename)) {
 		return false;
 	}
+	this->setScale(0.08);
 	return true;
 }
 

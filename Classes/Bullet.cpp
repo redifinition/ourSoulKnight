@@ -36,7 +36,7 @@ bool Bullet::init(EActorType actorType, Entity* attackSource, Vec2 attackDirecti
 	auto physicsBody = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0.0f, 0.0f, 0.0f));
 	physicsBody->setDynamic(false);
 	physicsBody->setCategoryBitmask(0x04);
-	physicsBody->setContactTestBitmask(0x02);
+	physicsBody->setContactTestBitmask(0x01);
 	this->setTag(_damage);
 	this->addComponent(physicsBody);
 
@@ -52,7 +52,7 @@ void Bullet::move()
 }
 
 
-//用于玩家攻击时子弹的运动
+//用于玩家攻击时创建子弹
 Bullet* Bullet::create(EActorType actorType, Weapon* attackSource, Vec2 attackDirection, Scene* currentScene)
 {
 	Bullet* bullet = new Bullet;

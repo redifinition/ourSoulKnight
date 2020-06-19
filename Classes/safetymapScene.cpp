@@ -49,7 +49,7 @@ bool safetymap::init()
 
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Knight* mplayer = Knight::create();
-	ShotGun* initialWeapon = ShotGun::create("broken pistol.png");
+	ShotGun* initialWeapon = ShotGun::create("goblin_guard_shotgun.png");
 	mplayer->bindSprite(player_sprite);
 	mplayer->bindWeapon(initialWeapon);
 	mplayer->setTiledMap(_tiledmap);
@@ -65,11 +65,11 @@ bool safetymap::init()
 	mplayer->setPosition(Point(playerX,playerY));
 
 	//娣诲姞涓�涓祴璇曠敤鐨刴onster
-	Sprite* monster_sprite = Sprite::create("turn right 2.png");
-	Player* monster = Player::create();
-	monster->setTag(-2);
+	Sprite* monster_sprite = Sprite::create("LongRemoteSoldier.png");
+	RemoteSoldier* monster = RemoteSoldier::create(LONGREMOTE,this);
+
 	monster->bindSprite(monster_sprite);
-	monster->setTiledMap(_tiledmap);
+	//monster->setTiledMap(_tiledmap);
 
 	TMXObjectGroup* bulletGroup = _tiledmap->getObjectGroup("bullet");
 
@@ -80,6 +80,7 @@ bool safetymap::init()
 	
 	//鍒涘缓鎬墿
 	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
+	this->m_remoteSoldierManager = remoteSoldierManager;
 	_tiledmap->addChild(remoteSoldierManager, 4);
 
 	//鍒涘缓鐜╁绠�鍗曠Щ鍔ㄦ帶鍒跺櫒
@@ -131,15 +132,18 @@ bool safetymap::init()
 
 bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 	auto target = this->m_monster;
-	if(!target->getalreadyDead())
+	m_player->resetWeaponPos();
+	m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
+	/*if(!target->getalreadyDead())
 	{
 		Vec2 pos = target->getPosition();
 		m_player->rotateWeapon(pos);
 		m_player->attack(this,pos);
 	}
 	else {
+		m_player->resetWeaponPos();
 		m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
-	}
+	}*/
 	return true;
 }
 
@@ -158,11 +162,20 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 			}
 			else if (nodeB->getTag() == -2)
 			{
-				this->m_monster->takeDamage(nodeA->getTag());
+				//this->m_monster->takeDamage(nodeA->getTag());
+				//找出是哪个怪物和子弹发生了碰撞
+				for (auto Soldier : this->m_remoteSoldierManager->getSoldierArr())
+				{
+					if (nodeB->getMonsterID() == Soldier->getMonsterID())
+					{
+						Soldier->takeDamage(nodeA->getTag());
+					}
+				}
 			}
 			nodeA->removeFromParentAndCleanup(true);
-
 		}
+
+		//和上面的代码块是镜像的，因为nodeA和nodeB不知道哪一个是子弹
 		else if (nodeB->getTag() > 0)
 		{
 			if (nodeA->getTag() == -1)
@@ -171,14 +184,19 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 			}
 			else if (nodeA->getTag() == -2)
 			{
-				this->m_monster->takeDamage(nodeB->getTag());
+				//this->m_monster->takeDamage(nodeB->getTag());
+				for (auto Soldier : this->m_remoteSoldierManager->getSoldierArr())
+				{
+					if (nodeA->getMonsterID() == Soldier->getMonsterID())
+					{
+						Soldier->takeDamage(nodeB->getTag());
+					}
+				}
 			}
 			nodeB->removeFromParentAndCleanup(true);
 		}
-
 	}
-
-	return true;
+		return true;
 }
 
 /*void safetymap::add_player(TMXTiledMap* map)
