@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 #include "HelloWorldScene.h"
 #include "MyHelloWorldScene.h"
+=======
+
+#include "audio.h"
+>>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 #include "safetymapScene.h"
 #include "audio.h"
 
@@ -36,14 +41,32 @@ bool safetymap::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+<<<<<<< HEAD
 	//创建地图背景
 	std::string floor_layer_file = "advantureMap_test.tmx";//地图文件
+=======
+
+
+	/*play game music*/
+	audio_home->stopBackgroundMusic();
+	audio_game->playBackgroundMusic("game_music.mp3", true);
+
+	/*auto tryab = Sprite::create("reservation.png");
+	tryab->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+	this->addChild(tryab, 5);*/
+
+	std::string floor_layer_file = "myfirstmap2.tmx";//��ͼ�ļ�
+
+	//std::string floor_layer_file = "myfirstmap2.tmx";
+
+	//创建地图背景
+>>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
 
-	//添加player并绑定武器
+	//添加player并绑定武�?
 
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Knight* mplayer = Knight::create();
@@ -81,6 +104,8 @@ bool safetymap::init()
 	this->addChild(remoteSoldierManager, 4);
 	//log("remoteSoldierManager:x=%f, y=%f", remoteSoldierManager->getPositionX(), remoteSoldierManager->getPositionY());
 
+
+
 	/*auto knight_animation = Animation::create();
 	char nameSize[30] = { 0 };
 	for (int i = 1; i <= 4; i++)
@@ -101,7 +126,7 @@ bool safetymap::init()
 	simple_move_controller->set_ixspeed(0);
 	simple_move_controller->set_iyspeed(0);
 
-	//将控制器添加到场景中让Upadate被调用
+	//将控制器添加到场景中让Upadate被调�?
 	this->addChild(simple_move_controller);
 
 	//设置控制器到主角身上
@@ -115,6 +140,7 @@ bool safetymap::init()
 	m_monster->getPhysicsBody()->setCategoryBitmask(0x02);
 	m_monster->getPhysicsBody()->setContactTestBitmask(0x04);
 
+	_tiledmap->addChild(mplayer,2);
 	this->addChild(monster,2);
 	this->addChild(mplayer,2);
 
@@ -125,6 +151,7 @@ bool safetymap::init()
 	listener->onTouchBegan = CC_CALLBACK_2(safetymap::onTouchBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
+	
 	//创建contactListener
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(safetymap::onContactBegin, this);

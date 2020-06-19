@@ -3,6 +3,7 @@
 
 Player::Player()
 {
+	isJumping = false;
 	_HP = 5;
 	_MP = 100;
 	_AC = 5;
@@ -28,8 +29,12 @@ bool Player::bindSprite(Sprite*sprite) {
 	else
 	{
 		this->addChild(m_sprite);
+<<<<<<< HEAD
 
 		//è®¾ç½®Playerçš„å¤§å°å’Œm_spriteçš„å¤§å°ä¸€è‡´ï¼Œå¦åˆ™ç¢°æ’žæ¨¡åž‹ä¼šä¸å¯¹
+=======
+		/*è®¾ç½®Playerçš„å¤§å°å’Œm_spriteçš„å¤§å°ä¸€è‡´ï¼Œå¦åˆ™ç¢°æ’žæ¨¡åž‹ä¼šä¸å¯?/
+>>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 		Size size = m_sprite->getContentSize();
 		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
 		this->setContentSize(size);
@@ -55,7 +60,7 @@ bool Player::bindWeapon(Weapon* weapon) {
 	else
 	{
 		this->m_weaponArr.pushBack(weapon);
-		this->m_weapon = weapon;	//å½“å‰æ­¦å™¨å°±è®¾ç½®ä¸ºç»‘å®šçš„æ­¦å™¨
+		this->m_weapon = weapon;	//å½“å‰æ­¦å™¨å°±è®¾ç½®ä¸ºç»‘å®šçš„æ­¦å™?
 		if (m_weapon == nullptr)
 		{
 			log("m_weapon is nullptr");
@@ -63,8 +68,8 @@ bool Player::bindWeapon(Weapon* weapon) {
 
 		//è®¾å®šæ­¦å™¨ä½ç½®
 		Size size = m_sprite->getContentSize();
-;		m_weapon->setPosition(Vec2(size.width*getWpPos().x, size.height*getWpPos().y));//*getWpPos().x
-		m_weapon->setScale(0.08);	//ç”¨äºŽåˆæ¬¡æµ‹è¯•ï¼Œä¹‹åŽåˆ é™¤ï¼Œä¸åŒæ­¦å™¨çš„ç¼©æ”¾ä¸åŒï¼Œè¦ä¹ˆæŠŠç¼©æ”¾æ”¾åœ¨åˆ›å»ºå‡½æ•°é‡Œé¢ï¼Œè¦ä¹ˆå°±æŠŠæ­¦å™¨å›¾ç‰‡çš„å¤§å°è°ƒå¯¹
+		m_weapon->setPosition(Vec2(size.width*getWpPos().x, size.height*getWpPos().y));//*getWpPos().x
+		m_weapon->setScale(0.08);	//ç”¨äºŽåˆæ¬¡æµ‹è¯•ï¼Œä¹‹åŽåˆ é™¤ï¼Œä¸åŒæ­¦å™¨çš„ç¼©æ”¾ä¸åŒï¼Œè¦ä¹ˆæŠŠç¼©æ”¾æ”¾åœ¨åˆ›å»ºå‡½æ•°é‡Œé¢ï¼Œè¦ä¹ˆå°±æŠŠæ­¦å™¨å›¾ç‰‡çš„å¤§å°è°ƒå¯?
 
 		this->addChild(m_weapon);
 
@@ -144,6 +149,19 @@ void Player::setViewPointByPlayer()
 		return;
 	Layer* parent = (Layer*)getParent();
 
+	//µØÍ¼·½¿éÊý
+	Size mapTiledNum = m_map->getMapSize();
+
+	//µØÍ¼µ¥¸ö¸ñ×Ó´óÐ¡
+	Size tiledSize = m_map->getTileSize();
+
+	//µØÍ¼´óÐ¡
+	Size mapSize = Size(mapTiledNum.width*tiledSize.width, mapTiledNum.height*tiledSize.height);
+
+	//ÆÁÄ»´óÐ¡
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	//Ö÷½Ç×ø±ê
 	Size mapTiledNum = m_map->getMapSize();
   
 	Size tiledSize = m_map->getTileSize();
@@ -156,6 +174,14 @@ void Player::setViewPointByPlayer()
 
 	float x = std::max(spritePos.x,visibleSize.width/2);
 	float y = std::max(spritePos.y, visibleSize.height / 2);
+
+	//Èç¹ûÖ÷½Ç×ø±ê³¬³ö·¶Î§£¬ÔòÈ¡Ö÷½Ç×ø±ê
+	x = std::min(x, mapSize.width - visibleSize.width / 2);
+	y = std::min(y, mapSize.height - visibleSize.height / 2);
+
+	//Ä¿±êµã
+	Point desPos = Point(x, y);
+
 
 
 	//é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·ç“¿î„Šæ‹·é”Ÿè½¿Ñæ‹·é”Ÿæ–¤æ‹·é”Ÿé¥ºâ˜…æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿ?
@@ -174,6 +200,18 @@ void Player::setViewPointByPlayer()
 
 void Player::set_tag_position(int x, int y)
 {
+	/*ÅÐ¶ÏÇ°ÃæÊÇ·ñ²»¿ÉÍ¨ÐÐ*/
+	Size spriteSize = m_sprite->getContentSize();
+	Point dstPos = Point(x+spriteSize.width/2, y);
+	Point dstPos_y = Point(x + spriteSize.width / 2, y - spriteSize.height / 2);
+	//¸Ã×ø±êÎªPlayer¶ÔÓ¦×ø±êÆ«ÏÂµÄÎ»ÖÃ£¬ÎªÁËÅÐ¶ÏPlayerÏÂ·½µÄ½¨ÖþÎï
+
+	/*»ñµÃÖ÷½ÇÇ°·½µØÍ¼¸ñ×ÓÎ»ÖÃ*/
+	Point tiledPos = tileCoordForPosition(Point(dstPos.x, dstPos.y));
+	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
+	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
+	//¶Ô¸Ã¾«ÁéËùÔÚ¸ñ×ÓµÄÇ°·½ÅÐ¶Ï£»
+	/*»ñµÃµØÍ¼¸ñ×ÓµÄÎ¨Ò»±êÊ¶*/
 
 	Size spriteSize = m_sprite->getContentSize();
 	Point dstPos = Point(x+spriteSize.width/2, y);
@@ -216,6 +254,7 @@ void Player::set_tag_position(int x, int y)
 		if (proper.asString().compare("true") == 0)
 			return;
 	}
+	
 	Entity::set_tag_position(x, y);
 
 	setViewPointByPlayer();
@@ -238,7 +277,8 @@ Point Player::tileCoordForPosition(Point pos) {
 
     /*yåæ ‡éœ€è¦è½¬æ¢ä¸€ä¸‹ï¼Œå› ä¸ºåæ ‡ç³»å’Œtiledä¸åŒ*/
 	y = (mapTiledNum.height*tiledSize.height - pos.y*1.8) / tiledSize.height;
-	
+
+	/*¸ñ×Ó´ÓÁã¿ªÊ¼*/
 	if (x > 0)
 		x--;
 	if (y > 0)
@@ -246,3 +286,5 @@ Point Player::tileCoordForPosition(Point pos) {
 
 	return Point(x, y);
 }
+
+

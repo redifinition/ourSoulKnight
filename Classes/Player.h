@@ -3,6 +3,10 @@
 
 #include "cocos2d.h"
 #include "Entity.h"
+#include"cocos2d.h"
+class Player:public Entity
+{
+public:
 #include "Weapon.h"
 #include "Bullet.h"
 
@@ -12,7 +16,7 @@ USING_NS_CC;
 class Player :public Entity {
 	CC_SYNTHESIZE(int, _MP, MP);		
 	CC_SYNTHESIZE(int, _AC, AC);
-	CC_SYNTHESIZE(Vec2, _weaponPosition, WpPos);				//武器固定在人物上的相对位置,默认值为player的中心
+	CC_SYNTHESIZE(Vec2, _weaponPosition, WpPos);				//武器固定在人物上的相对位�?默认值为player的中�?
 	CC_SYNTHESIZE(Weapon*, _currentWeapon, CurrentWeapon);
 public:
 	Player();
@@ -27,21 +31,44 @@ public:
 	virtual void takeDamage(int damage);						//受击判定，并掉血
 	void attack(Scene* currentScene, const Vec2& pos);			//攻击函数
 	void rotateWeapon(const Vec2& pos);							//武器跟随攻击方向
-	virtual void switchWeapon();								//接口，切换武器，角色不同切换武器的效果不同
-	void pickWeapon();											//接口，拾取武器
-	virtual void skill();										//技能
+	virtual void switchWeapon();								//接口，切换武器，角色不同切换武器的效果不�?
+	void pickWeapon();											//接口，拾取武�?
+	virtual void skill();										//技�?
 
 
 	void setViewPointByPlayer();
 	virtual void set_tag_position(int x, int y);
 	void setTiledMap(TMXTiledMap* map);
+	void bind_scene(Scene* scene);
 private:
+<<<<<<< HEAD
 	Weapon* m_weapon;											//Player当前使用的武器
 	Vector<Weapon*> m_weaponArr;								//Player携带的所有武器
 	TMXTiledMap* m_map;											//主角所在的地图
 	TMXLayer* meta;												//检测碰撞的地图层
 	Point tileCoordForPosition(Point pos);						//将像素坐标转化为地图格子坐标
 																
+=======
+	TMXTiledMap* m_map;
+	bool isJumping;//��������Ƿ���ײ���ϰ���
+	Weapon* m_weapon;											//Player当前使用的武�?
+	Vector<Weapon*> m_weaponArr;								//Player携带的所有武�?
+	TMXTiledMap* m_map;
+
+	bool isJumping;//标记主教是否碰撞了障碍物
+
+	TMXLayer* meta;//检测碰撞的地图�?
+	
+	/*����������ת��Ϊ��ͼ��������*/
+	Point tileCoordForPosition(Point pos);
+
+
+	/*将像素坐标转化为地图格子坐标*/
+	bool isJumping;
+	TMXLayer* meta;
+
+	Point tileCoordForPosition(Point pos);
+>>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 };
 
 #endif

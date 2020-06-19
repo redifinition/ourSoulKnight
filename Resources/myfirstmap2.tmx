@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="32" tileheight="32" nextobjectid="3">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="32" tileheight="32" nextobjectid="12">
  <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32" tilecount="16" columns="4">
   <image source="knight_floor.png" width="129" height="128"/>
  </tileset>
@@ -18,7 +18,7 @@
   </tile>
  </tileset>
  <tileset firstgid="39" name="block" tilewidth="32" tileheight="50" tilecount="1" columns="1">
-  <image source="box.png" width="34" height="53"/>
+  <image source="box.png" width="32" height="46"/>
  </tileset>
  <tileset firstgid="40" name="tree" tilewidth="31" tileheight="53" tilecount="1" columns="1">
   <image source="tree.png" width="31" height="53"/>
@@ -41,6 +41,15 @@
  </layer>
  <objectgroup name="objects">
   <object id="1" name="PlayerPoint" x="364.667" y="326.667" width="38" height="47" rotation="-0.297316"/>
+ </objectgroup>
+ <objectgroup name="bullet">
+  <object id="3" name="bullet1" x="658" y="267"/>
+  <object id="4" x="868" y="540"/>
+  <object id="5" name="remote_bullet1" x="2103" y="297" width="33" height="35"/>
+  <object id="6" name="remote_bullet2" x="2242" y="284" width="33" height="36"/>
+  <object id="9" name="remote_bullet3" x="2192" y="544" width="30" height="31"/>
+  <object id="10" name="remote_bullet4" x="2424" y="186" width="35" height="42"/>
+  <object id="11" name="remote_bullet5" x="1936" y="105" width="36" height="34"/>
  </objectgroup>
  <layer name="tree_root" width="80" height="80">
   <data encoding="base64" compression="zlib">

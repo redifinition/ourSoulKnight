@@ -27,27 +27,15 @@ private:
 	ValueMap   map;
 
 	/*action management*/
-	Animation* knight_animation_right_running;
-	Animate* animate_knight_right_running;
+	Animation* knight_animate;
+	Animate* knight_animate_run;
 
-	Animation* knight_animation_right_standing;
-	Animate* animate_knight_right_standing;
+	int left_right_tag;//to decide which action to use when press w or s
 
-	Animation* knight_animation_left_running;
-	Animate* animate_knight_left_running;
-
-	Animation* knight_animation_left_standing;
-	Animate* animate_knight_left_standing;
-
-	bool right_running_flag;
-	bool right_standing_flag;
-	bool left_running_flag;
-	bool left_standing_flag;
-	int right_left_flag;//to decide which action to use when running up and down
 	bool key_w;
-	bool key_d;
 	bool key_a;
 	bool key_s;
+	bool key_d;
 };
 
 #endif

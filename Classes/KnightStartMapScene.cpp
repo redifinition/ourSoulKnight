@@ -3,6 +3,7 @@
 #include "SimpleMoveController.h"
 #include"safetymapScene.h"
 #include"setupScene.h"
+#include"HelloWorldScene.h"
 USING_NS_CC;
 
 Scene* KnightStartMap::createScene()
@@ -26,6 +27,7 @@ bool KnightStartMap::init()
 	{
 		return false;
 	}
+	this->scheduleUpdate();
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -37,9 +39,15 @@ bool KnightStartMap::init()
 
 	//添加player
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
+<<<<<<< HEAD
 	Player* mplayer = Player::create();
 	mplayer->bindSprite(player_sprite);
 
+=======
+	mplayer = Player::create();
+	mplayer->bind_sprite(player_sprite);
+	mplayer->run();
+>>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 	mplayer->setTiledMap(_tiledmap);
 
 	//加载对象层
@@ -53,6 +61,11 @@ bool KnightStartMap::init()
 	//设置玩家坐标
 	mplayer->setPosition(Point(playerX, playerY));
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 	//创建玩家简单移动控制器
 	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
 
@@ -67,25 +80,143 @@ bool KnightStartMap::init()
 	mplayer->set_controller(simple_move_controller);
 	simple_move_controller->bind_sprite(player_sprite);
 
-	auto x = mplayer->getPositionX();
-	auto y = mplayer->getPositionY();
-	int x1 = (x*1.8) / 32;
-	int y1 = (1920 - 1.8*y) / 32;
-	if (x1 <= 21 && x1 >= 18 && y == 7)
-	{
-		
-		startgame();
-	}
 
+	auto knight_animate = Animation::create();
+	char nameSize[30] = { 0 };
+	for (int i = 1; i <= 2; i++)
+	{
+		sprintf(nameSize, "standing_right_%d_adjusted.png", i);
+		knight_animate->addSpriteFrameWithFile(nameSize);
+	}
+	knight_animate->setDelayPerUnit(0.1f);//设置动画帧时间间隔
+	knight_animate->setLoops(-1);
+	knight_animate->setRestoreOriginalFrame(true);
+	auto knight_animate_run = Animate::create(knight_animate);
+	player_sprite->runAction(knight_animate_run);
+
+<<<<<<< HEAD
 	_tiledmap->addChild(mplayer, 10);
+=======
+	_tiledmap->addChild(mplayer,23);
+>>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 
 	this->addChild(_tiledmap);
+	/*add the suspend button*/
+	auto suspend_button = MenuItemImage::create(
+		"suspend_button.png",
+		"suspend_button.png",
+		CC_CALLBACK_1(KnightStartMap::menuCloseCallback, this));
+	if (suspend_button == nullptr ||
+		suspend_button->getContentSize().width <= 0 ||
+		suspend_button->getContentSize().height <= 0)
+	{
+		problemLoading("'suspend_button.png' and 'suspend_button.png'");
+	}
+	else
+	{
 
+		suspend_button->setPosition(Vec2(visibleSize.width+ origin.x-20, visibleSize.height + origin.y-20));
+
+<<<<<<< HEAD
+=======
+	}
+	auto menu2 = Menu::create(suspend_button, NULL);
+	menu2->setPosition(Vec2::ZERO);
+	this->addChild(menu2, 1);//just a virtual button which is unvisible
+
+>>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 	return true;
 }
-void KnightStartMap::startgame()
+
+void KnightStartMap::menuCloseCallback(Ref* pSender)
+{   
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto suspend_scene = Sprite::create("suspend_scene.png");
+	suspend_scene->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2+300));
+	this->addChild(suspend_scene, 1);
+	auto suspend_scene_moveBy = MoveBy::create(0.3, Vec2(0,-300));
+	suspend_scene->runAction(suspend_scene_moveBy);
+
+	auto suspend_start = MenuItemImage::create(
+		"suspend_start.png",
+		"suspend_start.png",
+		CC_CALLBACK_1(KnightStartMap::start_menuCloseCallback, this));
+	if (suspend_start == nullptr ||
+		suspend_start->getContentSize().width <= 0 ||
+		suspend_start->getContentSize().height <= 0)
+	{
+		problemLoading("'suspend_button.png' and 'suspend_button.png'");
+	}
+	else
+	{
+
+		suspend_start->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2-40+300));
+		auto suspend_start_moveBy = MoveBy::create(0.3, Vec2(0, -300));
+		suspend_start->runAction(suspend_start_moveBy);
+	}
+	auto menu2 = Menu::create(suspend_start, NULL);
+	menu2->setPosition(Vec2::ZERO);
+	this->addChild(menu2, 1);//just a virtual button which is unvisible
+	/*create home button*/
+	auto home_button = MenuItemImage::create(
+		"home_button1.png",
+		"home_button2.png",
+		CC_CALLBACK_1(KnightStartMap::home_menuCloseCallback, this));
+	if (suspend_start == nullptr ||
+		suspend_start->getContentSize().width <= 0 ||
+		suspend_start->getContentSize().height <= 0)
+	{
+		problemLoading("'home_button1' and 'home_button2.png'");
+	}
+	else
+	{
+
+		home_button->setPosition(Vec2(visibleSize.width / 2-60, visibleSize.height / 2 - 40 + 300));
+		auto home_button_moveBy = MoveBy::create(0.3, Vec2(0, -300));
+		home_button->runAction(home_button_moveBy);
+	}
+	auto menu3 = Menu::create(home_button, NULL);
+	menu3->setPosition(Vec2::ZERO);
+	this->addChild(menu3, 1);//just a virtual button which is unvisible
+
+}
+
+void KnightStartMap::update(float dt)
 {
-	Director::getInstance()->pushScene(safetymap::createScene());
+	
+	auto player_x = mplayer->getPositionX();
+	auto player_y = mplayer->getPositionY();
+	int x = player_x * 1.8 / 32;
+	int y = (1920 - player_y * 1.8) / 32;
+	if (x <= 21 && x >= 18 &&(y==7))
+	{
+		
+		Director::getInstance()->replaceScene(safetymap::createScene());
+	}
+	
+	//加载玩家坐标对象
+	_tiledmap->getLayer("weapon_information")->setVisible(false);
+	if (x <= 15 && x >= 14 && y==50)
+	{
+		_tiledmap->getLayer("weapon_information")->setVisible(true);
+	}
+
 	
 }
+
+void KnightStartMap::start_menuCloseCallback(Ref* pSender)
+{
+
+	Director::getInstance()->replaceScene(KnightStartMap::createScene());
+
+}
+
+void KnightStartMap::home_menuCloseCallback(Ref* pSender)
+{
+	Director::getInstance()->replaceScene(HelloWorld::createScene());
+}
+
+
+
 
