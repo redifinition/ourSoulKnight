@@ -5,6 +5,10 @@
 #include "Controller.h"
 
 #include "Player.h"
+#include "Knight.h"
+#include "Gun.h"
+#include "Bullet.h"
+#include "RemoteSoldierManager.h"
 
 USING_NS_CC;
 
@@ -29,10 +33,15 @@ bool safetymap::init()
 	{
 		return false;
 	}
+	// åˆå§‹åŒ–Physics
+	if (!Scene::initWithPhysics())
+	{
+		return false;
+	}
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	//´´½¨µØÍ¼±³¾°
+
 
 
 	/*play game music*/
@@ -44,57 +53,175 @@ bool safetymap::init()
 	this->addChild(tryab, 5);*/
 
 	std::string floor_layer_file = "myfirstmap2.tmx";//µØÍ¼ÎÄ¼ş
+
+	//std::string floor_layer_file = "myfirstmap2.tmx";
+
+	//åˆ›å»ºåœ°å›¾èƒŒæ™¯
+
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
-	
 
+	//æ·»åŠ playerå¹¶ç»‘å®šæ­¦å™?
 
-	//Ìí¼Óplayer
-	//auto pinfo = AutoPolygon::generatePolygon("player.png");
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
-	Player* mplayer = Player::create();
-	mplayer->bind_sprite(player_sprite);
-
-	mplayer->run();
+	Knight* mplayer = Knight::create();
+	Gun* initialWeapon = Gun::create("broken pistol.png");
+	mplayer->bindSprite(player_sprite);
+	mplayer->bindWeapon(initialWeapon);
 	mplayer->setTiledMap(_tiledmap);
 
 	
-	TMXObjectGroup* objGroup = _tiledmap->getObjectGroup("objects");//¼ÓÔØ¶ÔÏó²ã
-	//¼ÓÔØÍæ¼Ò×ø±ê¶ÔÏó
+	TMXObjectGroup* objGroup = _tiledmap->getObjectGroup("objects");
+
 	ValueMap player_point_map = objGroup->getObject("PlayerPoint");
 	float playerX = player_point_map.at("x").asFloat();
 	float playerY = player_point_map.at("y").asFloat();
 
-	//ÉèÖÃÍæ¼Ò×ø±ê
+	//è®¾ç½®ç©å®¶åæ ‡
 	mplayer->setPosition(Point(playerX,playerY));
 
+  //log("playerposition:x=%f, y=%f", playerX, playerY);
+	//æ·»åŠ ä¸€ä¸ªæµ‹è¯•ç”¨çš„monster
+	Sprite* monster_sprite = Sprite::create("turn right 2.png");
+	Player* monster = Player::create();
+	monster->setTag(-2);
+	monster->bindSprite(monster_sprite);
+	monster->setTiledMap(_tiledmap);
+
+	TMXObjectGroup* bulletGroup = _tiledmap->getObjectGroup("bullet");
+
+	ValueMap monster_point_map = bulletGroup->getObject("bullet1");
+	float monsterX = monster_point_map.at("x").asFloat();
+	float monsterY = monster_point_map.at("y").asFloat();
+	monster->setPosition(Point(monsterX, monsterY));
 	
+	//åˆ›å»ºæ€ªç‰©
+	//RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
+	//this->addChild(remoteSoldierManager);
+	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
+	this->addChild(remoteSoldierManager, 4);
+	//log("remoteSoldierManager:x=%f, y=%f", remoteSoldierManager->getPositionX(), remoteSoldierManager->getPositionY());
 
 
-	//´´½¨Íæ¼Ò¼òµ¥ÒÆ¶¯¿ØÖÆÆ÷
-	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
 
-	//ÉèÖÃÒÆ¶¯ËÙ¶È
+	/*auto knight_animation = Animation::create();
+	char nameSize[30] = { 0 };
+	for (int i = 1; i <= 4; i++)
+	{
+		sprintf(nameSize, "turn right %d.png", i);
+		knight_animation->addSpriteFrameWithFile(nameSize);
+	}
+	knight_animation->setDelayPerUnit(0.08f);//ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½Ö¡Ê±ï¿½ï¿½ï¿½ï¿½
+	knight_animation->setLoops(-1);
+	knight_animation->setRestoreOriginalFrame(true);
+	Animate* animate_knight = Animate::create(knight_animation);
+	player_sprite->runAction(animate_knight);*/
+
+	//è®¾ç½®ç§»åŠ¨é€Ÿåº¦
 	simple_move_controller->set_ixspeed(0);
 	simple_move_controller->set_iyspeed(0);
 
-	//½«¿ØÖÆÆ÷Ìí¼Óµ½³¡¾°ÖĞÈÃUpadate±»µ÷ÓÃ
+	//å°†æ§åˆ¶å™¨æ·»åŠ åˆ°åœºæ™¯ä¸­è®©Upadateè¢«è°ƒç”?
 	this->addChild(simple_move_controller);
-	//ÉèÖÃ¿ØÖÆÆ÷µ½Ö÷½ÇÉíÉÏ
+
+	//è®¾ç½®æ§åˆ¶å™¨åˆ°ä¸»è§’èº«ä¸Š
 	mplayer->set_controller(simple_move_controller);
 	simple_move_controller->bind_sprite(player_sprite);//Bind player
+  
+	//è®¾ç½®ç¢°æ’æ©ç 
+	this->m_player = mplayer;
+	this->m_monster = monster;
 
-
-
+	m_monster->getPhysicsBody()->setCategoryBitmask(0x02);
+	m_monster->getPhysicsBody()->setContactTestBitmask(0x04);
 
 	_tiledmap->addChild(mplayer,2);
+	this->addChild(monster,2);
+	this->addChild(mplayer,2);
 
 	this->addChild(_tiledmap);
 
+	//åˆ›å»ºEventListener
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->onTouchBegan = CC_CALLBACK_2(safetymap::onTouchBegin, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	
+	//åˆ›å»ºcontactListener
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(safetymap::onContactBegin, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+
 	return true;
 }
+
+bool safetymap::onTouchBegin(Touch* touch, Event* event) {
+	auto target = this->m_monster;
+	if(!target->getalreadyDead())
+	{
+		Vec2 pos = target->getPosition();
+		m_player->rotateWeapon(pos);
+		m_player->attack(this, pos);
+	}
+	else {
+		m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
+	}
+	return true;
+}
+
+bool safetymap::onContactBegin(PhysicsContact& contact) {
+
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+
+	if (nodeA && nodeB)
+	{
+		if (nodeA->getTag() > 0)
+		{
+			if (nodeB->getTag() == -1)
+			{
+				this->m_player->takeDamage(nodeA->getTag());
+			}
+			else if (nodeB->getTag() == -2)
+			{
+				this->m_monster->takeDamage(nodeA->getTag());
+			}
+			nodeA->removeFromParentAndCleanup(true);
+
+		}
+		else if (nodeB->getTag() > 0)
+		{
+			if (nodeA->getTag() == -1)
+			{
+				this->m_player->takeDamage(nodeB->getTag());
+			}
+			else if (nodeA->getTag() == -2)
+			{
+				this->m_monster->takeDamage(nodeB->getTag());
+			}
+			nodeB->removeFromParentAndCleanup(true);
+		}
+
+	}
+
+	return true;
+}
+
+/*void safetymap::add_player(TMXTiledMap* map)
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½
+	Sprite* player_sprite = Sprite::create("player.png");
+	Player* mplayer = Player::create();
+	mplayer->bind_sprite(player_sprite);
+	mplayer->run();
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	mplayer->setPosition(Vec2(100, visibleSize.height / 2));
+
+	_tiledmap->addChild(mplayer);
+}*/
+
 
 
