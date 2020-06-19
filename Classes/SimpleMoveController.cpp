@@ -7,21 +7,15 @@ bool SimpleMoveController::init()
 	this->m_ixspeed = 0;
 	this->m_iyspeed = 0;
 
-	right_running_flag = true;
-	right_standing_flag = true;
-	left_standing_flag = true;
-	left_running_flag = true;
-
-	key_w = false;
-	key_d= false;
-	key_a = false;
-	key_s = false;
-
 
 	registeKeyBoardEvent();//注册键盘控制事件
 	this->scheduleUpdate();
 
-	
+	key_w = false;
+	key_a = false;
+	key_s = false;
+	key_d = false;
+
 	return true;
 }
 
@@ -68,201 +62,122 @@ void SimpleMoveController::registeKeyBoardEvent()
 		case EventKeyboard::KeyCode::KEY_W://上方向键;
 		{
 			key_w = true;
+			m_sprite->stopAllActions();
+			if (left_right_tag == -1)
+			{
+				knight_animate = Animation::create();
+				char nameSize[30] = { 0 };
+				for (int i = 1; i <= 4; i++)
+				{
+					sprintf(nameSize, "running_left_%d.png", i);
+					knight_animate->addSpriteFrameWithFile(nameSize);
+				}
+				knight_animate->setDelayPerUnit(0.08f);//设置动画帧时间间隔
+				knight_animate->setLoops(-1);
+				knight_animate->setRestoreOriginalFrame(true);
+				knight_animate_run = Animate::create(knight_animate);
+				m_sprite->runAction(knight_animate_run);
+			}
+			if (left_right_tag == 1)
+			{
+				knight_animate = Animation::create();
+				char nameSize[30] = { 0 };
+				for (int i = 1; i <= 4; i++)
+				{
+					sprintf(nameSize, "running_right_%d.png", i);
+					knight_animate->addSpriteFrameWithFile(nameSize);
+				}
+				knight_animate->setDelayPerUnit(0.08f);//设置动画帧时间间隔
+				knight_animate->setLoops(-1);
+				knight_animate->setRestoreOriginalFrame(true);
+				knight_animate_run = Animate::create(knight_animate);
+				m_sprite->runAction(knight_animate_run);
+			}
 			set_iyspeed(2);
-			if (right_left_flag == 1)
-			{
-
-				if (animate_knight_right_standing)
-				{
-					m_sprite->stopAction(animate_knight_right_standing);
-					right_standing_flag = true;
-				}
 
 
-				if (right_running_flag == true)
-				{
-					knight_animation_right_running = Animation::create();
-					char nameSize[30] = { 0 };
-					for (int i = 1; i <= 4; i++)
-					{
-						sprintf(nameSize, "running_right_%d.png", i);
-						knight_animation_right_running->addSpriteFrameWithFile(nameSize);
-					}
-					knight_animation_right_running->setDelayPerUnit(0.08f);//设置动画帧时间间隔
-					knight_animation_right_running->setLoops(-1);
-					knight_animation_right_running->setRestoreOriginalFrame(true);
-					animate_knight_right_running = Animate::create(knight_animation_right_running);
-					m_sprite->runAction(animate_knight_right_running);
-
-					right_running_flag = false;
-				}
-
-			}
-			if (right_left_flag == 0)
-			{
-				if (animate_knight_left_standing)
-				{
-					m_sprite->stopAction(animate_knight_left_standing);
-					left_standing_flag = true;
-				}
-
-				if (left_running_flag == true)
-				{
-					knight_animation_left_running = Animation::create();
-					char nameSize[30] = { 0 };
-					for (int i = 1; i <= 4; i++)
-					{
-						sprintf(nameSize, "running_left_%d.png", i);
-						knight_animation_left_running->addSpriteFrameWithFile(nameSize);
-					}
-					knight_animation_left_running->setDelayPerUnit(0.08f);//设置动画帧时间间隔
-					knight_animation_left_running->setLoops(-1);
-					knight_animation_left_running->setRestoreOriginalFrame(true);
-					animate_knight_left_running = Animate::create(knight_animation_left_running);
-					m_sprite->runAction(animate_knight_left_running);
-
-					left_running_flag = false;
-				}
-			}
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_A://左方向键;
 		{
 			set_ixspeed(-2);
+			key_a = true;
+			m_sprite->stopAllActions();
 
-			key_a = true;//key a is pressed
-
-			right_left_flag = 0;//to decide which action to use when pressed w or s
-
-			if (animate_knight_left_standing)
+			knight_animate = Animation::create();
+			char nameSize[30] = { 0 };
+			for (int i = 1; i <= 4; i++)
 			{
-				m_sprite->stopAction(animate_knight_left_standing);
-				left_standing_flag = true;
+				sprintf(nameSize, "running_left_%d.png", i);
+				knight_animate->addSpriteFrameWithFile(nameSize);
 			}
+			knight_animate->setDelayPerUnit(0.08f);//设置动画帧时间间隔
+			knight_animate->setLoops(-1);
+			knight_animate->setRestoreOriginalFrame(true);
+			knight_animate_run = Animate::create(knight_animate);
+			m_sprite->runAction(knight_animate_run);
 
-			if (animate_knight_right_standing)
-			{
-				m_sprite->stopAction(animate_knight_right_standing);
-				right_standing_flag = true;
-			}
-
-			if (left_running_flag = true)
-			{
-				knight_animation_left_running = Animation::create();
-				char nameSize[30] = { 0 };
-				for (int i = 1; i <= 4; i++)
-				{
-					sprintf(nameSize, "running_left_%d.png", i);
-					knight_animation_left_running->addSpriteFrameWithFile(nameSize);
-				}
-				knight_animation_left_running->setDelayPerUnit(0.08f);//设置动画帧时间间隔
-				knight_animation_left_running->setLoops(-1);
-				knight_animation_left_running->setRestoreOriginalFrame(true);
-				animate_knight_left_running = Animate::create(knight_animation_left_running);
-				m_sprite->runAction(animate_knight_left_running);
-
-				left_running_flag = false;
-
-			}
-
+			left_right_tag = -1;
 			break;
+
 		}
 
 		case EventKeyboard::KeyCode::KEY_S://下方向键;
 		{
-
 			key_s = true;
-			if (right_left_flag == 1)
+			m_sprite->stopAllActions();
+			if (left_right_tag == -1)
 			{
-
-				if (animate_knight_right_standing)
+				knight_animate = Animation::create();
+				char nameSize[30] = { 0 };
+				for (int i = 1; i <= 4; i++)
 				{
-					m_sprite->stopAction(animate_knight_right_standing);
-					right_standing_flag = true;
+					sprintf(nameSize, "running_left_%d.png", i);
+					knight_animate->addSpriteFrameWithFile(nameSize);
 				}
-
-
-				if (right_running_flag == true)
-				{
-					knight_animation_right_running = Animation::create();
-					char nameSize[30] = { 0 };
-					for (int i = 1; i <= 4; i++)
-					{
-						sprintf(nameSize, "running_right_%d.png", i);
-						knight_animation_right_running->addSpriteFrameWithFile(nameSize);
-					}
-					knight_animation_right_running->setDelayPerUnit(0.08f);//设置动画帧时间间隔
-					knight_animation_right_running->setLoops(-1);
-					knight_animation_right_running->setRestoreOriginalFrame(true);
-					animate_knight_right_running = Animate::create(knight_animation_right_running);
-					m_sprite->runAction(animate_knight_right_running);
-
-					right_running_flag = false;
-				}
-
+				knight_animate->setDelayPerUnit(0.08f);//设置动画帧时间间隔
+				knight_animate->setLoops(-1);
+				knight_animate->setRestoreOriginalFrame(true);
+				knight_animate_run = Animate::create(knight_animate);
+				m_sprite->runAction(knight_animate_run);
 			}
-			if (right_left_flag == 0)
+			if (left_right_tag == 1)
 			{
-				if (animate_knight_left_standing)
+				knight_animate = Animation::create();
+				char nameSize[30] = { 0 };
+				for (int i = 1; i <= 4; i++)
 				{
-					m_sprite->stopAction(animate_knight_left_standing);
-					left_standing_flag = true;
+					sprintf(nameSize, "running_right_%d.png", i);
+					knight_animate->addSpriteFrameWithFile(nameSize);
 				}
-
-				if (left_running_flag == true)
-				{
-					knight_animation_left_running = Animation::create();
-					char nameSize[30] = { 0 };
-					for (int i = 1; i <= 4; i++)
-					{
-						sprintf(nameSize, "running_left_%d.png", i);
-						knight_animation_left_running->addSpriteFrameWithFile(nameSize);
-					}
-					knight_animation_left_running->setDelayPerUnit(0.08f);//设置动画帧时间间隔
-					knight_animation_left_running->setLoops(-1);
-					knight_animation_left_running->setRestoreOriginalFrame(true);
-					animate_knight_left_running = Animate::create(knight_animation_left_running);
-					m_sprite->runAction(animate_knight_left_running);
-
-					left_running_flag = false;
-				}
+				knight_animate->setDelayPerUnit(0.08f);//设置动画帧时间间隔
+				knight_animate->setLoops(-1);
+				knight_animate->setRestoreOriginalFrame(true);
+				knight_animate_run = Animate::create(knight_animate);
+				m_sprite->runAction(knight_animate_run);
 			}
+
 			set_iyspeed(-2);
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_D://右方向键;
 		{
 			key_d = true;
-			right_left_flag = 1;
-			if (animate_knight_right_standing)
+			m_sprite->stopAllActions();
+			knight_animate = Animation::create();
+			char nameSize[30] = { 0 };
+			for (int i = 1; i <= 4; i++)
 			{
-				m_sprite->stopAction(animate_knight_right_standing);
-				right_standing_flag = true;
+				sprintf(nameSize, "running_right_%d.png", i);
+				knight_animate->addSpriteFrameWithFile(nameSize);
 			}
+			knight_animate->setDelayPerUnit(0.08f);//设置动画帧时间间隔
+			knight_animate->setLoops(-1);
+			knight_animate->setRestoreOriginalFrame(true);
+			knight_animate_run = Animate::create(knight_animate);
+			m_sprite->runAction(knight_animate_run);
 
-			if (animate_knight_left_standing)
-			{
-				m_sprite->stopAction(animate_knight_left_standing);
-				left_standing_flag = true;
-			}
-			if (right_running_flag == true)
-			{
-				knight_animation_right_running = Animation::create();
-				char nameSize[30] = { 0 };
-				for (int i = 1; i <= 4; i++)
-				{
-					sprintf(nameSize, "running_right_%d.png", i);
-					knight_animation_right_running->addSpriteFrameWithFile(nameSize);
-				}
-				knight_animation_right_running->setDelayPerUnit(0.08f);//设置动画帧时间间隔
-				knight_animation_right_running->setLoops(-1);
-				knight_animation_right_running->setRestoreOriginalFrame(true);
-				animate_knight_right_running = Animate::create(knight_animation_right_running);
-				m_sprite->runAction(animate_knight_right_running);
-
-				right_running_flag = false;
-			}
-
+			left_right_tag = 1;
 			set_ixspeed(2);
 			break;
 		}
@@ -274,183 +189,126 @@ void SimpleMoveController::registeKeyBoardEvent()
 		switch (keyCode) {
 		case EventKeyboard::KeyCode::KEY_W:
 		{
-			auto y = m_sprite->getPositionY();
-			key_w = false;
-			if (right_left_flag == 1)
+			if (key_a == false && key_s == false && key_d == false)
 			{
-				if (animate_knight_right_running&&key_d==false)
+				m_sprite->stopAllActions();
+				if (left_right_tag == -1)
 				{
-					m_sprite->stopAction(animate_knight_right_running);
-					right_running_flag =true;
-				}
-
-				/*start the standing_right action*/
-				if (right_standing_flag == true&&key_d==false)
-				{
-					knight_animation_right_standing = Animation::create();
-					char nameSize[30] = { 0 };
-					for (int i = 1; i <= 2; i++)
-					{
-						sprintf(nameSize, "standing_right_%d_adjusted.png", i);
-						knight_animation_right_standing->addSpriteFrameWithFile(nameSize);
-					}
-					knight_animation_right_standing->setDelayPerUnit(0.1f);//设置动画帧时间间隔
-					knight_animation_right_standing->setLoops(-1);
-					knight_animation_right_standing->setRestoreOriginalFrame(true);
-					animate_knight_right_standing = Animate::create(knight_animation_right_standing);
-					m_sprite->runAction(animate_knight_right_standing);
-
-					right_standing_flag = false;
-				}
-			}
-
-			if (right_left_flag ==0)
-			{
-				if (animate_knight_left_running&&key_a == false)
-				{
-					m_sprite->stopAction(animate_knight_left_running);
-					left_running_flag = true;
-				}
-
-				/*start the standing_left action*/
-				if (left_standing_flag == true && key_a == false)
-				{
-					knight_animation_left_standing = Animation::create();
+					knight_animate = Animation::create();
 					char nameSize[30] = { 0 };
 					for (int i = 1; i <= 2; i++)
 					{
 						sprintf(nameSize, "standing_left_%d.png", i);
-						knight_animation_left_standing->addSpriteFrameWithFile(nameSize);
+						knight_animate->addSpriteFrameWithFile(nameSize);
 					}
-					knight_animation_left_standing->setDelayPerUnit(0.1f);//设置动画帧时间间隔
-					knight_animation_left_standing->setLoops(-1);
-					knight_animation_left_standing->setRestoreOriginalFrame(true);
-					animate_knight_left_standing = Animate::create(knight_animation_left_standing);
-					m_sprite->runAction(animate_knight_left_standing);
-
-					left_standing_flag = false;
+					knight_animate->setDelayPerUnit(0.1f);//设置动画帧时间间隔
+					knight_animate->setLoops(-1);
+					knight_animate->setRestoreOriginalFrame(true);
+					knight_animate_run = Animate::create(knight_animate);
+					m_sprite->runAction(knight_animate_run);
+				}
+				if (left_right_tag == 1)
+				{
+					knight_animate = Animation::create();
+					char nameSize[30] = { 0 };
+					for (int i = 1; i <= 2; i++)
+					{
+						sprintf(nameSize, "standing_right_%d_adjusted.png", i);
+						knight_animate->addSpriteFrameWithFile(nameSize);
+					}
+					knight_animate->setDelayPerUnit(0.1f);//设置动画帧时间间隔
+					knight_animate->setLoops(-1);
+					knight_animate->setRestoreOriginalFrame(true);
+					knight_animate_run = Animate::create(knight_animate);
+					m_sprite->runAction(knight_animate_run);
 				}
 			}
+			key_w = false;
 			set_iyspeed(0);
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_A://左方向键;
 		{
-			key_a = false;//key a is released
-			if (animate_knight_left_running&&key_w == false)
+			if (key_w == false && key_s == false && key_d == false)
 			{
-				m_sprite->stopAction(animate_knight_left_running);
-				left_running_flag = true;
-			}
-
-			if (left_standing_flag == true && key_w == false&&key_s==false)
-			{
-				knight_animation_left_standing = Animation::create();
+				m_sprite->stopAllActions();
+				knight_animate = Animation::create();
 				char nameSize[30] = { 0 };
 				for (int i = 1; i <= 2; i++)
 				{
 					sprintf(nameSize, "standing_left_%d.png", i);
-					knight_animation_left_standing->addSpriteFrameWithFile(nameSize);
+					knight_animate->addSpriteFrameWithFile(nameSize);
 				}
-				knight_animation_left_standing->setDelayPerUnit(0.1f);//设置动画帧时间间隔
-				knight_animation_left_standing->setLoops(-1);
-				knight_animation_left_standing->setRestoreOriginalFrame(true);
-				animate_knight_left_standing = Animate::create(knight_animation_left_standing);
-				m_sprite->runAction(animate_knight_left_standing);
-				left_standing_flag = false;
+				knight_animate->setDelayPerUnit(0.1f);//设置动画帧时间间隔
+				knight_animate->setLoops(-1);
+				knight_animate->setRestoreOriginalFrame(true);
+				knight_animate_run = Animate::create(knight_animate);
+				m_sprite->runAction(knight_animate_run);
 			}
+			key_a = false;
 			set_ixspeed(0);
 			break;
 		}
-		case EventKeyboard::KeyCode::KEY_S://上方向键;
+		case EventKeyboard::KeyCode::KEY_S://下方向键;
 		{
-			key_s = false;
-			if (right_left_flag == 1)
+			if (key_w == false && key_a == false && key_d == false)
 			{
-				if (animate_knight_right_running&&key_d == false)
+				m_sprite->stopAllActions();
+				if (left_right_tag == -1)
 				{
-					m_sprite->stopAction(animate_knight_right_running);
-					right_running_flag = true;
-				}
-
-				/*start the standing_right action*/
-				if (right_standing_flag == true && key_d == false)
-				{
-					knight_animation_right_standing = Animation::create();
-					char nameSize[30] = { 0 };
-					for (int i = 1; i <= 2; i++)
-					{
-						sprintf(nameSize, "standing_right_%d_adjusted.png", i);
-						knight_animation_right_standing->addSpriteFrameWithFile(nameSize);
-					}
-					knight_animation_right_standing->setDelayPerUnit(0.1f);//设置动画帧时间间隔
-					knight_animation_right_standing->setLoops(-1);
-					knight_animation_right_standing->setRestoreOriginalFrame(true);
-					animate_knight_right_standing = Animate::create(knight_animation_right_standing);
-					m_sprite->runAction(animate_knight_right_standing);
-
-					right_standing_flag = false;
-				}
-			}
-
-			if (right_left_flag == 0)
-			{
-				if (animate_knight_left_running&&key_a == false)
-				{
-					m_sprite->stopAction(animate_knight_left_running);
-					left_running_flag = true;
-				}
-
-				/*start the standing_left action*/
-				if (left_standing_flag == true && key_a == false)
-				{
-					knight_animation_left_standing = Animation::create();
+					knight_animate = Animation::create();
 					char nameSize[30] = { 0 };
 					for (int i = 1; i <= 2; i++)
 					{
 						sprintf(nameSize, "standing_left_%d.png", i);
-						knight_animation_left_standing->addSpriteFrameWithFile(nameSize);
+						knight_animate->addSpriteFrameWithFile(nameSize);
 					}
-					knight_animation_left_standing->setDelayPerUnit(0.1f);//设置动画帧时间间隔
-					knight_animation_left_standing->setLoops(-1);
-					knight_animation_left_standing->setRestoreOriginalFrame(true);
-					animate_knight_left_standing = Animate::create(knight_animation_left_standing);
-					m_sprite->runAction(animate_knight_left_standing);
-
-					left_standing_flag = false;
+					knight_animate->setDelayPerUnit(0.1f);//设置动画帧时间间隔
+					knight_animate->setLoops(-1);
+					knight_animate->setRestoreOriginalFrame(true);
+					knight_animate_run = Animate::create(knight_animate);
+					m_sprite->runAction(knight_animate_run);
+				}
+				if (left_right_tag == 1)
+				{
+					knight_animate = Animation::create();
+					char nameSize[30] = { 0 };
+					for (int i = 1; i <= 2; i++)
+					{
+						sprintf(nameSize, "standing_right_%d_adjusted.png", i);
+						knight_animate->addSpriteFrameWithFile(nameSize);
+					}
+					knight_animate->setDelayPerUnit(0.1f);//设置动画帧时间间隔
+					knight_animate->setLoops(-1);
+					knight_animate->setRestoreOriginalFrame(true);
+					knight_animate_run = Animate::create(knight_animate);
+					m_sprite->runAction(knight_animate_run);
 				}
 			}
+			key_s = false;
 			set_iyspeed(0);
 			break;
 		}
 
 		case EventKeyboard::KeyCode::KEY_D://右方向键;
 		{
-			key_d = false;//key d is released
-
-			if (animate_knight_right_running&&key_w==false)
+			if (key_w == false && key_a == false && key_s == false)
 			{
-				m_sprite->stopAction(animate_knight_right_running);
-			    right_running_flag = true;
-			}
-
-			if (right_standing_flag == true&&key_w==false&&key_s==false)
-			{
-				knight_animation_right_standing = Animation::create();
+				m_sprite->stopAllActions();
+				knight_animate = Animation::create();
 				char nameSize[30] = { 0 };
 				for (int i = 1; i <= 2; i++)
 				{
 					sprintf(nameSize, "standing_right_%d_adjusted.png", i);
-					knight_animation_right_standing->addSpriteFrameWithFile(nameSize);
+					knight_animate->addSpriteFrameWithFile(nameSize);
 				}
-				knight_animation_right_standing->setDelayPerUnit(0.1f);//设置动画帧时间间隔
-				knight_animation_right_standing->setLoops(-1);
-				knight_animation_right_standing->setRestoreOriginalFrame(true);
-				animate_knight_right_standing = Animate::create(knight_animation_right_standing);
-				m_sprite->runAction(animate_knight_right_standing);
-				right_standing_flag =false;
+				knight_animate->setDelayPerUnit(0.1f);//设置动画帧时间间隔
+				knight_animate->setLoops(-1);
+				knight_animate->setRestoreOriginalFrame(true);
+				knight_animate_run = Animate::create(knight_animate);
+				m_sprite->runAction(knight_animate_run);
 			}
-
+			key_d = false;
 			set_ixspeed(0);
 			break;
 		}
@@ -458,7 +316,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyBoardListener, this);
 
-	
+
 
 }
 
@@ -466,4 +324,3 @@ void SimpleMoveController::bind_sprite(Sprite* sprite)
 {
 	m_sprite = sprite;
 }
-

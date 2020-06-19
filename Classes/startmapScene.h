@@ -12,11 +12,11 @@ public:
 	virtual bool init();
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
-	
+	void menuCloseCallbackHome(cocos2d::Ref* pSender);
 	CREATE_FUNC(startmap);
 private:
 	TMXTiledMap* _safetymap;
-
+	int audio_begin_flag=0;
 
 };
 

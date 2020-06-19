@@ -255,6 +255,7 @@ void setup::audio_menuCloseCallback(Ref* pSender)
 			{
 				int percent = music_slider->getPercent();
 				SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(float(percent) / 100);
+				audio_percent = (float)percent;
 				UserDefault::getInstance()->setFloatForKey("musicPercent", percent);
 			}
 		});

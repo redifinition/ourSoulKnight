@@ -32,6 +32,7 @@ bool HelloWorld::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+	audio_home->stopBackgroundMusic();
 	/////////////////////////////
 	// 2. add a menu item with "X" image, which is clicked to quit the program
 	//    you may modify it.
@@ -85,7 +86,8 @@ bool HelloWorld::init()
 	//auto audio = SimpleAudioEngine::getInstance();
 	audio_begin->playBackgroundMusic("startgame.mp3", true);
 
-	
+
+	//Director::getInstance()->replaceScene(TransitionCrossFade::create(0.7f, MyHelloWorld::createScene()));
 
 	return true;
 }

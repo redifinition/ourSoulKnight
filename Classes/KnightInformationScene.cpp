@@ -1,7 +1,7 @@
 
 #include"KnightInformationScene.h"
 #include"KnightStartMapScene.h"
-
+#include"startmapScene.h"
 USING_NS_CC;
 
 Scene* KnightInformation::createScene()
@@ -64,6 +64,28 @@ bool KnightInformation::init()
 	auto sequence = Sequence::create(scale_smaller, scale_bigger, nullptr);
 	start_button->runAction(RepeatForever::create(sequence));
 
+	/*add the close button*/
+	auto knight_close_button = MenuItemImage::create(
+		"knight_close_button1.png",
+		"knight_close_button2.png",
+		CC_CALLBACK_1(KnightInformation::close_menuCloseCallback, this));
+	if (knight_close_button == nullptr ||
+		knight_close_button->getContentSize().width <= 0 ||
+		knight_close_button->getContentSize().height <= 0)
+	{
+		problemLoading("'close_knight.png'");
+	}
+	else
+	{
+
+		knight_close_button->setPosition(Vec2(visibleSize.width / 2 + origin.x - 150, visibleSize.height / 4 + origin.y - 30));
+		knight_close_button->setScale(0.4);
+	}
+	auto menu2 = Menu::create(knight_close_button, NULL);
+	menu2->setPosition(Vec2::ZERO);
+	this->addChild(menu2, 1);//just a virtual button which is unvisible
+
+
 	this->addChild(start_button,1);
 
 	this->addChild(knight_data, 0);
@@ -76,5 +98,9 @@ void KnightInformation::menuCloseCallback(cocos2d::Ref* pSender)
    Director::getInstance()->replaceScene(KnightStartMap::createScene());
 }
 
+void KnightInformation::close_menuCloseCallback(cocos2d::Ref* pSender)
+{
+	Director::getInstance()->replaceScene(startmap::createScene());
+}
 
 

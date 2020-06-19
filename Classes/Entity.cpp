@@ -1,5 +1,11 @@
 #include "Entity.h"
 
+<<<<<<< HEAD
+void Entity::bind_sprite(Sprite* sprite)
+{
+	m_sprite = sprite;
+	this->addChild(m_sprite);
+=======
 
 Entity::Entity() {
 	m_sprite = NULL;
@@ -26,6 +32,7 @@ bool Entity::bindSprite(Sprite*sprite) {
 
 		return true;
 	}
+>>>>>>> 0b150e282704a53832ad87045d2b9191f961a38c
 }
 
 void Entity::set_controller(My_Controller* controller)
