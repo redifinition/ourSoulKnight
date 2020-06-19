@@ -1,6 +1,7 @@
 #ifndef  __CONSTANT_H__
 #define  __CONSTANT_H__
 
+#define PI 3.14
 #define MELEE_SOLDIER_ATTACK 3
 #define MELEE_SOLDIER_HP 15
 #define MELEE_SOLDIER_MOVE_SPEED 150

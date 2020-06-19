@@ -21,4 +21,6 @@ public:
 private:
 	virtual void die();
 };
+
 #endif
+#pragma once

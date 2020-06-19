@@ -1,16 +1,7 @@
-
+#include "HelloWorldScene.h"
+#include "MyHelloWorldScene.h"
 #include "audio.h"
 #include "safetymapScene.h"
-#include "SimpleMoveController.h"
-#include "Controller.h"
-
-#include "Player.h"
-#include "Knight.h"
-#include "Gun.h"
-#include "Bullet.h"
-#include "RemoteSoldierManager.h"
-
-USING_NS_CC;
 
 Scene* safetymap::createScene()
 {
@@ -42,31 +33,23 @@ bool safetymap::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-
-
 	/*play game music*/
 	audio_home->stopBackgroundMusic();
 	audio_game->playBackgroundMusic("game_music.mp3", true);
 
-	/*auto tryab = Sprite::create("reservation.png");
-	tryab->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-	this->addChild(tryab, 5);*/
-
 	std::string floor_layer_file = "myfirstmap2.tmx";//��ͼ�ļ�
-
-	//std::string floor_layer_file = "myfirstmap2.tmx";
-
-	//创建地图背景
 
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
+	this->addChild(_tiledmap);
+	log("map size:(%d, %d)", _tiledmap->getContentSize().width,_tiledmap->getContentSize().height);
 
 	//添加player并绑定武�?
 
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Knight* mplayer = Knight::create();
-	Gun* initialWeapon = Gun::create("broken pistol.png");
+	ShotGun* initialWeapon = ShotGun::create("broken pistol.png");
 	mplayer->bindSprite(player_sprite);
 	mplayer->bindWeapon(initialWeapon);
 	mplayer->setTiledMap(_tiledmap);
@@ -81,7 +64,6 @@ bool safetymap::init()
 	//设置玩家坐标
 	mplayer->setPosition(Point(playerX,playerY));
 
-  //log("playerposition:x=%f, y=%f", playerX, playerY);
 	//添加一个测试用的monster
 	Sprite* monster_sprite = Sprite::create("turn right 2.png");
 	Player* monster = Player::create();
@@ -96,27 +78,13 @@ bool safetymap::init()
 	float monsterY = monster_point_map.at("y").asFloat();
 	monster->setPosition(Point(monsterX, monsterY));
 	
+	log("player pos0:(%d, %d)", playerX, playerY);
 	//创建怪物
 	//RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
-	//this->addChild(remoteSoldierManager);
-	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
-	this->addChild(remoteSoldierManager, 4);
-	//log("remoteSoldierManager:x=%f, y=%f", remoteSoldierManager->getPositionX(), remoteSoldierManager->getPositionY());
+	//this->addChild(remoteSoldierManager, 4);
 
-
-
-	/*auto knight_animation = Animation::create();
-	char nameSize[30] = { 0 };
-	for (int i = 1; i <= 4; i++)
-	{
-		sprintf(nameSize, "turn right %d.png", i);
-		knight_animation->addSpriteFrameWithFile(nameSize);
-	}
-	knight_animation->setDelayPerUnit(0.08f);//���ö���֡ʱ����
-	knight_animation->setLoops(-1);
-	knight_animation->setRestoreOriginalFrame(true);
-	Animate* animate_knight = Animate::create(knight_animation);
-	player_sprite->runAction(animate_knight);*/
+	//创建玩家简单移动控制器
+	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
 
 	//设置移动速度
 	simple_move_controller->set_ixspeed(0);
@@ -135,12 +103,14 @@ bool safetymap::init()
 
 	m_monster->getPhysicsBody()->setCategoryBitmask(0x02);
 	m_monster->getPhysicsBody()->setContactTestBitmask(0x04);
-
-	_tiledmap->addChild(mplayer,2);
+	
+	/*_tiledmap->addChild(mplayer,2);
+	_tiledmap->addChild(monster, 2);
+	*/
+	
 	this->addChild(monster,2);
 	this->addChild(mplayer,2);
-
-	this->addChild(_tiledmap);
+	
 
 	//创建EventListener
 	auto listener = EventListenerTouchOneByOne::create();
@@ -162,7 +132,7 @@ bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 	{
 		Vec2 pos = target->getPosition();
 		m_player->rotateWeapon(pos);
-		m_player->attack(this, pos);
+		m_player->attack(this,pos);
 	}
 	else {
 		m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));

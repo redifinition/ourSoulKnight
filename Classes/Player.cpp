@@ -3,13 +3,10 @@
 
 Player::Player()
 {
-	isJumping = false;
 	_HP = 5;
 	_MP = 100;
 	_AC = 5;
-	_weaponPosition = Vec2(0.8, 0.3);
 	_alreadyDead = false;
-
 }
 
 Player::~Player() {
@@ -30,13 +27,12 @@ bool Player::bindSprite(Sprite*sprite) {
 	else
 	{
 		this->addChild(m_sprite);
-		/*璁剧疆Player鐨勫ぇ灏忓拰m_sprite鐨勫ぇ灏忎竴鑷达紝鍚﹀垯纰版挒妯″瀷浼氫笉瀵?/
 		Size size = m_sprite->getContentSize();
 		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
 		this->setContentSize(size);
 		this->setAnchorPoint(Vec2(0.5, 0.5));
 
-		/*娣诲姞鐗╃悊纰版挒妯″瀷*/
+		//娣诲姞鐗╃悊纰版挒妯″瀷
 		auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(0.0f, 0.0f, 0.0f));
 		physicsBody->setDynamic(false);
 		physicsBody->setCategoryBitmask(0x01);
@@ -75,7 +71,11 @@ bool Player::bindWeapon(Weapon* weapon) {
 }
 
 void Player::attack(Scene* currentScene,const Vec2& pos) {
-	this->m_weapon->fire(currentScene, pos);
+	if (_MP - m_weapon->getMpConsume() >= 0) {
+		_MP -= m_weapon->getMpConsume();
+		this->m_weapon->fire(currentScene, pos);
+		log("player pos:(%d,%d)", this->getPositionX(), this->getPositionY());
+	}
 	/*
 	//鏀诲嚮鏂瑰悜
 	auto direction = pos - this->getPosition();
@@ -113,11 +113,18 @@ void Player::skill() {
 
 void Player::takeDamage(int damage)
 {
-	_HP -= damage;
-	if (_HP <= 0)
+	if (_AC > 0)
 	{
-		_alreadyDead = true;
-		this->die();
+		_AC -= damage;
+	}
+	else 
+	{
+		_HP -= damage;
+		if (_HP <= 0)
+		{
+			_alreadyDead = true;
+			this->die();
+		}
 	}
 }
 
@@ -148,14 +155,6 @@ void Player::setViewPointByPlayer()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	//主角坐标
-	Size mapTiledNum = m_map->getMapSize();
-  
-	Size tiledSize = m_map->getTileSize();
-
-	Size mapSize = Size(mapTiledNum.width*tiledSize.width, mapTiledNum.height*tiledSize.height);
-
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-
 	Point spritePos = getPosition();
 
 	float x = std::max(spritePos.x,visibleSize.width/2);
@@ -166,14 +165,6 @@ void Player::setViewPointByPlayer()
 	y = std::min(y, mapSize.height - visibleSize.height / 2);
 
 	//目标点
-	Point desPos = Point(x, y);
-
-
-
-	//閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹鐡款剨鎷烽敓杞垦嶆嫹閿熸枻鎷烽敓楗衡槄鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓?
-	x = std::min(x, mapSize.width - visibleSize.width / 2);
-	y = std::min(y, mapSize.height - visibleSize.height / 2);
-
 	Point desPos = Point(x, y);
 
 	Point centPos = Point(visibleSize.width / 2, visibleSize.height / 2);
@@ -197,16 +188,8 @@ void Player::set_tag_position(int x, int y)
 	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
 	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
 	//对该精灵所在格子的前方判断；
-	/*获得地图格子的唯一标识*/
 
-	Size spriteSize = m_sprite->getContentSize();
-	Point dstPos = Point(x+spriteSize.width/2, y);
-	Point dstPos_y = Point(x + spriteSize.width / 2, y - spriteSize.height / 2);
-
-	Point tiledPos = tileCoordForPosition(Point(dstPos.x, dstPos.y));
-	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
-	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
-  
+	/*获得地图格子的唯一标识*/  
 	int tileGid = meta->getTileGIDAt(tiledPos);
 	int tiledGid_right = meta->getTileGIDAt(tiledPos_right); 
 	int tiledGid_bottom = meta->getTileGIDAt(tiledPos_bottom);

@@ -4,7 +4,7 @@
 Gun::Gun() {
 	_attack = 2;
 	_attackMode = 1;
-	_mpConsumption = 1;
+	_mpConsumption = 0;
 	_bulletSpeed = 1000;
 	_bulletType = LONGREMOTE;
 	this->setAnchorPoint(Vec2(0.1, 0.1));
@@ -34,6 +34,7 @@ bool Gun::init(const std::string& filename)
 }
 
 void Gun::fire(Scene* _currentScene,const Vec2& pos) {
+
 	//¹¥»÷·½Ïò
 	auto direction = pos - this->getParent()->getPosition();
 	direction.normalize();

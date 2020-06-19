@@ -18,3 +18,4 @@ public:
 };
 
 #endif // __MYHELLOWORLD_SCENE_H__
+#pragma once
