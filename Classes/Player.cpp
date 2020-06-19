@@ -74,6 +74,7 @@ void Player::attack(Scene* currentScene,const Vec2& pos) {
 	if (_MP - m_weapon->getMpConsume() >= 0) {
 		_MP -= m_weapon->getMpConsume();
 		this->m_weapon->fire(currentScene, pos);
+		log("player pos:(%d,%d)", this->getPositionX(), this->getPositionY());
 	}
 	/*
 	//攻击方向

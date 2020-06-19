@@ -37,11 +37,13 @@ bool safetymap::init()
 	audio_home->stopBackgroundMusic();
 	audio_game->playBackgroundMusic("game_music.mp3", true);
 
-	std::string floor_layer_file = "advantureMap_test.tmx";//��ͼ�ļ�
+	std::string floor_layer_file = "myfirstmap2.tmx";//��ͼ�ļ�
 
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
+	this->addChild(_tiledmap);
+	log("map size:(%d, %d)", _tiledmap->getContentSize().width,_tiledmap->getContentSize().height);
 
 	//添加player并绑定武�?
 
@@ -76,9 +78,10 @@ bool safetymap::init()
 	float monsterY = monster_point_map.at("y").asFloat();
 	monster->setPosition(Point(monsterX, monsterY));
 	
+	log("player pos0:(%d, %d)", playerX, playerY);
 	//创建怪物
-	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
-	this->addChild(remoteSoldierManager, 4);
+	//RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
+	//this->addChild(remoteSoldierManager, 4);
 
 	//创建玩家简单移动控制器
 	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
@@ -100,13 +103,14 @@ bool safetymap::init()
 
 	m_monster->getPhysicsBody()->setCategoryBitmask(0x02);
 	m_monster->getPhysicsBody()->setContactTestBitmask(0x04);
-
-	_tiledmap->addChild(mplayer,2);
+	
+	/*_tiledmap->addChild(mplayer,2);
 	_tiledmap->addChild(monster, 2);
-	//this->addChild(monster,2);
-	//this->addChild(mplayer,2);
-
-	this->addChild(_tiledmap);
+	*/
+	
+	this->addChild(monster,2);
+	this->addChild(mplayer,2);
+	
 
 	//创建EventListener
 	auto listener = EventListenerTouchOneByOne::create();
@@ -128,7 +132,7 @@ bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 	{
 		Vec2 pos = target->getPosition();
 		m_player->rotateWeapon(pos);
-		m_player->attack(this, pos);
+		m_player->attack(this,pos);
 	}
 	else {
 		m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
