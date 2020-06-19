@@ -1,15 +1,7 @@
-<<<<<<< HEAD
 #include "HelloWorldScene.h"
 #include "MyHelloWorldScene.h"
-=======
-
 #include "audio.h"
->>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 #include "safetymapScene.h"
-#include "audio.h"
-
-
-USING_NS_CC;
 
 Scene* safetymap::createScene()
 {
@@ -41,26 +33,11 @@ bool safetymap::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-<<<<<<< HEAD
-	//创建地图背景
-	std::string floor_layer_file = "advantureMap_test.tmx";//地图文件
-=======
-
-
 	/*play game music*/
 	audio_home->stopBackgroundMusic();
 	audio_game->playBackgroundMusic("game_music.mp3", true);
 
-	/*auto tryab = Sprite::create("reservation.png");
-	tryab->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-	this->addChild(tryab, 5);*/
-
-	std::string floor_layer_file = "myfirstmap2.tmx";//��ͼ�ļ�
-
-	//std::string floor_layer_file = "myfirstmap2.tmx";
-
-	//创建地图背景
->>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
+	std::string floor_layer_file = "advantureMap_test.tmx";//��ͼ�ļ�
 
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
@@ -102,22 +79,6 @@ bool safetymap::init()
 	//创建怪物
 	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
 	this->addChild(remoteSoldierManager, 4);
-	//log("remoteSoldierManager:x=%f, y=%f", remoteSoldierManager->getPositionX(), remoteSoldierManager->getPositionY());
-
-
-
-	/*auto knight_animation = Animation::create();
-	char nameSize[30] = { 0 };
-	for (int i = 1; i <= 4; i++)
-	{
-		sprintf(nameSize, "turn right %d.png", i);
-		knight_animation->addSpriteFrameWithFile(nameSize);
-	}
-	knight_animation->setDelayPerUnit(0.08f);//���ö���֡ʱ����
-	knight_animation->setLoops(-1);
-	knight_animation->setRestoreOriginalFrame(true);
-	Animate* animate_knight = Animate::create(knight_animation);
-	player_sprite->runAction(animate_knight);*/
 
 	//创建玩家简单移动控制器
 	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
@@ -141,8 +102,9 @@ bool safetymap::init()
 	m_monster->getPhysicsBody()->setContactTestBitmask(0x04);
 
 	_tiledmap->addChild(mplayer,2);
-	this->addChild(monster,2);
-	this->addChild(mplayer,2);
+	_tiledmap->addChild(monster, 2);
+	//this->addChild(monster,2);
+	//this->addChild(mplayer,2);
 
 	this->addChild(_tiledmap);
 

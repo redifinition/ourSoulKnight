@@ -3,12 +3,10 @@
 
 Player::Player()
 {
-	isJumping = false;
 	_HP = 5;
 	_MP = 100;
 	_AC = 5;
 	_alreadyDead = false;
-
 }
 
 Player::~Player() {
@@ -29,12 +27,6 @@ bool Player::bindSprite(Sprite*sprite) {
 	else
 	{
 		this->addChild(m_sprite);
-<<<<<<< HEAD
-
-		//设置Player的大小和m_sprite的大小一致，否则碰撞模型会不对
-=======
-		/*设置Player的大小和m_sprite的大小一致，否则碰撞模型会不�?/
->>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 		Size size = m_sprite->getContentSize();
 		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
 		this->setContentSize(size);
@@ -162,14 +154,6 @@ void Player::setViewPointByPlayer()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	//��������
-	Size mapTiledNum = m_map->getMapSize();
-  
-	Size tiledSize = m_map->getTileSize();
-
-	Size mapSize = Size(mapTiledNum.width*tiledSize.width, mapTiledNum.height*tiledSize.height);
-
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-
 	Point spritePos = getPosition();
 
 	float x = std::max(spritePos.x,visibleSize.width/2);
@@ -180,14 +164,6 @@ void Player::setViewPointByPlayer()
 	y = std::min(y, mapSize.height - visibleSize.height / 2);
 
 	//Ŀ���
-	Point desPos = Point(x, y);
-
-
-
-	//锟斤拷锟斤拷锟斤拷锟斤拷瓿拷锟轿э拷锟斤拷锟饺★拷锟斤拷锟斤拷锟?
-	x = std::min(x, mapSize.width - visibleSize.width / 2);
-	y = std::min(y, mapSize.height - visibleSize.height / 2);
-
 	Point desPos = Point(x, y);
 
 	Point centPos = Point(visibleSize.width / 2, visibleSize.height / 2);
@@ -211,16 +187,8 @@ void Player::set_tag_position(int x, int y)
 	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
 	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
 	//�Ըþ������ڸ��ӵ�ǰ���жϣ�
-	/*��õ�ͼ���ӵ�Ψһ��ʶ*/
 
-	Size spriteSize = m_sprite->getContentSize();
-	Point dstPos = Point(x+spriteSize.width/2, y);
-	Point dstPos_y = Point(x + spriteSize.width / 2, y - spriteSize.height / 2);
-
-	Point tiledPos = tileCoordForPosition(Point(dstPos.x, dstPos.y));
-	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
-	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
-  
+	/*��õ�ͼ���ӵ�Ψһ��ʶ*/  
 	int tileGid = meta->getTileGIDAt(tiledPos);
 	int tiledGid_right = meta->getTileGIDAt(tiledPos_right); 
 	int tiledGid_bottom = meta->getTileGIDAt(tiledPos_bottom);

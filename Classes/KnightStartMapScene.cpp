@@ -39,15 +39,9 @@ bool KnightStartMap::init()
 
 	//添加player
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
-<<<<<<< HEAD
+
 	Player* mplayer = Player::create();
 	mplayer->bindSprite(player_sprite);
-
-=======
-	mplayer = Player::create();
-	mplayer->bind_sprite(player_sprite);
-	mplayer->run();
->>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 	mplayer->setTiledMap(_tiledmap);
 
 	//加载对象层
@@ -61,11 +55,6 @@ bool KnightStartMap::init()
 	//设置玩家坐标
 	mplayer->setPosition(Point(playerX, playerY));
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 	//创建玩家简单移动控制器
 	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
 
@@ -94,11 +83,8 @@ bool KnightStartMap::init()
 	auto knight_animate_run = Animate::create(knight_animate);
 	player_sprite->runAction(knight_animate_run);
 
-<<<<<<< HEAD
-	_tiledmap->addChild(mplayer, 10);
-=======
-	_tiledmap->addChild(mplayer,23);
->>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
+	_tiledmap->addChild(mplayer,23);//10or23？
+
 
 	this->addChild(_tiledmap);
 	/*add the suspend button*/
@@ -114,17 +100,12 @@ bool KnightStartMap::init()
 	}
 	else
 	{
-
 		suspend_button->setPosition(Vec2(visibleSize.width+ origin.x-20, visibleSize.height + origin.y-20));
-
-<<<<<<< HEAD
-=======
 	}
 	auto menu2 = Menu::create(suspend_button, NULL);
 	menu2->setPosition(Vec2::ZERO);
 	this->addChild(menu2, 1);//just a virtual button which is unvisible
 
->>>>>>> bbd7442a8b0690efe4fd35c4788f1021c521395b
 	return true;
 }
 
@@ -201,8 +182,6 @@ void KnightStartMap::update(float dt)
 	{
 		_tiledmap->getLayer("weapon_information")->setVisible(true);
 	}
-
-	
 }
 
 void KnightStartMap::start_menuCloseCallback(Ref* pSender)

@@ -5,7 +5,6 @@
 #include  "allHeadFiles.h"
 using namespace cocos2d;
 
-
 class safetymap: public cocos2d::Scene
 {
 public:
@@ -21,7 +20,6 @@ private:
 protected:
 	virtual bool onContactBegin(PhysicsContact& contact);	//碰撞后的回调
 	virtual bool onTouchBegin(Touch* touch, Event* event);	//点击鼠标后的回调
-
 };
 
 #endif // __SAFETYMAP_SCENE_H__
