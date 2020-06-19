@@ -39,7 +39,6 @@ private:
 	Weapon* m_weapon;											//Player当前使用的武器
 	Vector<Weapon*> m_weaponArr;								//Player携带的所有武器
 	TMXTiledMap* m_map;											//主角所在的地图
-	bool isJumping;												//标记主角是否碰撞了障碍物
 	TMXLayer* meta;												//检测碰撞的地图层
 	Point tileCoordForPosition(Point pos);						//将像素坐标转化为地图格子坐标
 																
