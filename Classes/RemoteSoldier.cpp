@@ -35,7 +35,34 @@ bool RemoteSoldier::init(EActorType soldierType, Scene* currentScene)
 	_currentScene = currentScene;
 	_bulletSpeed = SOLDIER_BULLET_SPEED;
 	setTag(-2);
+
 	return true;
+}
+
+bool RemoteSoldier::bindSprite(Sprite*sprite) {
+	this->m_sprite = sprite;
+	if (m_sprite == nullptr)
+	{
+		printf("m_sprite in this entity is nullptr, check wether the file used to create the sprite in right dictionary.");
+		return false;
+	}
+	else
+	{
+		this->addChild(m_sprite);
+		/*设置Entity的大小和m_sprite的大小一致，否则碰撞模型会不对*/
+		Size size = m_sprite->getContentSize();
+		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
+		this->setContentSize(size);
+		this->setAnchorPoint(Vec2(0.5, 0.5));
+
+		auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(0.0f, 0.0f, 0.0f));
+		physicsBody->setDynamic(false);
+		physicsBody->setCategoryBitmask(0x02);
+		physicsBody->setContactTestBitmask(0x04);
+		this->addComponent(physicsBody);
+
+		return true;
+	}
 }
 
 void RemoteSoldier::attack(Entity* attackTarget)
@@ -95,6 +122,5 @@ void RemoteSoldier::die()
 		item->setPosition(this->getPosition());
 		_currentScene->addChild(item);
 	}
-	this->release();
-	m_sprite->release();
+	this->removeFromParentAndCleanup(true);
 }

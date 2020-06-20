@@ -17,7 +17,9 @@ private:
 	TMXLayer *_background;									//背景层
 	Sprite *_player;
 	Player* m_player;
-	Player* m_monster;										//先用player类替代
+	RemoteSoldier* m_monster;										//先用player类替代
+	RemoteSoldierManager* m_remoteSoldierManager;
+									//先用player类替代
 	ProgressTimer* bloodProgress;
 protected:
 	virtual bool onContactBegin(PhysicsContact& contact);	//碰撞后的回调

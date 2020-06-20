@@ -27,6 +27,7 @@ public:
 	virtual void takeDamage(int damage);						//受击判定，并掉血
 	void attack(Scene* currentScene, const Vec2& pos);			//攻击函数
 	void rotateWeapon(const Vec2& pos);							//武器跟随攻击方向
+	void resetWeaponPos();
 	virtual void switchWeapon();								//接口，切换武器，角色不同切换武器的效果不�?
 	void pickWeapon();											//接口，拾取武�?
 	virtual void skill();										//技�?

@@ -38,12 +38,15 @@ void RemoteSoldierManager::createMonsters()
 			remoteSoldier = RemoteSoldier::create(LONGREMOTE, _currentScene);
 			sprite = Sprite::create("LongRemoteSoldier.png");
 			remoteSoldier->bindSprite(sprite);
+			remoteSoldier->setMonsterID(i);
 		}
 		else
 		{
 			remoteSoldier = RemoteSoldier::create(SHORTREMOTE, _currentScene);
 			sprite = Sprite::create("LongRemoteSoldier.png");
 			remoteSoldier->bindSprite(sprite);
+			remoteSoldier->setMonsterID(i);
+
 		}
 		remoteSoldier->setPosition(this->setSoldierPosition(i));
 		_map->addChild(remoteSoldier,10);
