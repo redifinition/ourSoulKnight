@@ -51,7 +51,7 @@ void Gun::fire(Scene* _currentScene, const Vec2& pos, Entity* player) {
 	//修正子弹初始位置
 	Vec2 bulletPosition = this->getParent()->getPosition();
 	bulletPosition.x += 10;
-	bulletPosition.y -= 8;
+	bulletPosition.y -= 7.5;
 	bullet->setPosition(bulletPosition);
 	
 	player->getCurrentMap()->addChild(bullet);

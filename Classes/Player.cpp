@@ -105,7 +105,13 @@ void Player::resetWeaponPos() {
 }
 
 void Player::switchWeapon() {
-
+	_currentWeapon->setVisible(false);
+	for (auto weapon : _weaponBag) {
+		if (_currentWeapon != weapon) {
+			_currentWeapon = weapon;
+		}
+	}
+	_currentWeapon->setVisible(true);
 }
 
 void Player::skill() {
