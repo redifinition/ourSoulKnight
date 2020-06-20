@@ -33,7 +33,7 @@ bool Player::bindSprite(Sprite*sprite) {
 		this->setContentSize(size);
 		this->setAnchorPoint(Vec2(0.5, 0.5));
 
-		//æ·»åŠ ç‰©ç†ç¢°æ’žæ¨¡åž‹
+		//Ìí¼ÓÎïÀíÅö×²Ä£ÐÍ
 		auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(0.0f, 0.0f, 0.0f));
 		physicsBody->setDynamic(false);
 		physicsBody->setCategoryBitmask(0x01);
