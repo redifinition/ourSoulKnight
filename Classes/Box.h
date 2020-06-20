@@ -14,4 +14,6 @@ public:
     bool init(Scene* currentScene);
     void open();
 };
+
 #endif
+#pragma once

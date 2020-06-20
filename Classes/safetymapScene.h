@@ -5,7 +5,6 @@
 #include  "allHeadFiles.h"
 using namespace cocos2d;
 
-
 class safetymap: public cocos2d::Scene
 {
 public:
@@ -17,14 +16,15 @@ private:
 	TMXLayer *_background;									//背景层
 	Sprite *_player;
 	Player* m_player;
-	Player* m_monster;										//先用player类替代
+	RemoteSoldier* m_monster;										//先用player类替代
+	RemoteSoldierManager* m_remoteSoldierManager;
 protected:
 	virtual bool onContactBegin(PhysicsContact& contact);	//碰撞后的回调
 	virtual bool onTouchBegin(Touch* touch, Event* event);	//点击鼠标后的回调
-
 };
 
 #endif // __SAFETYMAP_SCENE_H__
+#pragma once
 
 /*
 bool safetymap::onContactBegin(PhysicsContact& contact) {

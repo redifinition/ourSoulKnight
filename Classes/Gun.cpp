@@ -4,7 +4,7 @@
 Gun::Gun() {
 	_attack = 2;
 	_attackMode = 1;
-	_mpConsumption = 1;
+	_mpConsumption = 0;
 	_bulletSpeed = 1000;
 	_bulletType = LONGREMOTE;
 	this->setAnchorPoint(Vec2(0.1, 0.1));
@@ -30,10 +30,12 @@ bool Gun::init(const std::string& filename)
 	if (!Sprite::initWithFile(filename)) {
 		return false;
 	}
+	this->setScale(0.08);
 	return true;
 }
 
-void Gun::fire(Scene* _currentScene,const Vec2& pos) {
+void Gun::fire(Scene* _currentScene, const Vec2& pos, Entity* player) {
+
 	//¹¥»÷·½Ïò
 	auto direction = pos - this->getParent()->getPosition();
 	direction.normalize();
@@ -42,6 +44,6 @@ void Gun::fire(Scene* _currentScene,const Vec2& pos) {
 	auto bullet = Bullet::create(_bulletType, this, direction, _currentScene);
 	bullet->setScale(1.5);
 	bullet->setPosition(this->getParent()->getPosition());
-	_currentScene->addChild(bullet);
+	player->getCurrentMap()->addChild(bullet);
 	bullet->new_move();
 }

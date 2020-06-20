@@ -1,16 +1,7 @@
-
+#include "HelloWorldScene.h"
+#include "MyHelloWorldScene.h"
 #include "audio.h"
 #include "safetymapScene.h"
-#include "SimpleMoveController.h"
-#include "Controller.h"
-
-#include "Player.h"
-#include "Knight.h"
-#include "Gun.h"
-#include "Bullet.h"
-#include "RemoteSoldierManager.h"
-
-USING_NS_CC;
 
 Scene* safetymap::createScene()
 {
@@ -42,31 +33,23 @@ bool safetymap::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-
-
 	/*play game music*/
 	audio_home->stopBackgroundMusic();
 	audio_game->playBackgroundMusic("game_music.mp3", true);
 
-	/*auto tryab = Sprite::create("reservation.png");
-	tryab->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-	this->addChild(tryab, 5);*/
-
 	std::string floor_layer_file = "myfirstmap2.tmx";//µØÍ¼ÎÄ¼þ
-
-	//std::string floor_layer_file = "myfirstmap2.tmx";
-
-	//åˆ›å»ºåœ°å›¾èƒŒæ™¯
 
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
 
+	log("map size:(%f, %f)", _tiledmap->getContentSize().width,_tiledmap->getContentSize().height);
+
 	//æ·»åŠ playerå¹¶ç»‘å®šæ­¦å™?
 
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Knight* mplayer = Knight::create();
-	Gun* initialWeapon = Gun::create("broken pistol.png");
+	ShotGun* initialWeapon = ShotGun::create("goblin_guard_shotgun.png");
 	mplayer->bindSprite(player_sprite);
 	mplayer->bindWeapon(initialWeapon);
 	mplayer->setTiledMap(_tiledmap);
@@ -81,13 +64,12 @@ bool safetymap::init()
 	//è®¾ç½®çŽ©å®¶åæ ‡
 	mplayer->setPosition(Point(playerX,playerY));
 
-  //log("playerposition:x=%f, y=%f", playerX, playerY);
 	//æ·»åŠ ä¸€ä¸ªæµ‹è¯•ç”¨çš„monster
-	Sprite* monster_sprite = Sprite::create("turn right 2.png");
-	Player* monster = Player::create();
-	monster->setTag(-2);
+	Sprite* monster_sprite = Sprite::create("LongRemoteSoldier.png");
+	RemoteSoldier* monster = RemoteSoldier::create(LONGREMOTE,this);
+
 	monster->bindSprite(monster_sprite);
-	monster->setTiledMap(_tiledmap);
+	//monster->setTiledMap(_tiledmap);
 
 	TMXObjectGroup* bulletGroup = _tiledmap->getObjectGroup("bullet");
 
@@ -97,26 +79,12 @@ bool safetymap::init()
 	monster->setPosition(Point(monsterX, monsterY));
 	
 	//åˆ›å»ºæ€ªç‰©
-	//RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
-	//this->addChild(remoteSoldierManager);
 	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
-	this->addChild(remoteSoldierManager, 4);
-	//log("remoteSoldierManager:x=%f, y=%f", remoteSoldierManager->getPositionX(), remoteSoldierManager->getPositionY());
+	this->m_remoteSoldierManager = remoteSoldierManager;
+	_tiledmap->addChild(remoteSoldierManager, 4);
 
-
-
-	/*auto knight_animation = Animation::create();
-	char nameSize[30] = { 0 };
-	for (int i = 1; i <= 4; i++)
-	{
-		sprintf(nameSize, "turn right %d.png", i);
-		knight_animation->addSpriteFrameWithFile(nameSize);
-	}
-	knight_animation->setDelayPerUnit(0.08f);//ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½Ö¡Ê±ï¿½ï¿½ï¿½ï¿½
-	knight_animation->setLoops(-1);
-	knight_animation->setRestoreOriginalFrame(true);
-	Animate* animate_knight = Animate::create(knight_animation);
-	player_sprite->runAction(animate_knight);*/
+	//åˆ›å»ºçŽ©å®¶ç®€å•ç§»åŠ¨æŽ§åˆ¶å™¨
+	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
 
 	//è®¾ç½®ç§»åŠ¨é€Ÿåº¦
 	simple_move_controller->set_ixspeed(0);
@@ -135,13 +103,19 @@ bool safetymap::init()
 
 	m_monster->getPhysicsBody()->setCategoryBitmask(0x02);
 	m_monster->getPhysicsBody()->setContactTestBitmask(0x04);
-
-	_tiledmap->addChild(mplayer,2);
-	this->addChild(monster,2);
-	this->addChild(mplayer,2);
+	
 
 	this->addChild(_tiledmap);
 
+	_tiledmap->addChild(mplayer,2);
+	_tiledmap->addChild(monster, 2);
+	
+	//this->addChild(monster,2);
+	//this->addChild(mplayer,2);
+	log("player pos0:(%f, %f)", playerX, playerY);
+	log("monster pos0:(%f, %f)", monsterX, monsterY);
+
+	
 	//åˆ›å»ºEventListener
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(safetymap::onTouchBegin, this);
@@ -157,16 +131,34 @@ bool safetymap::init()
 }
 
 bool safetymap::onTouchBegin(Touch* touch, Event* event) {
-	auto target = this->m_monster;
-	if(!target->getalreadyDead())
-	{
-		Vec2 pos = target->getPosition();
+	/*if(!m_player->getLockedTarget()->getalreadyDead())){
+		Vec2 pos = m_player->getLockedTarget()->getPosition();
 		m_player->rotateWeapon(pos);
 		m_player->attack(this, pos);
 	}
-	else {
-		m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
-	}
+	else{
+		//ÕÒÒ»¸ö¾àÀë×î½üµÄsoldier¹¥»÷
+		for (auto target : this->m_remoteSoldierManager->getSoldierArr()){
+			if (target->getalreadyDead()){
+				continue;
+			}
+			Vec2 direction = target->getPosition() - m_player->getPosition();
+			float distance = sqrt(direction.x*direction.x + direction.y*direction.y);
+
+			/*if(!target->getalreadyDead())
+			{
+				Vec2 pos = target->getPosition();
+				m_player->rotateWeapon(pos);
+				m_player->attack(this,pos);
+			}
+			else {
+				m_player->resetWeaponPos();
+				m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
+			}
+		}
+	}*/
+	m_player->resetWeaponPos();
+	m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
 	return true;
 }
 
@@ -185,11 +177,20 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 			}
 			else if (nodeB->getTag() == -2)
 			{
-				this->m_monster->takeDamage(nodeA->getTag());
+				//this->m_monster->takeDamage(nodeA->getTag());
+				//ÕÒ³öÊÇÄÄ¸ö¹ÖÎïºÍ×Óµ¯·¢ÉúÁËÅö×²
+				for (auto Soldier : this->m_remoteSoldierManager->getSoldierArr())
+				{
+					if (nodeB->getMonsterID() == Soldier->getMonsterID())
+					{
+						Soldier->takeDamage(nodeA->getTag());
+					}
+				}
 			}
 			nodeA->removeFromParentAndCleanup(true);
-
 		}
+
+		//ºÍÉÏÃæµÄ´úÂë¿éÊÇ¾µÏñµÄ£¬ÒòÎªnodeAºÍnodeB²»ÖªµÀÄÄÒ»¸öÊÇ×Óµ¯
 		else if (nodeB->getTag() > 0)
 		{
 			if (nodeA->getTag() == -1)
@@ -198,14 +199,19 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 			}
 			else if (nodeA->getTag() == -2)
 			{
-				this->m_monster->takeDamage(nodeB->getTag());
+				//this->m_monster->takeDamage(nodeB->getTag());
+				for (auto Soldier : this->m_remoteSoldierManager->getSoldierArr())
+				{
+					if (nodeA->getMonsterID() == Soldier->getMonsterID())
+					{
+						Soldier->takeDamage(nodeB->getTag());
+					}
+				}
 			}
 			nodeB->removeFromParentAndCleanup(true);
 		}
-
 	}
-
-	return true;
+		return true;
 }
 
 /*void safetymap::add_player(TMXTiledMap* map)

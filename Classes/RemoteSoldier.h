@@ -15,10 +15,13 @@ class RemoteSoldier : public  Entity
 	CC_SYNTHESIZE(std::string, _soldierType, soldierType);
 public:
 	static RemoteSoldier* create(EActorType soldierType,Scene* currentScene);
-	void attack(Entity* attackTarget);
-	virtual void takeDamage(int damage);
 	bool init(EActorType soldierType, Scene* currentScene);
+	void attack(Entity* attackTarget);
+	bool bindSprite(Sprite* sprite);
+	virtual void takeDamage(int damage);
 private:
 	virtual void die();
 };
+
 #endif
+#pragma once

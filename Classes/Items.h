@@ -13,4 +13,6 @@ public:
 	static Items* create(EItemsType ItemsType);
 	bool init(EItemsType ItemsType);
 };
+
 #endif
+#pragma once

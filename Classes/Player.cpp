@@ -3,13 +3,10 @@
 
 Player::Player()
 {
-	isJumping = false;
 	_HP = 5;
 	_MP = 100;
 	_AC = 5;
-	_weaponPosition = Vec2(0.8, 0.3);
 	_alreadyDead = false;
-
 }
 
 Player::~Player() {
@@ -30,13 +27,12 @@ bool Player::bindSprite(Sprite*sprite) {
 	else
 	{
 		this->addChild(m_sprite);
-		/*设置Player的大小和m_sprite的大小一致，否则碰撞模型会不�?/
 		Size size = m_sprite->getContentSize();
 		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
 		this->setContentSize(size);
 		this->setAnchorPoint(Vec2(0.5, 0.5));
 
-		/*添加物理碰撞模型*/
+		//添加物理碰撞模型
 		auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(0.0f, 0.0f, 0.0f));
 		physicsBody->setDynamic(false);
 		physicsBody->setCategoryBitmask(0x01);
@@ -65,7 +61,7 @@ bool Player::bindWeapon(Weapon* weapon) {
 		//设定武器位置
 		Size size = m_sprite->getContentSize();
 		m_weapon->setPosition(Vec2(size.width*getWpPos().x, size.height*getWpPos().y));//*getWpPos().x
-		m_weapon->setScale(0.08);	//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调�?
+			//用于初次测试，之后删除，不同武器的缩放不同，要么把缩放放在创建函数里面，要么就把武器图片的大小调�?
 
 		this->addChild(m_weapon);
 
@@ -75,20 +71,11 @@ bool Player::bindWeapon(Weapon* weapon) {
 }
 
 void Player::attack(Scene* currentScene,const Vec2& pos) {
-	this->m_weapon->fire(currentScene, pos);
-	/*
-	//攻击方向
-	auto direction = pos - this->getPosition();
-	direction.normalize();
-	Vec2 test = this->m_weapon->getPosition();
-
-	//创建子弹
-	auto bullet = Bullet::create(LONGREMOTE, this, direction, currentScene);
-	bullet->setScale(1.5);
-	bullet->setPosition(Vec2(this->getPositionX(), this->getPositionY()));
-	currentScene->addChild(bullet);
-	bullet->new_move();
-	*/
+	if (_MP - m_weapon->getMpConsume() >= 0) {
+		_MP -= m_weapon->getMpConsume();
+		this->m_weapon->fire(currentScene, pos, this);
+		log("player pos:(%f,%f)", this->getPositionX(), this->getPositionY());
+	}
 }
 
 void Player::rotateWeapon(const Vec2& pos) {
@@ -103,6 +90,10 @@ void Player::rotateWeapon(const Vec2& pos) {
 	}
 }
 
+void Player::resetWeaponPos() {
+	this->m_weapon->setRotation(0.0f);
+}
+
 void Player::switchWeapon() {
 
 }
@@ -113,11 +104,18 @@ void Player::skill() {
 
 void Player::takeDamage(int damage)
 {
-	_HP -= damage;
-	if (_HP <= 0)
+	if (_AC > 0)
 	{
-		_alreadyDead = true;
-		this->die();
+		_AC -= damage;
+	}
+	else 
+	{
+		_HP -= damage;
+		if (_HP <= 0)
+		{
+			_alreadyDead = true;
+			this->die();
+		}
 	}
 }
 
@@ -148,14 +146,6 @@ void Player::setViewPointByPlayer()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	//��������
-	Size mapTiledNum = m_map->getMapSize();
-  
-	Size tiledSize = m_map->getTileSize();
-
-	Size mapSize = Size(mapTiledNum.width*tiledSize.width, mapTiledNum.height*tiledSize.height);
-
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-
 	Point spritePos = getPosition();
 
 	float x = std::max(spritePos.x,visibleSize.width/2);
@@ -166,14 +156,6 @@ void Player::setViewPointByPlayer()
 	y = std::min(y, mapSize.height - visibleSize.height / 2);
 
 	//Ŀ���
-	Point desPos = Point(x, y);
-
-
-
-	//锟斤拷锟斤拷锟斤拷锟斤拷瓿拷锟轿э拷锟斤拷锟饺★拷锟斤拷锟斤拷锟?
-	x = std::min(x, mapSize.width - visibleSize.width / 2);
-	y = std::min(y, mapSize.height - visibleSize.height / 2);
-
 	Point desPos = Point(x, y);
 
 	Point centPos = Point(visibleSize.width / 2, visibleSize.height / 2);
@@ -197,16 +179,8 @@ void Player::set_tag_position(int x, int y)
 	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
 	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
 	//�Ըþ������ڸ��ӵ�ǰ���жϣ�
-	/*��õ�ͼ���ӵ�Ψһ��ʶ*/
 
-	Size spriteSize = m_sprite->getContentSize();
-	Point dstPos = Point(x+spriteSize.width/2, y);
-	Point dstPos_y = Point(x + spriteSize.width / 2, y - spriteSize.height / 2);
-
-	Point tiledPos = tileCoordForPosition(Point(dstPos.x, dstPos.y));
-	Point tiledPos_right = tileCoordForPosition(Point(dstPos.x + spriteSize.width / 2, dstPos.y));
-	Point tiledPos_bottom = tileCoordForPosition(Point(dstPos.x, dstPos.y- spriteSize.height / 2));
-  
+	/*��õ�ͼ���ӵ�Ψһ��ʶ*/  
 	int tileGid = meta->getTileGIDAt(tiledPos);
 	int tiledGid_right = meta->getTileGIDAt(tiledPos_right); 
 	int tiledGid_bottom = meta->getTileGIDAt(tiledPos_bottom);

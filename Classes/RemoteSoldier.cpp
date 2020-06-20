@@ -35,7 +35,34 @@ bool RemoteSoldier::init(EActorType soldierType, Scene* currentScene)
 	_currentScene = currentScene;
 	_bulletSpeed = SOLDIER_BULLET_SPEED;
 	setTag(-2);
+
 	return true;
+}
+
+bool RemoteSoldier::bindSprite(Sprite*sprite) {
+	this->m_sprite = sprite;
+	if (m_sprite == nullptr)
+	{
+		printf("m_sprite in this entity is nullptr, check wether the file used to create the sprite in right dictionary.");
+		return false;
+	}
+	else
+	{
+		this->addChild(m_sprite);
+		/*设置Entity的大小和m_sprite的大小一致，否则碰撞模型会不对*/
+		Size size = m_sprite->getContentSize();
+		m_sprite->setPosition(Point(size.width*0.5f, size.height*0.5f));
+		this->setContentSize(size);
+		this->setAnchorPoint(Vec2(0.5, 0.5));
+
+		auto physicsBody = PhysicsBody::createBox(size, PhysicsMaterial(0.0f, 0.0f, 0.0f));
+		physicsBody->setDynamic(false);
+		physicsBody->setCategoryBitmask(0x02);
+		physicsBody->setContactTestBitmask(0x04);
+		this->addComponent(physicsBody);
+
+		return true;
+	}
 }
 
 void RemoteSoldier::attack(Entity* attackTarget)
@@ -54,9 +81,9 @@ void RemoteSoldier::attack(Entity* attackTarget)
 		bullet1->setPosition(this->getPosition());
 		bullet2->setPosition(this->getPosition());
 		bullet3->setPosition(this->getPosition());
-		_currentScene->addChild(bullet1);
-		_currentScene->addChild(bullet2);
-		_currentScene->addChild(bullet3);
+		attackTarget->getCurrentMap()->addChild(bullet1);
+		attackTarget->getCurrentMap()->addChild(bullet2);
+		attackTarget->getCurrentMap()->addChild(bullet3);
 		bullet1->move();
 		bullet2->move();
 		bullet3->move();
@@ -65,7 +92,7 @@ void RemoteSoldier::attack(Entity* attackTarget)
 	{
 		auto bullet = Bullet::create(LONGREMOTE, this, direction, _currentScene);
 		bullet->setPosition(this->getPosition());
-		_currentScene->addChild(bullet);
+		attackTarget->getCurrentMap()->addChild(bullet);
 		bullet->move();
 	}
 }
@@ -95,6 +122,7 @@ void RemoteSoldier::die()
 		item->setPosition(this->getPosition());
 		_currentScene->addChild(item);
 	}
-	this->release();
-	m_sprite->release();
+	this->setVisible(false);
+	this->getPhysicsBody()->setCategoryBitmask(0x00);
+	this->getPhysicsBody()->setContactTestBitmask(0x00);
 }
