@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Entity.h"
 #include "Weapon.h"
+#include "RemoteSoldier.h"
 #include "Bullet.h"
 USING_NS_CC;
 
@@ -13,7 +14,8 @@ class Player :public Entity {
 	CC_SYNTHESIZE(int, _AC, AC);
 	CC_SYNTHESIZE(Vec2, _weaponPosition, WpPos);				//武器固定在人物上的相对位�?默认值为player的中�?
 	CC_SYNTHESIZE(Weapon*, _currentWeapon, CurrentWeapon);
-	
+	CC_SYNTHESIZE(RemoteSoldier*, _lockedTarget, LockedTarget);
+
 public:
 	Player();
 	~Player();

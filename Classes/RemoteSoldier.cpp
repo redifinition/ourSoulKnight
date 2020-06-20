@@ -122,5 +122,7 @@ void RemoteSoldier::die()
 		item->setPosition(this->getPosition());
 		_currentScene->addChild(item);
 	}
-	this->removeFromParentAndCleanup(true);
+	this->setVisible(false);
+	this->getPhysicsBody()->setCategoryBitmask(0x00);
+	this->getPhysicsBody()->setContactTestBitmask(0x00);
 }

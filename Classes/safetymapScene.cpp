@@ -131,19 +131,34 @@ bool safetymap::init()
 }
 
 bool safetymap::onTouchBegin(Touch* touch, Event* event) {
-	auto target = this->m_monster;
+	/*if(!m_player->getLockedTarget()->getalreadyDead())){
+		Vec2 pos = m_player->getLockedTarget()->getPosition();
+		m_player->rotateWeapon(pos);
+		m_player->attack(this, pos);
+	}
+	else{
+		//找一个距离最近的soldier攻击
+		for (auto target : this->m_remoteSoldierManager->getSoldierArr()){
+			if (target->getalreadyDead()){
+				continue;
+			}
+			Vec2 direction = target->getPosition() - m_player->getPosition();
+			float distance = sqrt(direction.x*direction.x + direction.y*direction.y);
+
+			/*if(!target->getalreadyDead())
+			{
+				Vec2 pos = target->getPosition();
+				m_player->rotateWeapon(pos);
+				m_player->attack(this,pos);
+			}
+			else {
+				m_player->resetWeaponPos();
+				m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
+			}
+		}
+	}*/
 	m_player->resetWeaponPos();
 	m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
-	/*if(!target->getalreadyDead())
-	{
-		Vec2 pos = target->getPosition();
-		m_player->rotateWeapon(pos);
-		m_player->attack(this,pos);
-	}
-	else {
-		m_player->resetWeaponPos();
-		m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
-	}*/
 	return true;
 }
 
