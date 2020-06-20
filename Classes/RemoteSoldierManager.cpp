@@ -1,5 +1,5 @@
-#include "RemoteSoldierManager.h"
-
+﻿#include "RemoteSoldierManager.h"
+#include "cocos2d.h"
 RemoteSoldierManager* RemoteSoldierManager::create(Scene* currentScene, Entity* player, TMXTiledMap* map)
 {
 	RemoteSoldierManager* remoteSoldierManager = new RemoteSoldierManager;
@@ -19,6 +19,8 @@ bool RemoteSoldierManager::init(Scene* currentScene, Entity* player, TMXTiledMap
 	createMonsters();
 	this->scheduleUpdate();
 	this->schedule(CC_SCHEDULE_SELECTOR(RemoteSoldierManager::attackUpdate), 2.0f);
+	meta = _map->getLayer("meta");
+
 	return true;
 }
 
@@ -40,11 +42,11 @@ void RemoteSoldierManager::createMonsters()
 		else
 		{
 			remoteSoldier = RemoteSoldier::create(SHORTREMOTE, _currentScene);
-			sprite = Sprite::create("ShortRemoteSoldier.png");
+			sprite = Sprite::create("LongRemoteSoldier.png");
 			remoteSoldier->bindSprite(sprite);
 		}
 		remoteSoldier->setPosition(this->setSoldierPosition(i));
-		this->addChild(remoteSoldier);
+		_map->addChild(remoteSoldier,10);
 		m_remoteSoldierArr.pushBack(remoteSoldier);
 	}
 }
@@ -53,30 +55,116 @@ void RemoteSoldierManager::update(float dt)
 {
 	for (auto remoteSoldier : m_remoteSoldierArr)
 	{
-		if(!(remoteSoldier->getalreadyDead()))
+		if (!(remoteSoldier->getalreadyDead()))
 		{
-			int random = rand() % 4;
+			//remoteSoldier->setPosition(getRandomPosition(remoteSoldier->getPosition()));
+			int random = rand()%4;
 			//log("random:%d", random);
-			//todo:���ڵ�ͼ�߽������
+			//todo:¹ØÓÚµØÍ¼±ß½çµÄÎÊÌâ
 			if (random == 0) //up
 			{
-				remoteSoldier->setPositionY(remoteSoldier->getPositionY() + 4);
+				float bullet_x = remoteSoldier->getPositionX();
+				float bullet_y = remoteSoldier->getPositionY() + 4;
+				Point tiledPos = tileCoordForPosition(Point(bullet_x,bullet_y));
+				int tileGid = meta->getTileGIDAt(tiledPos);
+
+				//int tileGid = meta->getTileGIDAt(Point(16,12));
+				if (tileGid != 0)
+				{
+					Value properties = _map->getPropertiesForGID(tileGid);
+
+					Value proper = properties.asValueMap().at("Collidable");
+
+					if (proper.asString().compare("true") == 0)
+					{
+						remoteSoldier->setPosition(remoteSoldier->getPosition());
+					}
+				}
+				if (bullet_x >= 1422 || bullet_y+4 >= 1422 || bullet_x < 0 || bullet_y+4 < 0)
+				{
+					remoteSoldier->setPosition(remoteSoldier->getPosition());
+				}
+				remoteSoldier->setPosition(Point(bullet_x,bullet_y));
 			}
 			else if (random == 1) //down
 			{
-				remoteSoldier->setPositionY(remoteSoldier->getPositionY() - 4);
+				float bullet_x = remoteSoldier->getPositionX();
+				float bullet_y = remoteSoldier->getPositionY() - 4;
+				Point tiledPos = tileCoordForPosition(Point(bullet_x, bullet_y));
+				int tileGid = meta->getTileGIDAt(tiledPos);
+
+				//int tileGid = meta->getTileGIDAt(Point(16,12));
+				if (tileGid != 0)
+				{
+					Value properties = _map->getPropertiesForGID(tileGid);
+
+					Value proper = properties.asValueMap().at("Collidable");
+
+					if (proper.asString().compare("true") == 0)
+					{
+						remoteSoldier->setPosition(remoteSoldier->getPosition());
+					}
+				}
+				if (bullet_x >= 1422 || bullet_y - 4 >= 1422 || bullet_x < 0 || bullet_y - 4 < 0)
+				{
+					remoteSoldier->setPosition(remoteSoldier->getPosition());
+				}
+				remoteSoldier->setPosition(Point(bullet_x, bullet_y));
 			}
 			else if (random == 2) //left
 			{
-				remoteSoldier->setPositionX(remoteSoldier->getPositionX() - 4);
+				float bullet_x = remoteSoldier->getPositionX()-4;
+				float bullet_y = remoteSoldier->getPositionY();
+				Point tiledPos = tileCoordForPosition(Point(bullet_x, bullet_y));
+				int tileGid = meta->getTileGIDAt(tiledPos);
+
+				//int tileGid = meta->getTileGIDAt(Point(16,12));
+				if (tileGid != 0)
+				{
+					Value properties = _map->getPropertiesForGID(tileGid);
+
+					Value proper = properties.asValueMap().at("Collidable");
+
+					if (proper.asString().compare("true") == 0)
+					{
+						remoteSoldier->setPosition(remoteSoldier->getPosition());
+					}
+				}
+				if (bullet_x -4>= 1422 || bullet_y  >= 1422 || bullet_x-4 < 0 || bullet_y < 0)
+				{
+					remoteSoldier->setPosition(remoteSoldier->getPosition());
+				}
+				remoteSoldier->setPosition(Point(bullet_x, bullet_y));
 			}
 			else //right
 			{
-				remoteSoldier->setPositionX(remoteSoldier->getPositionX() + 4);
+				float bullet_x = remoteSoldier->getPositionX()+4;
+				float bullet_y = remoteSoldier->getPositionY();
+				Point tiledPos = tileCoordForPosition(Point(bullet_x, bullet_y));
+				int tileGid = meta->getTileGIDAt(tiledPos);
+
+				//int tileGid = meta->getTileGIDAt(Point(16,12));
+				if (tileGid != 0)
+				{
+					Value properties = _map->getPropertiesForGID(tileGid);
+
+					Value proper = properties.asValueMap().at("Collidable");
+
+					if (proper.asString().compare("true") == 0)
+					{
+						remoteSoldier->setPosition(remoteSoldier->getPosition());
+					}
+				}
+				if (bullet_x +4>= 1422 || bullet_y >= 1422 || bullet_x+4 < 0 || bullet_y < 0)
+				{
+					remoteSoldier->setPosition(remoteSoldier->getPosition());
+				}
+				remoteSoldier->setPosition(Point(bullet_x, bullet_y));
 			}
 			//log("remoteSoldier:x=%f, y=%f", remoteSoldier->getPositionX(), remoteSoldier->getPositionY());
 		}
 	}
+	
 }
 
 void RemoteSoldierManager::attackUpdate(float dt)
@@ -129,4 +217,70 @@ Vec2 RemoteSoldierManager::setSoldierPosition(int num)
 		remoteSoldierY = remoteSoldierMap.at("y").asFloat();
 	}
 	return Vec2(remoteSoldierX, remoteSoldierY);
+}
+
+Point RemoteSoldierManager::tileCoordForPosition(Point pos)
+{
+	Size mapTiledNum = _map->getMapSize();
+	Size tiledSize = _map->getTileSize();
+
+	int x, y;
+	x = (pos.x*1.8) / tiledSize.width;
+
+	/*y鍧愭爣闇€瑕佽浆鎹竴涓嬶紝鍥犱负鍧愭爣绯诲拰tiled涓嶅悓*/
+	y = (mapTiledNum.height*tiledSize.height - pos.y*1.8) / tiledSize.height;
+
+	/*格子从零开始*/
+	if (x > 0)
+		x--;
+	if (y > 0)
+		y -= 0;
+	return Point(x, y);
+}
+
+Point RemoteSoldierManager::getRandomPosition(Point pos)
+{
+	int random = rand() % 4;
+	//log("random:%d", random);
+	//todo:关于地图边界的问题
+	if (random == 0) //up
+	{
+
+		pos.y += 4;
+	}
+	else if (random == 1) //down
+	{
+		pos.y -= 4;
+	}
+	else if (random == 2) //left
+	{
+		pos.x -= 4;
+	}
+	else //right
+	{
+		pos.x += 4;
+	}
+	//log("remoteSoldier:x=%f, y=%f", remoteSoldier->getPositionX(), remoteSoldier->getPositionY());
+
+
+	Point tiledPos = tileCoordForPosition(pos);
+	int tileGid = meta->getTileGIDAt(tiledPos);
+
+	//int tileGid = meta->getTileGIDAt(Point(16,12));
+	if (tileGid != 0)
+	{
+		Value properties = _map->getPropertiesForGID(tileGid);
+
+		Value proper = properties.asValueMap().at("Collidable");
+
+		if (proper.asString().compare("true") == 0)
+		{
+			return getRandomPosition(pos);
+		}
+	}
+	if (pos.x >= 1422 || pos.y >= 1422||pos.x<0||pos.y<0)
+	{
+		return getRandomPosition(pos);
+	}
+	return pos;
 }

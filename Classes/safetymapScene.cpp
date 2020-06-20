@@ -2,6 +2,10 @@
 #include "MyHelloWorldScene.h"
 #include "audio.h"
 #include "safetymapScene.h"
+#include"ShotGun.h"
+#include "ui/CocosGUI.h"
+using namespace cocos2d::ui;
+USING_NS_CC;
 
 Scene* safetymap::createScene()
 {
@@ -32,7 +36,31 @@ bool safetymap::init()
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	/*add information bar*/
+	auto information_bar = Sprite::create("data_bars_blank.png");
+	information_bar->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
+	this->addChild(information_bar, 1);
 
+	/*add blood bar
+	auto bloodLoadingBar = LoadingBar::create("blood_bar_full.png");
+	bloodLoadingBar->setDirection(LoadingBar::Direction::LEFT);
+	bloodLoadingBar->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
+	bloodLoadingBar->setPercent(100);
+	this->addChild(bloodLoadingBar,2);*/
+
+	/*second method*/
+	auto bloodEmpty = Sprite::create("blood_bar_empty.png");
+	bloodEmpty->setPosition(Vec2(origin.x + 55, visibleSize.height + 5));
+	this->addChild(bloodEmpty, 2);
+	auto bloodFull = Sprite::create("blood_bar_full.png");
+	bloodProgress = ProgressTimer::create(bloodFull);
+	bloodProgress->setType(ProgressTimer::Type::BAR);//type:bar
+	bloodProgress->setPosition(Vec2(origin.x + 55, visibleSize.height + 5));
+	bloodProgress->setMidpoint(Point(0, 0.5));//from right to left
+	bloodProgress->setBarChangeRate(Point(1, 0));
+	//bloodProgress->setTag(BLOOD_BAR);//
+	this->addChild(bloodProgress, 2);
+	schedule(CC_SCHEDULE_SELECTOR(safetymap::scheduleBlood), 0.1f);
 	/*play game music*/
 	audio_home->stopBackgroundMusic();
 	audio_game->playBackgroundMusic("game_music.mp3", true);
@@ -49,7 +77,7 @@ bool safetymap::init()
 
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Knight* mplayer = Knight::create();
-	ShotGun* initialWeapon = ShotGun::create("broken pistol.png");
+	ShotGun* initialWeapon = ShotGun::create("broken_pistol.png");
 	mplayer->bindSprite(player_sprite);
 	mplayer->bindWeapon(initialWeapon);
 	mplayer->setTiledMap(_tiledmap);
@@ -177,7 +205,7 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 		}
 
 	}
-
+	
 	return true;
 }
 
@@ -196,5 +224,13 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 	_tiledmap->addChild(mplayer);
 }*/
 
+void safetymap::scheduleBlood(float delta)
+{
+	bloodProgress->setPercentage(100);
+	if (bloodProgress->getPercentage() < 0)
+	{
+		this->unschedule(CC_SCHEDULE_SELECTOR(safetymap::scheduleBlood));
+	}
+}
 
 

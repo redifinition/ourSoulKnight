@@ -12,7 +12,6 @@ public:
 	Vec2 increaseBy15Degree(const Vec2& pos);					//改变子弹的发射角度 +30°
 	Vec2 reduceBy15Degree(const Vec2& pos);						//改变子弹的发射角度 -30°
 	virtual void fire(Scene* _currentScene, const Vec2& pos, Entity* player);
-	
 };
 
 #endif

@@ -47,6 +47,7 @@ void ShotGun::fire(Scene* _currentScene, const Vec2& pos, Entity* player) {
 		bullet1->setPosition(this->getParent()->getPosition());
 		log("bullet pos:(%f, %f)", this->getParent()->getPositionX(), this->getParent()->getPositionY());
 		player->getCurrentMap()->addChild(bullet1);
+		//bullet1->bindMap();
 		bullet1->new_move();
 		//break;
 	}
