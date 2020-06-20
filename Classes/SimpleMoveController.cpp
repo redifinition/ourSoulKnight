@@ -59,6 +59,11 @@ void SimpleMoveController::registeKeyBoardEvent()
 	auto keyBoardListener = EventListenerKeyboard::create();
 	keyBoardListener->onKeyPressed = [&](EventKeyboard::KeyCode keyCode, Event* event) {
 		switch (keyCode) {
+		case EventKeyboard::KeyCode::KEY_K://ÎäÆ÷ÇĞ»»¼ü
+		{
+			m_player->switchWeapon();
+			break;
+		}
 		case EventKeyboard::KeyCode::KEY_W://ÉÏ·½Ïò¼ü;
 		{
 			key_w = true;

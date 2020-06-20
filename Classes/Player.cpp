@@ -109,6 +109,7 @@ void Player::switchWeapon() {
 	for (auto weapon : _weaponBag) {
 		if (_currentWeapon != weapon) {
 			_currentWeapon = weapon;
+			break;
 		}
 	}
 	_currentWeapon->setVisible(true);
