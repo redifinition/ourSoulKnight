@@ -95,7 +95,8 @@ bool safetymap::init()
 
 	//设置控制器到主角身上
 	mplayer->set_controller(simple_move_controller);
-	simple_move_controller->bind_sprite(player_sprite);//Bind player
+	simple_move_controller->bind_player(mplayer);//Bind player
+	//simple_move_controller->bind_sprite(player_sprite);//Bind player
   
 	//设置碰撞掩码
 	this->m_player = mplayer;

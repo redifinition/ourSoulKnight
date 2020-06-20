@@ -62,7 +62,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 		case EventKeyboard::KeyCode::KEY_W://上方向键;
 		{
 			key_w = true;
-			m_sprite->stopAllActions();
+			m_player->getSprite()->stopAllActions();
 			if (left_right_tag == -1)
 			{
 				knight_animate = Animation::create();
@@ -76,7 +76,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 				knight_animate->setLoops(-1);
 				knight_animate->setRestoreOriginalFrame(true);
 				knight_animate_run = Animate::create(knight_animate);
-				m_sprite->runAction(knight_animate_run);
+				m_player->getSprite()->runAction(knight_animate_run);
 			}
 			if (left_right_tag == 1)
 			{
@@ -91,7 +91,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 				knight_animate->setLoops(-1);
 				knight_animate->setRestoreOriginalFrame(true);
 				knight_animate_run = Animate::create(knight_animate);
-				m_sprite->runAction(knight_animate_run);
+				m_player->getSprite()->runAction(knight_animate_run);
 			}
 			set_iyspeed(2);
 
@@ -102,7 +102,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 		{
 			set_ixspeed(-2);
 			key_a = true;
-			m_sprite->stopAllActions();
+			m_player->getSprite()->stopAllActions();
 
 			knight_animate = Animation::create();
 			char nameSize[30] = { 0 };
@@ -115,7 +115,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 			knight_animate->setLoops(-1);
 			knight_animate->setRestoreOriginalFrame(true);
 			knight_animate_run = Animate::create(knight_animate);
-			m_sprite->runAction(knight_animate_run);
+			m_player->getSprite()->runAction(knight_animate_run);
 
 			left_right_tag = -1;
 			break;
@@ -125,7 +125,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 		case EventKeyboard::KeyCode::KEY_S://下方向键;
 		{
 			key_s = true;
-			m_sprite->stopAllActions();
+			m_player->getSprite()->stopAllActions();
 			if (left_right_tag == -1)
 			{
 				knight_animate = Animation::create();
@@ -139,7 +139,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 				knight_animate->setLoops(-1);
 				knight_animate->setRestoreOriginalFrame(true);
 				knight_animate_run = Animate::create(knight_animate);
-				m_sprite->runAction(knight_animate_run);
+				m_player->getSprite()->runAction(knight_animate_run);
 			}
 			if (left_right_tag == 1)
 			{
@@ -154,7 +154,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 				knight_animate->setLoops(-1);
 				knight_animate->setRestoreOriginalFrame(true);
 				knight_animate_run = Animate::create(knight_animate);
-				m_sprite->runAction(knight_animate_run);
+				m_player->getSprite()->runAction(knight_animate_run);
 			}
 
 			set_iyspeed(-2);
@@ -163,7 +163,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 		case EventKeyboard::KeyCode::KEY_D://右方向键;
 		{
 			key_d = true;
-			m_sprite->stopAllActions();
+			m_player->getSprite()->stopAllActions();
 			knight_animate = Animation::create();
 			char nameSize[30] = { 0 };
 			for (int i = 1; i <= 4; i++)
@@ -175,7 +175,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 			knight_animate->setLoops(-1);
 			knight_animate->setRestoreOriginalFrame(true);
 			knight_animate_run = Animate::create(knight_animate);
-			m_sprite->runAction(knight_animate_run);
+			m_player->getSprite()->runAction(knight_animate_run);
 
 			left_right_tag = 1;
 			set_ixspeed(2);
@@ -191,7 +191,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 		{
 			if (key_a == false && key_s == false && key_d == false)
 			{
-				m_sprite->stopAllActions();
+				m_player->getSprite()->stopAllActions();
 				if (left_right_tag == -1)
 				{
 					knight_animate = Animation::create();
@@ -205,7 +205,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 					knight_animate->setLoops(-1);
 					knight_animate->setRestoreOriginalFrame(true);
 					knight_animate_run = Animate::create(knight_animate);
-					m_sprite->runAction(knight_animate_run);
+					m_player->getSprite()->runAction(knight_animate_run);
 				}
 				if (left_right_tag == 1)
 				{
@@ -220,7 +220,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 					knight_animate->setLoops(-1);
 					knight_animate->setRestoreOriginalFrame(true);
 					knight_animate_run = Animate::create(knight_animate);
-					m_sprite->runAction(knight_animate_run);
+					m_player->getSprite()->runAction(knight_animate_run);
 				}
 			}
 			key_w = false;
@@ -231,7 +231,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 		{
 			if (key_w == false && key_s == false && key_d == false)
 			{
-				m_sprite->stopAllActions();
+				m_player->getSprite()->stopAllActions();
 				knight_animate = Animation::create();
 				char nameSize[30] = { 0 };
 				for (int i = 1; i <= 2; i++)
@@ -243,7 +243,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 				knight_animate->setLoops(-1);
 				knight_animate->setRestoreOriginalFrame(true);
 				knight_animate_run = Animate::create(knight_animate);
-				m_sprite->runAction(knight_animate_run);
+				m_player->getSprite()->runAction(knight_animate_run);
 			}
 			key_a = false;
 			set_ixspeed(0);
@@ -253,7 +253,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 		{
 			if (key_w == false && key_a == false && key_d == false)
 			{
-				m_sprite->stopAllActions();
+				m_player->getSprite()->stopAllActions();
 				if (left_right_tag == -1)
 				{
 					knight_animate = Animation::create();
@@ -267,7 +267,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 					knight_animate->setLoops(-1);
 					knight_animate->setRestoreOriginalFrame(true);
 					knight_animate_run = Animate::create(knight_animate);
-					m_sprite->runAction(knight_animate_run);
+					m_player->getSprite()->runAction(knight_animate_run);
 				}
 				if (left_right_tag == 1)
 				{
@@ -282,7 +282,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 					knight_animate->setLoops(-1);
 					knight_animate->setRestoreOriginalFrame(true);
 					knight_animate_run = Animate::create(knight_animate);
-					m_sprite->runAction(knight_animate_run);
+					m_player->getSprite()->runAction(knight_animate_run);
 				}
 			}
 			key_s = false;
@@ -294,7 +294,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 		{
 			if (key_w == false && key_a == false && key_s == false)
 			{
-				m_sprite->stopAllActions();
+				m_player->getSprite()->stopAllActions();
 				knight_animate = Animation::create();
 				char nameSize[30] = { 0 };
 				for (int i = 1; i <= 2; i++)
@@ -306,7 +306,7 @@ void SimpleMoveController::registeKeyBoardEvent()
 				knight_animate->setLoops(-1);
 				knight_animate->setRestoreOriginalFrame(true);
 				knight_animate_run = Animate::create(knight_animate);
-				m_sprite->runAction(knight_animate_run);
+				m_player->getSprite()->runAction(knight_animate_run);
 			}
 			key_d = false;
 			set_ixspeed(0);
@@ -323,4 +323,9 @@ void SimpleMoveController::registeKeyBoardEvent()
 void SimpleMoveController::bind_sprite(Sprite* sprite)
 {
 	m_sprite = sprite;
+}
+
+void SimpleMoveController::bind_player(Player* player)
+{
+	m_player = player;
 }
