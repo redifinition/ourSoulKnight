@@ -25,7 +25,7 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 #include "MyHelloWorldScene.h"
-
+#include "safetymapScene.h"
 
  // #define USE_AUDIO_ENGINE 1
 
@@ -39,7 +39,7 @@ USING_NS_CC;
 static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 576);
-static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
+static cocos2d::Size largeResolutionSize = cocos2d::Size(1920, 1080);
 
 AppDelegate::AppDelegate()
 {
@@ -110,7 +110,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	register_all_packages();
 
 	// create a scene. it's an autorelease object
-	auto scene = HelloWorld::createScene();
+	auto scene = safetymap::createScene();
 
 	// run
 	director->runWithScene(scene);
