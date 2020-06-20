@@ -11,12 +11,12 @@ USING_NS_CC;
 class Bullet : public cocos2d::Sprite
 {
 	CC_SYNTHESIZE(Entity*, _attackSource, attackSource);
-	CC_SYNTHESIZE(Vec2, _attackDirection,attackDirection);
+	CC_SYNTHESIZE(Vec2, _attackDirection, attackDirection);
 	CC_SYNTHESIZE(int, _damage, damage);
 	CC_SYNTHESIZE(std::string, _bulletType, bulletType);
 	CC_SYNTHESIZE(Scene*, _currentScene, currentScene);
 public:
-	static Bullet* create(EActorType actorType,Entity* attackSource, Vec2 attackDirection, Scene* currentScene);
+	static Bullet* create(EActorType actorType, Entity* attackSource, Vec2 attackDirection, Scene* currentScene);
 	bool init(EActorType actorType, Entity* attackSource, Vec2 attackDirection, Scene* currentScene);
 	static Bullet* create(EActorType actorType, Weapon* attackSource, Vec2 attackDirection, Scene* currentScene);
 	bool init(EActorType actorType, Weapon* attackSource, Vec2 attackDirection, Scene* currentScene);

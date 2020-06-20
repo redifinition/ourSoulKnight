@@ -10,6 +10,7 @@ class safetymap: public cocos2d::Scene
 public:
 	static cocos2d::Scene* createScene();
 	virtual bool init();
+	void scheduleBlood(float delta);
 	CREATE_FUNC(safetymap);
 private:
 	TMXTiledMap *_tiledmap;									//地图类中相关地图
@@ -18,9 +19,12 @@ private:
 	Player* m_player;
 	RemoteSoldier* m_monster;										//先用player类替代
 	RemoteSoldierManager* m_remoteSoldierManager;
+									//先用player类替代
+	ProgressTimer* bloodProgress;
 protected:
 	virtual bool onContactBegin(PhysicsContact& contact);	//碰撞后的回调
 	virtual bool onTouchBegin(Touch* touch, Event* event);	//点击鼠标后的回调
+
 };
 
 #endif // __SAFETYMAP_SCENE_H__

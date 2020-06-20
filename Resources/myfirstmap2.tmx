@@ -45,11 +45,11 @@
  <objectgroup name="bullet">
   <object id="3" name="bullet1" x="658" y="267"/>
   <object id="4" x="868" y="540"/>
-  <object id="5" name="remote_bullet1" x="2103" y="297" width="33" height="35"/>
-  <object id="6" name="remote_bullet2" x="2242" y="284" width="33" height="36"/>
-  <object id="9" name="remote_bullet3" x="2192" y="544" width="30" height="31"/>
-  <object id="10" name="remote_bullet4" x="2424" y="186" width="35" height="42"/>
-  <object id="11" name="remote_bullet5" x="1936" y="105" width="36" height="34"/>
+  <object id="5" name="remote_bullet1" x="2066.67" y="342.167" width="33" height="35"/>
+  <object id="6" name="remote_bullet2" x="2199" y="342" width="33" height="36"/>
+  <object id="9" name="remote_bullet3" x="2136" y="423" width="30" height="31"/>
+  <object id="10" name="remote_bullet4" x="2131" y="338" width="35" height="42"/>
+  <object id="11" name="remote_bullet5" x="2065" y="407" width="36" height="34"/>
  </objectgroup>
  <layer name="tree_root" width="80" height="80">
   <data encoding="base64" compression="zlib">
@@ -73,7 +73,7 @@
  </layer>
  <layer name="meta" width="80" height="80">
   <data encoding="base64" compression="zlib">
-   eJztmksSwjAMxbgL978jWxYtpJEd5yPNdMXwnKjNr9PXS+Sed+J1Aln9PMlfdF//Ze70rFf5i65XBan9y9PJ/lrGx7+xc7K/7Nys+aLqymCkvx052V9E/072F4H+2rmaR/V3z5WrSn+rr78z+Ktih/3LrP7o2S4jd0Te09o9Z7DeTJI7Ku9p7ZYzcETm9++RVPsj/+19fzDbGthLxfqxE+S+zvpMzEKLP7lHfwz9MfTH0B9Dfwz9MfTH0B9Dfwz9MfTH0B9Dfwz9MfTH0B9Dfwz9MfTH0B9Dfwz9MfTH0B9Dfwz9MfTH0B/jdH/Z3yXO/F1jBJV92MVfdf2Vv899Wrel/T3jm7KKv4z6+mP1V/c3aoxlZusvJqfiqmSGNsxKixf9MU72FzEH6E9/LVz1UX/juHO0w/4l+/7/qnPC/nmF+rucf5/m7epv9NiOyKmg8uz7nT/7HH7HqbWj0B+juv3V9SnV+87V/YmIED5yaEwF
+   eJztmkuSgzAQxXKXuf8dZ5sFEGN1u/2Rqlil8hoLfyk+H5Fn/hKuU8hq6ykOM/rLr8yd+nuVv+h6VZDaT55O9tcyPn6Nnd39Zc8do/1VXhmM9LcjJ/uLaN/J/iLQXztX86j+7rlyVelv9fV3Bn9V7LB/mdUfPdtl5I7Ie1u75wzWm0lyR+W9rd1yBo7I/P49kmp/5L+97w9mWwN7qVg/dqP3uc7YH2aixZ/coz+G/hj6Y+iPoT+G/hj6Y+iPoT+G/hj6Y+iPoT+G/hj6Y+iPoT+G/hj6Y+iPoT+G/hj6Y+iPoT+G/hj6Y+iPcbq/7O8SZ/6uMYLKNuzir7r+yt/nvq3bcv8945uyir+M+vpj9Vf3N2qMZWbrLyan4qpkhnuYlRYv+mOc7C9iDtCf/lq4aqP+xnHnaIf9S/bzf6pzwv55hfq7nH/f5u3qb/TYjsipoPLs+50/+xx+x6m1o9Afo/r+q+tTqvedq/sTESH8A5CSS78=
   </data>
  </layer>
  <layer name="tree" width="80" height="80">

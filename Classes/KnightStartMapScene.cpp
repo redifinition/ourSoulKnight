@@ -4,6 +4,7 @@
 #include"safetymapScene.h"
 #include"setupScene.h"
 #include"HelloWorldScene.h"
+#include "audio.h"
 USING_NS_CC;
 
 Scene* KnightStartMap::createScene()
@@ -89,7 +90,7 @@ bool KnightStartMap::init()
 	player_sprite->runAction(knight_animate_run);
 
 	this->m_player = mplayer;
-	_tiledmap->addChild(mplayer,23);//10or23？
+	_tiledmap->addChild(mplayer, 23);//10or23？
 
 
 	this->addChild(_tiledmap);
@@ -106,7 +107,7 @@ bool KnightStartMap::init()
 	}
 	else
 	{
-		suspend_button->setPosition(Vec2(visibleSize.width+ origin.x-20, visibleSize.height + origin.y-20));
+		suspend_button->setPosition(Vec2(visibleSize.width + origin.x - 20, visibleSize.height + origin.y - 20));
 	}
 	auto menu2 = Menu::create(suspend_button, NULL);
 	menu2->setPosition(Vec2::ZERO);
@@ -116,16 +117,16 @@ bool KnightStartMap::init()
 }
 
 void KnightStartMap::menuCloseCallback(Ref* pSender)
-{   
+{
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	auto suspend_scene = Sprite::create("suspend_scene.png");
-	suspend_scene->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2+300));
+	suspend_scene = Sprite::create("suspend_scene.png");
+	suspend_scene->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 300));
 	this->addChild(suspend_scene, 1);
-	auto suspend_scene_moveBy = MoveBy::create(0.3, Vec2(0,-300));
+	auto suspend_scene_moveBy = MoveBy::create(0.3, Vec2(0, -300));
 	suspend_scene->runAction(suspend_scene_moveBy);
 
-	auto suspend_start = MenuItemImage::create(
+	suspend_start = MenuItemImage::create(
 		"suspend_start.png",
 		"suspend_start.png",
 		CC_CALLBACK_1(KnightStartMap::start_menuCloseCallback, this));
@@ -138,7 +139,7 @@ void KnightStartMap::menuCloseCallback(Ref* pSender)
 	else
 	{
 
-		suspend_start->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2-40+300));
+		suspend_start->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 40 + 300));
 		auto suspend_start_moveBy = MoveBy::create(0.3, Vec2(0, -300));
 		suspend_start->runAction(suspend_start_moveBy);
 	}
@@ -146,7 +147,7 @@ void KnightStartMap::menuCloseCallback(Ref* pSender)
 	menu2->setPosition(Vec2::ZERO);
 	this->addChild(menu2, 1);//just a virtual button which is unvisible
 	/*create home button*/
-	auto home_button = MenuItemImage::create(
+	home_button = MenuItemImage::create(
 		"home_button1.png",
 		"home_button2.png",
 		CC_CALLBACK_1(KnightStartMap::home_menuCloseCallback, this));
@@ -159,7 +160,7 @@ void KnightStartMap::menuCloseCallback(Ref* pSender)
 	else
 	{
 
-		home_button->setPosition(Vec2(visibleSize.width / 2-60, visibleSize.height / 2 - 40 + 300));
+		home_button->setPosition(Vec2(visibleSize.width / 2 - 60, visibleSize.height / 2 - 40 + 300));
 		auto home_button_moveBy = MoveBy::create(0.3, Vec2(0, -300));
 		home_button->runAction(home_button_moveBy);
 	}
@@ -167,24 +168,47 @@ void KnightStartMap::menuCloseCallback(Ref* pSender)
 	menu3->setPosition(Vec2::ZERO);
 	this->addChild(menu3, 1);//just a virtual button which is unvisible
 
+	/*add setup button*/
+	setup_button = MenuItemImage::create(
+		"volume_on.png",
+		"volume_off.png",
+		CC_CALLBACK_1(KnightStartMap::setup_menuCloseCallback, this));
+	if (setup_button == nullptr ||
+		setup_button->getContentSize().width <= 0 ||
+		setup_button->getContentSize().height <= 0)
+	{
+		problemLoading("'suspend_button.png' and 'suspend_button.png'");
+	}
+	else
+	{
+
+		setup_button->setPosition(Vec2(visibleSize.width / 2 + 60, visibleSize.height / 2 - 40 + 300));
+		auto setup_buton_moveBy = MoveBy::create(0.3, Vec2(0, -300));
+		setup_button->runAction(setup_buton_moveBy);
+		setup_button->setScale(0.38);
+	}
+	auto menu4 = Menu::create(setup_button, NULL);
+	menu4->setPosition(Vec2::ZERO);
+	this->addChild(menu4, 1);//just a virtual button which is unvisible
+
 }
 
 void KnightStartMap::update(float dt)
 {
-	
+
 	auto player_x = this->m_player->getPositionX();
 	auto player_y = this->m_player->getPositionY();
 	int x = player_x * 1.8 / 32;
 	int y = (1920 - player_y * 1.8) / 32;
-	if (x <= 21 && x >= 18 &&(y==7))
+	if (x <= 21 && x >= 18 && (y == 7))
 	{
-		
+
 		Director::getInstance()->replaceScene(safetymap::createScene());
 	}
-	
+
 	//加载玩家坐标对象
 	_tiledmap->getLayer("weapon_information")->setVisible(false);
-	if (x <= 15 && x >= 14 && y==50)
+	if (x <= 15 && x >= 14 && y == 50)
 	{
 		_tiledmap->getLayer("weapon_information")->setVisible(true);
 	}
@@ -193,7 +217,14 @@ void KnightStartMap::update(float dt)
 void KnightStartMap::start_menuCloseCallback(Ref* pSender)
 {
 
-	Director::getInstance()->replaceScene(KnightStartMap::createScene());
+	auto suspend_start_moveBy = MoveBy::create(0.3, Vec2(0, 300));
+	suspend_start->runAction(suspend_start_moveBy);
+	auto suspend_scene_moveBy = MoveBy::create(0.3, Vec2(0, 300));
+	suspend_scene->runAction(suspend_scene_moveBy);
+	auto home_button_moveBy = MoveBy::create(0.3, Vec2(0, 300));
+	home_button->runAction(home_button_moveBy);
+	auto setup_button_moveBy = MoveBy::create(0.3, Vec2(0, 300));
+	setup_button->runAction(setup_button_moveBy);
 
 }
 
@@ -202,6 +233,18 @@ void KnightStartMap::home_menuCloseCallback(Ref* pSender)
 	Director::getInstance()->replaceScene(HelloWorld::createScene());
 }
 
-
-
-
+void KnightStartMap::setup_menuCloseCallback(Ref* pSender)
+{
+	if (AudioIsEffect == true)
+	{
+		audio_home->pauseBackgroundMusic();
+		AudioIsEffect = false;
+		return;
+	}
+	if (AudioIsEffect == false)
+	{
+		audio_home->resumeBackgroundMusic();
+		AudioIsEffect = true;
+		return;
+	}
+}

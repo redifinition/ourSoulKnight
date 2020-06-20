@@ -19,8 +19,12 @@ public:
 	void attackUpdate(float dt);
 	void update(float dt);
 	Vec2 setSoldierPosition(int num);
+	Point getRandomPosition(Point pos);
 private:
 	void createMonsters();
+	Vector<RemoteSoldier*> m_remoteSoldierArr;
+	TMXLayer* meta;
+	Point tileCoordForPosition(Point pos);
 };
 
 #endif

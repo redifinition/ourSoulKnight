@@ -4,7 +4,7 @@
 Bullet* Bullet::create(EActorType actorType, Entity* attackSource, Vec2 attackDirection, Scene* currentScene)
 {
 	Bullet* bullet = new Bullet;
-	if (bullet && bullet->init(actorType, attackSource,attackDirection, currentScene))
+	if (bullet && bullet->init(actorType, attackSource, attackDirection, currentScene))
 	{
 		bullet->autorelease();
 		return bullet;
@@ -18,12 +18,12 @@ bool Bullet::init(EActorType actorType, Entity* attackSource, Vec2 attackDirecti
 	if (actorType == SHORTREMOTE)
 	{
 		_bulletType = "ShortRemote";
-		setTexture("ShortRemoteBullet.png"); 
+		setTexture("ShortRemoteBullet.png");
 	}
 	else if (actorType == LONGREMOTE)
 	{
 		_bulletType = "LongRemote";
-		setTexture("LongRemoteBullet.png"); 
+		setTexture("LongRemoteBullet.png");
 	}
 	else
 		return false;

@@ -2,6 +2,10 @@
 #include "MyHelloWorldScene.h"
 #include "audio.h"
 #include "safetymapScene.h"
+#include"ShotGun.h"
+#include "ui/CocosGUI.h"
+using namespace cocos2d::ui;
+USING_NS_CC;
 
 Scene* safetymap::createScene()
 {
@@ -24,7 +28,7 @@ bool safetymap::init()
 	{
 		return false;
 	}
-	// 初始化Physics
+	// 鍒濆鍖朠hysics
 	if (!Scene::initWithPhysics())
 	{
 		return false;
@@ -32,12 +36,36 @@ bool safetymap::init()
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	/*add information bar*/
+	auto information_bar = Sprite::create("data_bars_blank.png");
+	information_bar->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
+	this->addChild(information_bar, 1);
 
+	/*add blood bar
+	auto bloodLoadingBar = LoadingBar::create("blood_bar_full.png");
+	bloodLoadingBar->setDirection(LoadingBar::Direction::LEFT);
+	bloodLoadingBar->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
+	bloodLoadingBar->setPercent(100);
+	this->addChild(bloodLoadingBar,2);*/
+
+	/*second method*/
+	auto bloodEmpty = Sprite::create("blood_bar_empty.png");
+	bloodEmpty->setPosition(Vec2(origin.x + 55, visibleSize.height + 5));
+	this->addChild(bloodEmpty, 2);
+	auto bloodFull = Sprite::create("blood_bar_full.png");
+	bloodProgress = ProgressTimer::create(bloodFull);
+	bloodProgress->setType(ProgressTimer::Type::BAR);//type:bar
+	bloodProgress->setPosition(Vec2(origin.x + 55, visibleSize.height + 5));
+	bloodProgress->setMidpoint(Point(0, 0.5));//from right to left
+	bloodProgress->setBarChangeRate(Point(1, 0));
+	//bloodProgress->setTag(BLOOD_BAR);//
+	this->addChild(bloodProgress, 2);
+	schedule(CC_SCHEDULE_SELECTOR(safetymap::scheduleBlood), 0.1f);
 	/*play game music*/
 	audio_home->stopBackgroundMusic();
 	audio_game->playBackgroundMusic("game_music.mp3", true);
 
-	std::string floor_layer_file = "myfirstmap2.tmx";//��ͼ�ļ�
+	std::string floor_layer_file = "myfirstmap2.tmx";//地图文件
 
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
@@ -45,7 +73,7 @@ bool safetymap::init()
 
 	log("map size:(%f, %f)", _tiledmap->getContentSize().width,_tiledmap->getContentSize().height);
 
-	//添加player并绑定武�?
+	//娣诲姞player骞剁粦瀹氭鍣?
 
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
 	Knight* mplayer = Knight::create();
@@ -61,10 +89,10 @@ bool safetymap::init()
 	float playerX = player_point_map.at("x").asFloat();
 	float playerY = player_point_map.at("y").asFloat();
 
-	//设置玩家坐标
+	//璁剧疆鐜╁鍧愭爣
 	mplayer->setPosition(Point(playerX,playerY));
 
-	//添加一个测试用的monster
+	//娣诲姞涓�涓祴璇曠敤鐨刴onster
 	Sprite* monster_sprite = Sprite::create("LongRemoteSoldier.png");
 	RemoteSoldier* monster = RemoteSoldier::create(LONGREMOTE,this);
 
@@ -78,26 +106,26 @@ bool safetymap::init()
 	float monsterY = monster_point_map.at("y").asFloat();
 	monster->setPosition(Point(monsterX, monsterY));
 	
-	//创建怪物
+	//鍒涘缓鎬墿
 	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
 	this->m_remoteSoldierManager = remoteSoldierManager;
 	_tiledmap->addChild(remoteSoldierManager, 4);
 
-	//创建玩家简单移动控制器
+	//鍒涘缓鐜╁绠�鍗曠Щ鍔ㄦ帶鍒跺櫒
 	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
 
-	//设置移动速度
+	//璁剧疆绉诲姩閫熷害
 	simple_move_controller->set_ixspeed(0);
 	simple_move_controller->set_iyspeed(0);
 
-	//将控制器添加到场景中让Upadate被调�?
+	//灏嗘帶鍒跺櫒娣诲姞鍒板満鏅腑璁︰padate琚皟鐢?
 	this->addChild(simple_move_controller);
 
-	//设置控制器到主角身上
+	//璁剧疆鎺у埗鍣ㄥ埌涓昏韬笂
 	mplayer->set_controller(simple_move_controller);
 	simple_move_controller->bind_sprite(player_sprite);//Bind player
   
-	//设置碰撞掩码
+	//璁剧疆纰版挒鎺╃爜
 	this->m_player = mplayer;
 	this->m_monster = monster;
 
@@ -116,13 +144,13 @@ bool safetymap::init()
 	log("monster pos0:(%f, %f)", monsterX, monsterY);
 
 	
-	//创建EventListener
+	//鍒涘缓EventListener
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(safetymap::onTouchBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	
-	//创建contactListener
+	//鍒涘缓contactListener
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(safetymap::onContactBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
@@ -163,7 +191,7 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 			else if (nodeB->getTag() == -2)
 			{
 				//this->m_monster->takeDamage(nodeA->getTag());
-				//�ҳ����ĸ�������ӵ���������ײ
+				//找出是哪个怪物和子弹发生了碰撞
 				for (auto Soldier : this->m_remoteSoldierManager->getSoldierArr())
 				{
 					if (nodeB->getMonsterID() == Soldier->getMonsterID())
@@ -175,7 +203,7 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 			nodeA->removeFromParentAndCleanup(true);
 		}
 
-		//������Ĵ�����Ǿ���ģ���ΪnodeA��nodeB��֪����һ�����ӵ�
+		//和上面的代码块是镜像的，因为nodeA和nodeB不知道哪一个是子弹
 		else if (nodeB->getTag() > 0)
 		{
 			if (nodeA->getTag() == -1)
@@ -196,23 +224,32 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 			nodeB->removeFromParentAndCleanup(true);
 		}
 	}
-		return true;
+	
+	return true;
 }
 
 /*void safetymap::add_player(TMXTiledMap* map)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	//����һ����
+	//锟斤拷锟斤拷一锟斤拷锟斤拷
 	Sprite* player_sprite = Sprite::create("player.png");
 	Player* mplayer = Player::create();
 	mplayer->bind_sprite(player_sprite);
 	mplayer->run();
 
-    //����������
+    //锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 	mplayer->setPosition(Vec2(100, visibleSize.height / 2));
 
 	_tiledmap->addChild(mplayer);
 }*/
 
+void safetymap::scheduleBlood(float delta)
+{
+	bloodProgress->setPercentage(100);
+	if (bloodProgress->getPercentage() < 0)
+	{
+		this->unschedule(CC_SCHEDULE_SELECTOR(safetymap::scheduleBlood));
+	}
+}
 
 
