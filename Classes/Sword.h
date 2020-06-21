@@ -2,8 +2,9 @@
 #define _Sword_H_
 
 #include "Weapon.h"
-
+#include "Bullet.h"
 class Sword: public Weapon {
+	CC_SYNTHESIZE(EActorType, _bulletType, BulletType);			//武器使用的子弹类型,近战创建隐形子弹
 
 public:
 	Sword();										//初始化的时候添加碰撞模型
