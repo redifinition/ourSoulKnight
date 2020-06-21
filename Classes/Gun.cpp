@@ -8,9 +8,6 @@ Gun::Gun() {
 	_attackRadius = 500;
 	_bulletSpeed = 280;
 	_bulletType = PISTOLBULLET;
-	
-	//ÎäÆ÷Î»ÖÃ
-	this->setAnchorPoint(Vec2(0.1, 0.1));
 }
 
 Gun::~Gun() {
@@ -34,7 +31,10 @@ bool Gun::init(const std::string& filename)
 	if (!Sprite::initWithFile(filename)) {
 		return false;
 	}
+	//ÐÞÕýÍ¼Æ¬Ëõ·Å
 	this->setScale(0.08);
+	//ÎäÆ÷Î»ÖÃ
+	this->setAnchorPoint(Vec2(0.1, 0.1));
 	return true;
 }
 
