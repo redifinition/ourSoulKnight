@@ -33,6 +33,94 @@ bool safetymap::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+	musicOnOff = true;
+	/*add information bar*/
+	auto information_bar = Sprite::create("data_bars_blank.png");
+	information_bar->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
+	this->addChild(information_bar, 1);
+
+	/*add blood bar
+	auto bloodLoadingBar = LoadingBar::create("blood_bar_full.png");
+	bloodLoadingBar->setDirection(LoadingBar::Direction::LEFT);
+	bloodLoadingBar->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
+	bloodLoadingBar->setPercent(100);
+	this->addChild(bloodLoadingBar,2);*/
+
+	/*second method*/
+	auto bloodEmpty = Sprite::create("blood_bar_empty.png");
+	bloodEmpty->setPosition(Vec2(origin.x + 55, visibleSize.height + 5));
+	this->addChild(bloodEmpty, 2);
+	auto bloodFull = Sprite::create("blood_bar_full.png");
+	bloodProgress = ProgressTimer::create(bloodFull);
+	bloodProgress->setType(ProgressTimer::Type::BAR);//type:bar
+	bloodProgress->setPosition(Vec2(origin.x + 55, visibleSize.height + 5));
+	bloodProgress->setMidpoint(Point(0, 0.5));//from right to left
+	bloodProgress->setBarChangeRate(Point(1, 0));
+	//bloodProgress->setTag(BLOOD_BAR);//
+	this->addChild(bloodProgress, 2);
+
+	/*add HP text*/
+	bloodNum = "5/5";
+	bloodLabel = Label::createWithTTF(bloodNum, "fonts/Marker Felt.ttf", 7);
+	bloodLabel->setPosition(Vec2(origin.x + 55, visibleSize.height + 5));
+	this->addChild(bloodLabel, 2);
+
+	/*add MP bar*/
+	auto MPEmpty = Sprite::create("mana_bar_empty.png");
+	MPEmpty->setPosition(Vec2(origin.x + 55, visibleSize.height - 22));
+	this->addChild(MPEmpty, 2);
+	auto MPFull = Sprite::create("mana_bar_full.png");
+	MPProgress = ProgressTimer::create(MPFull);
+	MPProgress->setType(ProgressTimer::Type::BAR);//type:bar
+	MPProgress->setPosition(Vec2(origin.x + 55, visibleSize.height - 22));
+	MPProgress->setMidpoint(Point(0, 0.5));//from right to left
+	MPProgress->setBarChangeRate(Point(1, 0));
+	//bloodProgress->setTag(BLOOD_BAR);//
+	this->addChild(MPProgress, 2);
+
+	/*add MP text*/
+	MPNum = "180/180";
+	MPLabel = Label::createWithTTF(MPNum, "fonts/Marker Felt.ttf", 7);
+	MPLabel->setPosition(Vec2(origin.x + 55, visibleSize.height - 22));
+	this->addChild(MPLabel, 3);
+
+	/*add AC text*/
+	ACNum = "5/5";
+	ACLabel = Label::createWithTTF(ACNum, "fonts/Marker Felt.ttf", 7);
+	ACLabel->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
+	this->addChild(ACLabel, 3);
+
+	/*add AC bar*/
+	auto ACEmpty = Sprite::create("shield_bar_empty.png");
+	ACEmpty->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
+	this->addChild(ACEmpty, 2);
+	auto ACFull = Sprite::create("shield_bar_full.png");
+	ACProgress = ProgressTimer::create(ACFull);
+	ACProgress->setType(ProgressTimer::Type::BAR);//type:bar
+	ACProgress->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
+	ACProgress->setMidpoint(Point(0, 0.5));//from right to left
+	ACProgress->setBarChangeRate(Point(1, 0));
+	//bloodProgress->setTag(BLOOD_BAR);//
+	this->addChild(ACProgress, 2);
+	schedule(CC_SCHEDULE_SELECTOR(safetymap::scheduleBlood), 0.1f);
+
+	auto suspend_button = MenuItemImage::create(
+		"suspend_button.png",
+		"suspend_button.png",
+		CC_CALLBACK_1(safetymap::menuCloseCallback, this));
+	if (suspend_button == nullptr ||
+		suspend_button->getContentSize().width <= 0 ||
+		suspend_button->getContentSize().height <= 0)
+	{
+		problemLoading("'suspend_button.png' and 'suspend_button.png'");
+	}
+	else
+	{
+		suspend_button->setPosition(Vec2(visibleSize.width + origin.x - 20, visibleSize.height + origin.y - 20));
+	}
+	auto menu2 = Menu::create(suspend_button, NULL);
+	menu2->setPosition(Vec2::ZERO);
+	this->addChild(menu2, 1);//just a virtual button which is unvisible
 	/*play game music*/
 	audio_home->stopBackgroundMusic();
 	audio_game->playBackgroundMusic("game_music.mp3", true);
@@ -48,8 +136,8 @@ bool safetymap::init()
 	//æ·»åŠ playerå¹¶ç»‘å®šæ­¦å™?
 
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
-	Knight* mplayer = Knight::create();
-	Gun* initialWeapon = Gun::create("BrokenPistol.png");
+    mplayer = Knight::create();
+	Sword* initialWeapon = Sword::create("BroadSword.png");
 	ShotGun* secondWeapon = ShotGun::create("GoblinShotGun.png");
 	mplayer->bindSprite(player_sprite);
 	mplayer->bindInitWeapon(initialWeapon);
@@ -64,6 +152,28 @@ bool safetymap::init()
 	float playerX = player_point_map.at("x").asFloat();
 	float playerY = player_point_map.at("y").asFloat();
 
+	/*add next map sprite*/
+	TMXObjectGroup* NextGroup = _tiledmap->getObjectGroup("exit");
+
+	ValueMap next_map = NextGroup->getObject("exit1");
+	float exitX = next_map.at("x").asFloat();
+	float exitY = next_map.at("y").asFloat();
+	auto next_map_sprite = Sprite::create("next_pass_1.png");
+	next_map_sprite->setScale(0.3);
+	next_map_sprite->setPosition(Point(exitX, exitY));
+	_tiledmap->addChild(next_map_sprite, 1);
+	auto exitAnimation = Animation::create();
+	char nameSize[20] = { 0 };
+	for (int i = 1; i <= 8; i++)
+	{
+		sprintf(nameSize, "next_pass_%d.png", i);
+		exitAnimation->addSpriteFrameWithFile(nameSize);
+	}
+	exitAnimation->setDelayPerUnit(0.1f);//ÉèÖÃ¶¯»­Ö¡Ê±¼ä¼ä¸ô
+	exitAnimation->setLoops(-1);
+	exitAnimation->setRestoreOriginalFrame(true);
+	auto exitAnimate = Animate::create(exitAnimation);
+	next_map_sprite->runAction(exitAnimate);
 	//è®¾ç½®çŽ©å®¶åæ ‡
 	mplayer->setPosition(Point(playerX,playerY));
 
@@ -259,5 +369,154 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 	_tiledmap->addChild(mplayer);
 }*/
 
+
+void safetymap::scheduleBlood(float delta)
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	float HpRate = (float)mplayer->get_HP() / 5.0f;
+	bloodProgress->setPercentage(HpRate * 100);
+
+
+	sprintf(bloodChar, "%d/5", mplayer->get_HP() >= 0 ? mplayer->get_HP() : 0);
+	bloodNum = bloodChar;
+	bloodLabel->setString(bloodNum);
+
+
+	sprintf(ACChar, "%d/5", mplayer->get_AC() >= 0 ? mplayer->get_AC() : 0);
+	ACNum = ACChar;
+	ACLabel->setString(ACNum);
+
+	sprintf(MPChar, "%d/180", mplayer->get_MP() >= 0 ? mplayer->get_MP() : 0);
+	MPNum = MPChar;
+	MPLabel->setString(MPNum);
+
+	float MPRate = (float)mplayer->get_MP() / 180.0f;
+	MPProgress->setPercentage(MPRate * 100);
+
+	float ACRate = (float)mplayer->get_AC() / 5.0f;
+	ACProgress->setPercentage(ACRate * 100);
+	if (ACProgress->getPercentage() < 0 && MPProgress->getPercentage() < 0 && bloodProgress->getPercentage() < 0)
+	{
+		this->unschedule(CC_SCHEDULE_SELECTOR(safetymap::scheduleBlood));
+	}
+
+}
+
+void safetymap::update(float dt)
+{
+	auto player_x = this->mplayer->getPositionX();
+	auto player_y = this->m_player->getPositionY();
+	int x = player_x * 1.8 / 32;
+	int y = (2560 - player_y * 1.8) / 32;
+
+	if (x <= 9 && x >= 8 && y <= 64 && y >= 63)
+	{
+		//get to the next map
+	}
+}
+
+void safetymap::menuCloseCallback(Ref* pSender)
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	suspend_scene = Sprite::create("suspend_scene.png");
+	suspend_scene->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 300));
+	this->addChild(suspend_scene, 1);
+	auto suspend_scene_moveBy = MoveBy::create(0.3, Vec2(0, -300));
+	suspend_scene->runAction(suspend_scene_moveBy);
+
+	suspend_start = MenuItemImage::create(
+		"suspend_start.png",
+		"suspend_start.png",
+		CC_CALLBACK_1(safetymap::start_menuCloseCallback, this));
+	if (suspend_start == nullptr ||
+		suspend_start->getContentSize().width <= 0 ||
+		suspend_start->getContentSize().height <= 0)
+	{
+		problemLoading("'suspend_button.png' and 'suspend_button.png'");
+	}
+	else
+	{
+
+		suspend_start->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 40 + 300));
+		auto suspend_start_moveBy = MoveBy::create(0.3, Vec2(0, -300));
+		suspend_start->runAction(suspend_start_moveBy);
+	}
+	auto menu2 = Menu::create(suspend_start, NULL);
+	menu2->setPosition(Vec2::ZERO);
+	this->addChild(menu2, 1);//just a virtual button which is unvisible
+	/*create home button*/
+	home_button = MenuItemImage::create(
+		"home_button1.png",
+		"home_button2.png",
+		CC_CALLBACK_1(safetymap::home_menuCloseCallback, this));
+	if (suspend_start == nullptr ||
+		suspend_start->getContentSize().width <= 0 ||
+		suspend_start->getContentSize().height <= 0)
+	{
+		problemLoading("'home_button1' and 'home_button2.png'");
+	}
+	else
+	{
+
+		home_button->setPosition(Vec2(visibleSize.width / 2 - 60, visibleSize.height / 2 - 40 + 300));
+		auto home_button_moveBy = MoveBy::create(0.3, Vec2(0, -300));
+		home_button->runAction(home_button_moveBy);
+	}
+	auto menu3 = Menu::create(home_button, NULL);
+	menu3->setPosition(Vec2::ZERO);
+	this->addChild(menu3, 1);//just a virtual button which is unvisible
+
+
+	music_button = MenuItemImage::create(
+		"volume_on.png",
+		"volume_off.png",
+		CC_CALLBACK_1(safetymap::music_menuCloseCallback, this));
+	if (music_button == nullptr ||
+		music_button->getContentSize().width <= 0 ||
+		music_button->getContentSize().height <= 0)
+	{
+		problemLoading("'music_button'");
+	}
+	else
+	{
+
+		music_button->setPosition(Vec2(visibleSize.width / 2 + 60, visibleSize.height / 2 - 40 + 300));
+		auto music_button_moveBy = MoveBy::create(0.3, Vec2(0, -300));
+		music_button->runAction(music_button_moveBy);
+		music_button->setScale(0.4);
+	}
+	auto menu4 = Menu::create(music_button, NULL);
+	menu4->setPosition(Vec2::ZERO);
+	this->addChild(menu4, 1);//just a virtual button which is unvisible
+}
+
+void safetymap::start_menuCloseCallback(Ref* pSender)
+{
+
+}
+
+void safetymap::home_menuCloseCallback(Ref* pSender)
+{
+	Director::getInstance()->replaceScene(HelloWorld::createScene());
+}
+
+void safetymap::music_menuCloseCallback(Ref* pSender)
+{
+	if (musicOnOff == true)
+	{
+		audio_begin->pauseBackgroundMusic();
+		musicOnOff = false;
+	}
+	else
+	{
+		audio_begin->resumeBackgroundMusic();
+		musicOnOff = true;
+	}
+
+}
 
 

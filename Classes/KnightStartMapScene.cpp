@@ -112,6 +112,10 @@ bool KnightStartMap::init()
 	menu2->setPosition(Vec2::ZERO);
 	this->addChild(menu2, 1);//just a virtual button which is unvisible
 
+	/*add blood bar*/
+	auto bloodBar = Sprite::create("bloodBar.png");
+	bloodBar->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
+	this->addChild(bloodBar, 3);
 	return true;
 }
 
@@ -187,6 +191,11 @@ void KnightStartMap::update(float dt)
 	if (x <= 15 && x >= 14 && y==50)
 	{
 		_tiledmap->getLayer("weapon_information")->setVisible(true);
+	}
+	_tiledmap->getLayer("monster_information")->setVisible(false);
+	if (x <= 34 && x >= 33 && y == 50)
+	{
+		_tiledmap->getLayer("monster_information")->setVisible(true);
 	}
 }
 
