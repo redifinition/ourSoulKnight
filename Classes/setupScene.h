@@ -20,3 +20,4 @@ public:
 };
 
 #endif // __SETUP_SCENE_H__
+#pragma once

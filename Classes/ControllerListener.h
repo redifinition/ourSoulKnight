@@ -16,6 +16,5 @@ public:
 
 };
 
-
-
 #endif
+#pragma once
