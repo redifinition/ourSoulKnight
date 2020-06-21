@@ -24,7 +24,7 @@ bool safetymap::init()
 	{
 		return false;
 	}
-	// åˆå§‹åŒ–Physics
+	// é’æ¿†îé–æœ hysics
 	if (!Scene::initWithPhysics())
 	{
 		return false;
@@ -125,7 +125,7 @@ bool safetymap::init()
 	audio_home->stopBackgroundMusic();
 	audio_game->playBackgroundMusic("game_music.mp3", true);
 
-	std::string floor_layer_file = "myfirstmap2.tmx";//µØÍ¼ÎÄ¼þ
+	std::string floor_layer_file = "myfirstmap2.tmx";//åœ°å›¾æ–‡ä»¶
 
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
@@ -133,10 +133,13 @@ bool safetymap::init()
 
 	log("map size:(%f, %f)", _tiledmap->getContentSize().width,_tiledmap->getContentSize().height);
 
-	//æ·»åŠ playerå¹¶ç»‘å®šæ­¦å™?
+	//å¨£è¯²å§žplayeréªžå‰ç²¦ç€¹æ°­î„Ÿé£?
 
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
-    mplayer = Knight::create();
+
+  //mplayer = Knight::create();
+	Knight* mplayer = Knight::create();
+
 	Sword* initialWeapon = Sword::create("BroadSword.png");
 	ShotGun* secondWeapon = ShotGun::create("GoblinShotGun.png");
 	mplayer->bindSprite(player_sprite);
@@ -169,15 +172,15 @@ bool safetymap::init()
 		sprintf(nameSize, "next_pass_%d.png", i);
 		exitAnimation->addSpriteFrameWithFile(nameSize);
 	}
-	exitAnimation->setDelayPerUnit(0.1f);//ÉèÖÃ¶¯»­Ö¡Ê±¼ä¼ä¸ô
+	exitAnimation->setDelayPerUnit(0.1f);//è®¾ç½®åŠ¨ç”»å¸§æ—¶é—´é—´éš”
 	exitAnimation->setLoops(-1);
 	exitAnimation->setRestoreOriginalFrame(true);
 	auto exitAnimate = Animate::create(exitAnimation);
 	next_map_sprite->runAction(exitAnimate);
-	//è®¾ç½®çŽ©å®¶åæ ‡
+	//ç’å‰§ç–†éœâ•î†é§æ„­çˆ£
 	mplayer->setPosition(Point(playerX,playerY));
 
-	//æ·»åŠ ä¸€ä¸ªæµ‹è¯•ç”¨çš„monster
+	//å¨£è¯²å§žæ¶“ï¿½æ¶“î…ç¥´ç’‡æ› æ•¤é¨åˆ´onster
 	Sprite* monster_sprite = Sprite::create("LongRemoteSoldier.png");
 	RemoteSoldier* monster = RemoteSoldier::create(LONGREMOTE,this);
 
@@ -187,27 +190,27 @@ bool safetymap::init()
 	TMXObjectGroup* bulletGroup = _tiledmap->getObjectGroup("bullet");
 
 
-	//åˆ›å»ºæ€ªç‰©
+	//é’æ¶˜ç¼“éŽ¬î†å¢¿
 	RemoteSoldierManager* remoteSoldierManager = RemoteSoldierManager::create(this, mplayer, _tiledmap);
 	this->m_remoteSoldierManager = remoteSoldierManager;
 	_tiledmap->addChild(remoteSoldierManager, 4);
 
-	//åˆ›å»ºçŽ©å®¶ç®€å•ç§»åŠ¨æŽ§åˆ¶å™¨
+	//é’æ¶˜ç¼“éœâ•î†ç» ï¿½é—æ› Ð©é”ã„¦å¸¶é’è·ºæ«’
 	SimpleMoveController* simple_move_controller = SimpleMoveController::create();
 
-	//è®¾ç½®ç§»åŠ¨é€Ÿåº¦
+	//ç’å‰§ç–†ç»‰è¯²å§©é–«ç†·å®³
 	simple_move_controller->set_ixspeed(0);
 	simple_move_controller->set_iyspeed(0);
 
-	//å°†æŽ§åˆ¶å™¨æ·»åŠ åˆ°åœºæ™¯ä¸­è®©Upadateè¢«è°ƒç”?
+	//çå—˜å¸¶é’è·ºæ«’å¨£è¯²å§žé’æ¿æº€é…îˆ™è…‘ç’ï¸°padateçšî‚¥çšŸé¢?
 	this->addChild(simple_move_controller);
 
-	//è®¾ç½®æŽ§åˆ¶å™¨åˆ°ä¸»è§’èº«ä¸Š
+	//ç’å‰§ç–†éŽºÑƒåŸ—é£ã„¥åŸŒæ¶“æ˜î—éŸ¬î‚¡ç¬‚
 	mplayer->set_controller(simple_move_controller);
 	simple_move_controller->bind_player(mplayer);
 	simple_move_controller->bind_scene(this);
   
-	//è®¾ç½®ç¢°æ’žæŽ©ç 
+	//ç’å‰§ç–†çº°ç‰ˆæŒ’éŽºâ•ƒçˆœ
 	this->m_player = mplayer;
 	this->m_monster = monster;
 
@@ -223,13 +226,13 @@ bool safetymap::init()
 
 
 	
-	//åˆ›å»ºEventListener
+	//é’æ¶˜ç¼“EventListener
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(safetymap::onTouchBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	
-	//åˆ›å»ºcontactListener
+	//é’æ¶˜ç¼“contactListener
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(safetymap::onContactBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
@@ -243,34 +246,34 @@ bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 		m_player->rotateWeapon(pos);
 		m_player->attack(this, pos);
 	*/
-	//Èç¹ûµ±Ç°Ã»ÓÐËø¶¨µÄ¹ÖÎï£¬»òÕßËø¶¨µÄ¹ÖÎïÒÑ¾­ËÀÁË
+	//å¦‚æžœå½“å‰æ²¡æœ‰é”å®šçš„æ€ªç‰©ï¼Œæˆ–è€…é”å®šçš„æ€ªç‰©å·²ç»æ­»äº†
 	if (m_player->getLockedTarget() == NULL ||
 		m_player->getLockedTarget()->getalreadyDead()) {
 		
-		//ÐÂ½¨Ò»¸ötarget£¬ÓÃÓÚÖ¸Ïò×î½üµÄ»îµÄsoldier
+		//æ–°å»ºä¸€ä¸ªtargetï¼Œç”¨äºŽæŒ‡å‘æœ€è¿‘çš„æ´»çš„soldier
 		RemoteSoldier* target = NULL;
 		
-		//±éÀúsoldiermanager,ÕÒ³ö×î½üµÄ»îµÄsoldier
+		//éåŽ†soldiermanager,æ‰¾å‡ºæœ€è¿‘çš„æ´»çš„soldier
 		for (auto soldier : this->m_remoteSoldierManager->getSoldierArr()){	
-			//Èç¹ûÊÇËÀµÄ£¬Ìø¹ý
+			//å¦‚æžœæ˜¯æ­»çš„ï¼Œè·³è¿‡
 			if (soldier->getalreadyDead()) {
 				continue;
 			}
 
-			//Õâ¸ösoldierÃ»ËÀµÄ»°£¬¼ÆËã³ösoldierºÍplayerµÄ¾àÀë
+			//è¿™ä¸ªsoldieræ²¡æ­»çš„è¯ï¼Œè®¡ç®—å‡ºsoldierå’Œplayerçš„è·ç¦»
 			Vec2 direction = soldier->getPosition() - m_player->getPosition();
 			float distance = sqrt(direction.x*direction.x + direction.y*direction.y);
 			static float minDistance = distance;
 
-			//Èç¹ûµ±Ç°soldier¾àÀëÊÇ×î½üµÄ£¬ÄÇÃ´°ÑtargetÉèÖÃÎªÕâ¸ösoldier
+			//å¦‚æžœå½“å‰soldierè·ç¦»æ˜¯æœ€è¿‘çš„ï¼Œé‚£ä¹ˆæŠŠtargetè®¾ç½®ä¸ºè¿™ä¸ªsoldier
 			if (minDistance >= distance) {
 				target = soldier;
 			}
 
-			//Èç¹û¶¼ËÀÍêÁË£¬ÄÇÃ´target²»»á±ä£¬Ò»Ö±ÊÇNULL
+			//å¦‚æžœéƒ½æ­»å®Œäº†ï¼Œé‚£ä¹ˆtargetä¸ä¼šå˜ï¼Œä¸€ç›´æ˜¯NULL
 		}
 
-		//Èç¹ûÕÒµ½ÁËËø¶¨Ä¿±ê£¬ÄÇÃ´Ëø¶¨²¢¹¥»÷
+		//å¦‚æžœæ‰¾åˆ°äº†é”å®šç›®æ ‡ï¼Œé‚£ä¹ˆé”å®šå¹¶æ”»å‡»
 		if (target != NULL) {
 			m_player->setLockedTarget(target);
 			Vec2 pos = m_player->getLockedTarget()->getPosition();
@@ -278,16 +281,16 @@ bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 			m_player->attack(this, pos);
 		}
 		
-		//Èç¹ûÃ»ÕÒµ½Ëø¶¨µÄÄ¿±ê£¬¾ÍÏòÇ°·½¿ª»ð
+		//å¦‚æžœæ²¡æ‰¾åˆ°é”å®šçš„ç›®æ ‡ï¼Œå°±å‘å‰æ–¹å¼€ç«
 		else {
 			m_player->resetWeaponPos();
 			m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
 		}
 	}
 	
-	//ÉÏÊöÇé¿öµÄ·´Ãæ£¬¾ÍÊÇÓÐËø¶¨Ä¿±êÇÒ¸ÃÄ¿±êÊÇ»î×ÅµÄ
+	//ä¸Šè¿°æƒ…å†µçš„åé¢ï¼Œå°±æ˜¯æœ‰é”å®šç›®æ ‡ä¸”è¯¥ç›®æ ‡æ˜¯æ´»ç€çš„
 	else {
-		//Ö±½Ó¹¥»÷¸ÃÄ¿±ê
+		//ç›´æŽ¥æ”»å‡»è¯¥ç›®æ ‡
 		Vec2 pos = m_player->getLockedTarget()->getPosition();
 		m_player->rotateWeapon(pos);
 		m_player->attack(this, pos);
@@ -311,7 +314,7 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 			else if (nodeB->getTag() == -2)
 			{
 				//this->m_monster->takeDamage(nodeA->getTag());
-				//ÕÒ³öÊÇÄÄ¸ö¹ÖÎïºÍ×Óµ¯·¢ÉúÁËÅö×²
+				//æ‰¾å‡ºæ˜¯å“ªä¸ªæ€ªç‰©å’Œå­å¼¹å‘ç”Ÿäº†ç¢°æ’ž
 				for (auto Soldier : this->m_remoteSoldierManager->getSoldierArr())
 				{
 					if (nodeB->getMonsterID() == Soldier->getMonsterID())
@@ -323,7 +326,7 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 			nodeA->removeFromParentAndCleanup(true);
 		}
 
-		//ºÍÉÏÃæµÄ´úÂë¿éÊÇ¾µÏñµÄ£¬ÒòÎªnodeAºÍnodeB²»ÖªµÀÄÄÒ»¸öÊÇ×Óµ¯
+		//å’Œä¸Šé¢çš„ä»£ç å—æ˜¯é•œåƒçš„ï¼Œå› ä¸ºnodeAå’ŒnodeBä¸çŸ¥é“å“ªä¸€ä¸ªæ˜¯å­å¼¹
 		else if (nodeB->getTag() > 0)
 		{
 			if (nodeA->getTag() == -1)
@@ -350,13 +353,13 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 /*void safetymap::add_player(TMXTiledMap* map)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½
+	//é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·ä¸€é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
 	Sprite* player_sprite = Sprite::create("player.png");
 	Player* mplayer = Player::create();
 	mplayer->bind_sprite(player_sprite);
 	mplayer->run();
 
-    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
 	mplayer->setPosition(Vec2(100, visibleSize.height / 2));
 
 	_tiledmap->addChild(mplayer);
