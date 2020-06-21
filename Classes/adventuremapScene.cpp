@@ -1,11 +1,11 @@
 #include "HelloWorldScene.h"
 #include "MyHelloWorldScene.h"
 #include "audio.h"
-#include "safetymapScene.h"
 #include"adventuremapScene.h"
-Scene* safetymap::createScene()
+#include"KnightStartMapScene.h"
+Scene* adventuremap::createScene()
 {
-	return safetymap::create();
+	return adventuremap::create();
 }
 
 // Print useful error message instead of segfaulting when files are not there.
@@ -16,7 +16,7 @@ static void problemLoading(const char* filename)
 }
 
 // on "init" you need to initialize your instance
-bool safetymap::init()
+bool adventuremap::init()
 {
 	//////////////////////////////
 	// 1. super init first
@@ -32,13 +32,13 @@ bool safetymap::init()
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
+	this->scheduleUpdate();
 	musicOnOff = true;
 	/*add information bar*/
 	auto information_bar = Sprite::create("data_bars_blank.png");
 	information_bar->setPosition(Vec2(origin.x + 55, visibleSize.height - 10));
 	this->addChild(information_bar, 1);
-	this->scheduleUpdate();
+
 	/*add blood bar
 	auto bloodLoadingBar = LoadingBar::create("blood_bar_full.png");
 	bloodLoadingBar->setDirection(LoadingBar::Direction::LEFT);
@@ -102,12 +102,12 @@ bool safetymap::init()
 	ACProgress->setBarChangeRate(Point(1, 0));
 	//bloodProgress->setTag(BLOOD_BAR);//
 	this->addChild(ACProgress, 2);
-	schedule(CC_SCHEDULE_SELECTOR(safetymap::scheduleBlood), 0.1f);
+	schedule(CC_SCHEDULE_SELECTOR(adventuremap::scheduleBlood), 0.1f);
 
 	auto suspend_button = MenuItemImage::create(
 		"suspend_button.png",
 		"suspend_button.png",
-		CC_CALLBACK_1(safetymap::menuCloseCallback, this));
+		CC_CALLBACK_1(adventuremap::menuCloseCallback, this));
 	if (suspend_button == nullptr ||
 		suspend_button->getContentSize().width <= 0 ||
 		suspend_button->getContentSize().height <= 0)
@@ -122,21 +122,19 @@ bool safetymap::init()
 	menu2->setPosition(Vec2::ZERO);
 	this->addChild(menu2, 1);//just a virtual button which is unvisible
 	/*play game music*/
-	audio_home->stopBackgroundMusic();
-	audio_game->playBackgroundMusic("game_music.mp3", true);
 
-	std::string floor_layer_file = "myfirstmap2.tmx";//地图文件
+	std::string floor_layer_file = "adventuremap2.tmx";//地图文件
 
 	_tiledmap = TMXTiledMap::create(floor_layer_file);
 	_tiledmap->setAnchorPoint(Vec2::ZERO);
 	_tiledmap->setPosition(Vec2::ZERO);
 
-	log("map size:(%f, %f)", _tiledmap->getContentSize().width,_tiledmap->getContentSize().height);
+	log("map size:(%f, %f)", _tiledmap->getContentSize().width, _tiledmap->getContentSize().height);
 
 	//娣诲姞player骞剁粦瀹氭鍣?
 
 	Sprite* player_sprite = Sprite::create("turn right 1.png");
-    mplayer = Knight::create();
+	mplayer = Knight::create();
 	Sword* initialWeapon = Sword::create("BroadSword.png");
 	ShotGun* secondWeapon = ShotGun::create("GoblinShotGun.png");
 	mplayer->bindSprite(player_sprite);
@@ -145,7 +143,7 @@ bool safetymap::init()
 
 	mplayer->setTiledMap(_tiledmap);
 
-	
+
 	TMXObjectGroup* objGroup = _tiledmap->getObjectGroup("objects");
 
 	ValueMap player_point_map = objGroup->getObject("PlayerPoint");
@@ -175,16 +173,14 @@ bool safetymap::init()
 	auto exitAnimate = Animate::create(exitAnimation);
 	next_map_sprite->runAction(exitAnimate);
 	//璁剧疆鐜╁鍧愭爣
-	mplayer->setPosition(Point(playerX,playerY));
+	mplayer->setPosition(Point(playerX, playerY));
 
 	//娣诲姞涓�涓祴璇曠敤鐨刴onster
 	Sprite* monster_sprite = Sprite::create("LongRemoteSoldier.png");
-	RemoteSoldier* monster = RemoteSoldier::create(LONGREMOTE,this);
+	RemoteSoldier* monster = RemoteSoldier::create(LONGREMOTE, this);
 
 	monster->bindSprite(monster_sprite);
 	//monster->setTiledMap(_tiledmap);
-
-	TMXObjectGroup* bulletGroup = _tiledmap->getObjectGroup("bullet");
 
 
 	//鍒涘缓鎬墿
@@ -205,39 +201,38 @@ bool safetymap::init()
 	//璁剧疆鎺у埗鍣ㄥ埌涓昏韬笂
 	mplayer->set_controller(simple_move_controller);
 	simple_move_controller->bind_player(mplayer);
-	simple_move_controller->bind_scene(this);
-  
+
 	//璁剧疆纰版挒鎺╃爜
 	this->m_player = mplayer;
 	this->m_monster = monster;
 
 	m_monster->getPhysicsBody()->setCategoryBitmask(0x02);
 	m_monster->getPhysicsBody()->setContactTestBitmask(0x04);
-	
+
 
 	this->addChild(_tiledmap);
 
-	_tiledmap->addChild(mplayer,2);
+	_tiledmap->addChild(mplayer, 2);
 	_tiledmap->addChild(monster, 2);
-	
 
+	//this->addChild(monster,2);
+	//this->addChild(mplayer,2);
 
-	
 	//鍒涘缓EventListener
 	auto listener = EventListenerTouchOneByOne::create();
-	listener->onTouchBegan = CC_CALLBACK_2(safetymap::onTouchBegin, this);
+	listener->onTouchBegan = CC_CALLBACK_2(adventuremap::onTouchBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	
+
 	//鍒涘缓contactListener
 	auto contactListener = EventListenerPhysicsContact::create();
-	contactListener->onContactBegin = CC_CALLBACK_1(safetymap::onContactBegin, this);
+	contactListener->onContactBegin = CC_CALLBACK_1(adventuremap::onContactBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	return true;
 }
 
-bool safetymap::onTouchBegin(Touch* touch, Event* event) {
+bool adventuremap::onTouchBegin(Touch* touch, Event* event) {
 	/*
 		Vec2 pos = m_player->getLockedTarget()->getPosition();
 		m_player->rotateWeapon(pos);
@@ -246,12 +241,12 @@ bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 	//如果当前没有锁定的怪物，或者锁定的怪物已经死了
 	if (m_player->getLockedTarget() == NULL ||
 		m_player->getLockedTarget()->getalreadyDead()) {
-		
+
 		//新建一个target，用于指向最近的活的soldier
 		RemoteSoldier* target = NULL;
-		
+
 		//遍历soldiermanager,找出最近的活的soldier
-		for (auto soldier : this->m_remoteSoldierManager->getSoldierArr()){	
+		for (auto soldier : this->m_remoteSoldierManager->getSoldierArr()) {
 			//如果是死的，跳过
 			if (soldier->getalreadyDead()) {
 				continue;
@@ -277,14 +272,14 @@ bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 			m_player->rotateWeapon(pos);
 			m_player->attack(this, pos);
 		}
-		
+
 		//如果没找到锁定的目标，就向前方开火
 		else {
 			m_player->resetWeaponPos();
 			m_player->attack(this, Vec2(m_player->getPositionX() + 1, m_player->getPositionY()));
 		}
 	}
-	
+
 	//上述情况的反面，就是有锁定目标且该目标是活着的
 	else {
 		//直接攻击该目标
@@ -295,7 +290,7 @@ bool safetymap::onTouchBegin(Touch* touch, Event* event) {
 	return true;
 }
 
-bool safetymap::onContactBegin(PhysicsContact& contact) {
+bool adventuremap::onContactBegin(PhysicsContact& contact) {
 
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
@@ -344,7 +339,7 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 			nodeB->removeFromParentAndCleanup(true);
 		}
 	}
-		return true;
+	return true;
 }
 
 /*void safetymap::add_player(TMXTiledMap* map)
@@ -356,14 +351,14 @@ bool safetymap::onContactBegin(PhysicsContact& contact) {
 	mplayer->bind_sprite(player_sprite);
 	mplayer->run();
 
-    //锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+	//锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 	mplayer->setPosition(Vec2(100, visibleSize.height / 2));
 
 	_tiledmap->addChild(mplayer);
 }*/
 
 
-void safetymap::scheduleBlood(float delta)
+void adventuremap::scheduleBlood(float delta)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -392,26 +387,26 @@ void safetymap::scheduleBlood(float delta)
 	ACProgress->setPercentage(ACRate * 100);
 	if (ACProgress->getPercentage() < 0 && MPProgress->getPercentage() < 0 && bloodProgress->getPercentage() < 0)
 	{
-		this->unschedule(CC_SCHEDULE_SELECTOR(safetymap::scheduleBlood));
+		this->unschedule(CC_SCHEDULE_SELECTOR(adventuremap::scheduleBlood));
 	}
 
 }
 
-void safetymap::update(float dt)
+void adventuremap::update(float dt)
 {
 	auto player_x = this->mplayer->getPositionX();
 	auto player_y = this->m_player->getPositionY();
 	int x = player_x * 1.8 / 32;
 	int y = (2560 - player_y * 1.8) / 32;
 
-	if (x <= 9 && x >= 7 && y <= 64 && y >= 63)
+	if (x <= 70 && x >= 68 && y <= 44 && y >= 42)
 	{
 		//get to the next map
-		Director::getInstance()->replaceScene(adventuremap::createScene());
+		Director::getInstance()->replaceScene(KnightStartMap::createScene());
 	}
 }
 
-void safetymap::menuCloseCallback(Ref* pSender)
+void adventuremap::menuCloseCallback(Ref* pSender)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -425,7 +420,7 @@ void safetymap::menuCloseCallback(Ref* pSender)
 	suspend_start = MenuItemImage::create(
 		"suspend_start.png",
 		"suspend_start.png",
-		CC_CALLBACK_1(safetymap::start_menuCloseCallback, this));
+		CC_CALLBACK_1(adventuremap::start_menuCloseCallback, this));
 	if (suspend_start == nullptr ||
 		suspend_start->getContentSize().width <= 0 ||
 		suspend_start->getContentSize().height <= 0)
@@ -446,7 +441,7 @@ void safetymap::menuCloseCallback(Ref* pSender)
 	home_button = MenuItemImage::create(
 		"home_button1.png",
 		"home_button2.png",
-		CC_CALLBACK_1(safetymap::home_menuCloseCallback, this));
+		CC_CALLBACK_1(adventuremap::home_menuCloseCallback, this));
 	if (suspend_start == nullptr ||
 		suspend_start->getContentSize().width <= 0 ||
 		suspend_start->getContentSize().height <= 0)
@@ -468,7 +463,7 @@ void safetymap::menuCloseCallback(Ref* pSender)
 	music_button = MenuItemImage::create(
 		"volume_on.png",
 		"volume_off.png",
-		CC_CALLBACK_1(safetymap::music_menuCloseCallback, this));
+		CC_CALLBACK_1(adventuremap::music_menuCloseCallback, this));
 	if (music_button == nullptr ||
 		music_button->getContentSize().width <= 0 ||
 		music_button->getContentSize().height <= 0)
@@ -488,7 +483,7 @@ void safetymap::menuCloseCallback(Ref* pSender)
 	this->addChild(menu4, 1);//just a virtual button which is unvisible
 }
 
-void safetymap::start_menuCloseCallback(Ref* pSender)
+void adventuremap::start_menuCloseCallback(Ref* pSender)
 {
 	auto suspend_moveby = MoveBy::create(0.3f, Vec2(0, 300));
 	suspend_scene->runAction(suspend_moveby);
@@ -504,12 +499,12 @@ void safetymap::start_menuCloseCallback(Ref* pSender)
 	music_button->runAction(music_moveby);
 }
 
-void safetymap::home_menuCloseCallback(Ref* pSender)
+void adventuremap::home_menuCloseCallback(Ref* pSender)
 {
 	Director::getInstance()->replaceScene(HelloWorld::createScene());
 }
 
-void safetymap::music_menuCloseCallback(Ref* pSender)
+void adventuremap::music_menuCloseCallback(Ref* pSender)
 {
 	if (musicOnOff == true)
 	{
@@ -523,5 +518,6 @@ void safetymap::music_menuCloseCallback(Ref* pSender)
 	}
 
 }
+
 
 

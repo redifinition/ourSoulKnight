@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="32" tileheight="32" nextobjectid="22">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="32" tileheight="32" nextobjectid="24">
  <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32" tilecount="16" columns="4">
-  <image source="../../../../yuanqi/Resources/knight_floor.png" width="129" height="128"/>
+  <image source="knight_floor.png" width="129" height="128"/>
  </tileset>
  <tileset firstgid="17" name="floor" tilewidth="32" tileheight="49" tilecount="2" columns="2">
-  <image source="../../../../yuanqi/Resources/wall1.png" width="65" height="49"/>
+  <image source="wall1.png" width="65" height="49"/>
  </tileset>
  <tileset firstgid="19" name="tiled_box" tilewidth="32" tileheight="50" tilecount="1" columns="1">
-  <image source="../../../../yuanqi/Resources/box_tile.png" width="32" height="50"/>
+  <image source="box_tile.png" width="32" height="50"/>
  </tileset>
  <tileset firstgid="20" name="tree" tilewidth="31" tileheight="53" tilecount="1" columns="1">
-  <image source="../../../../yuanqi/Resources/tree.png" width="31" height="53"/>
+  <image source="tree.png" width="31" height="53"/>
  </tileset>
  <tileset firstgid="21" name="torch" tilewidth="32" tileheight="56" tilecount="1" columns="1">
-  <image source="../../../../yuanqi/Resources/torch_verse.png" width="32" height="56"/>
+  <image source="torch_verse.png" width="32" height="56"/>
  </tileset>
  <tileset firstgid="22" name="tree_root" tilewidth="32" tileheight="41" tilecount="1" columns="1">
-  <image source="../../../../yuanqi/Resources/tree_root.png" width="32" height="41"/>
+  <image source="tree_root.png" width="32" height="41"/>
  </tileset>
- <tileset firstgid="23" name="steps" tilewidth="32" tileheight="32" tilecount="1" columns="1">
-  <image source="../../../../yuanqi/Resources/steps.png" width="32" height="33"/>
+ <tileset firstgid="23" name="steps" tilewidth="32" tileheight="32" tilecount="20" columns="5">
+  <image source="entrance.png" width="160" height="131"/>
  </tileset>
- <tileset firstgid="24" name="floor_shade" tilewidth="32" tileheight="32" tilecount="16" columns="4">
-  <image source="../../../../yuanqi/Resources/shadow.png" width="129" height="128"/>
+ <tileset firstgid="43" name="floor_shade" tilewidth="32" tileheight="32" tilecount="16" columns="4">
+  <image source="shadow.png" width="129" height="128"/>
+ </tileset>
+ <tileset firstgid="59" name="meta" tilewidth="32" tileheight="32" tilecount="4" columns="4">
+  <image source="meta.png" width="128" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="Collidable" type="bool" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="63" name="floor1" tilewidth="32" tileheight="32" tilecount="2" columns="2">
+  <image source="wall1.png" width="65" height="49"/>
+ </tileset>
+ <tileset firstgid="65" name="floor2" tilewidth="32" tileheight="49" tilecount="2" columns="2">
+  <image source="wall1.png" width="65" height="49"/>
  </tileset>
  <layer name="floor" width="80" height="80">
   <data encoding="base64" compression="zlib">
@@ -36,12 +50,22 @@
  </layer>
  <layer name="floor_shade" width="80" height="80">
   <data encoding="base64" compression="zlib">
-   eJzt3FtqwzAQBVAtI7b3v8+21EOu1ULjNMSvc0A4RP4JQprxSHFrXM302W7zdYw2xXd1HaK/PrNfw9xqfKd2H7fb3KqfpWHl/ebCsX2Nd62F5gOsV/Gl4kq2sS3jUX/NHCTvy1xkir7pTb8JXiXzZzEG9qViDMe3dhw9v8HfKmc3XwA4or4GlbWlfs+r6lBj+1mzqjg4NjER+JZrx9q9RLgCtbbzyn28q61//93bMS/uZzEqN8994KEtz6eN3b0A7+LMGLClzLWzNtnXM9UjuLKs9efzBNvLc8J1Hji/q/HKMwi1rnFexhgA4PyyXlF5PgDbUi97TtWxjiBrba+sv/z2/6FH4rv4D/siL2eNfs9tbMu9uKHrAwCOp4/n9SwJz/DeNPYg3weQ7419dG3LvS0A2NoHrlcUsQ==
+   eJzt3FtqwzAQBVDtJ7b3v7y21EOu1ULjNMSvc0A4RP4JQprxSHFrXM302W7zdYw2xXd1HaK/PrNfw9xqfKd2H7fb3KqfpWHl/ebCsX2Nd62F5gOsV/Gl4kq2sS3jUX/NHCTvy1xkir7pTb8JXiXzZzEG9qViDMe3dhw9v8HfKmc3XwA4or4GlbWlfs+r6lBj+1mzqjg4NjER+JZrx9q9RLgCtbbzyn28q61//93bMS/uZzEqN8994KEtz6eN3b0A7+LMGLClzLWzNtnXM9UjuLKs9efzBNvLc8J1Hji/q/HKMwi1rnFexhgA4PyyXlF5PgDbUi97TtWxjiBrba+sv/z2/6FH4rv4D/siL2eNfs9tbMu9uKHrAwCOp4/n9SwJz/DeNPYg3weQ7419dG3LvS0A2NoHnIIkDg==
   </data>
  </layer>
  <layer name="wall" width="80" height="80">
   <data encoding="base64" compression="zlib">
-   eJztmw1uwyAMhXuFVbv/WadJnRYh29jYmOfEn1QpbZMAD/wTIK9XHd6fz9fnM36nfpO+P43INkfrN/ah1KfjOVlElvUOvJfnfif1+x4+FqL1W9Uhuh6Wsjz67bDfFU7q5yFav4r2i3KvXzz6aXOJMe5o84/rcRQo/q8Ko49s/XRwMQYlflQFzf9dfZfm+Wl2DvdfFCj22/HXd7/M/A9Zv1UdqubPT7Rf5OcPKcel/jsxj4ZsvxVAHn8VQPZ/FWj79THLyUdmcxPNP5QeKBpR8djyjMYdR66jIOuXUQ+vP6euR9EvI1Z528r5PwQy6uEtg9IfRT/N2LCuf43s0A/Ffmf1WF1DtJQxo6r/86zBastYvb6CflF0/uIvQ5MnSnnmSKX4gQhKvVH60QqKflH18MYYKyj9HlWPbP1Qxl+Gfpo5CWltgYs9CGTYL0pbd5ChH4qv2kGF+Ssrmr0i1PEKVNsintmuZNvvSnnI+p0Yf1aQ9+hmj78VLZD1W6nbbP1ltmdupbwVUOdfKtj833XSOqrUn1TuG5XrVrB5LVxbdrax9fMxtocb69wznpUTY2Fnn1H6rV6r4W76jWVayqJiMzd2M+YjpPihZRafZnuGuPOlNQEUovTLBGnOJyJ+VMnndhDh/+6Uj1jh6pKlH8I76B4Q/N/pd9A9tP/z0fr56PjhA8H/Wbmbfm2/+t8psvWrMP7a/+lA8X+WHLCK/UpzKtJ8ihXrXuIK+iGDZL8V9UOqM1JfakHSD6kuWpD6nFsjlubRT+93rNjnElx7ot7R0ZZXFc6eKP0idLybflR7Ru0ixyGS/4tAGg87bPhu+knt8Y5D6vwn6beDJ/i/O5W3G26/qLS/dLancPa9aZrn8gN9RSzI
+   eJzt2ksOwjAMRdFuAdT9r5UJSKgkLdVzEn/ukTph1DzZThqxbQAAALU8Vr8AptjfD+7ZDw8AAAAAANlwN4SVqD/Nc/ULBBcpP493k1H61+v9boT8PN+PR8jPM/LTRNo/PKL+NNnym73HZOvf2flRf/hGfhrygxXrb7Zss/6KdX7ZzhqzVas/a9QfosnU8721jFwj+WkyzcxeTiPXSH746OWUaUaNZJFf5awt9o/KvW4x/yrXXy+nWflFv1v0MP8i58f805Cfhv1D42H+RWaRH/37/+8tlfNbff6Lzsv8i3oGtFi72r+e/0t8pXLvWSA/TeW90wL1pyE/vyLvqx608iPHX60ZcMyOOuw7m6Fkd+3sDKTWYYXsOUNqOANpyA/ATC+i+gsE
+  </data>
+ </layer>
+ <layer name="meta" width="80" height="80">
+  <data encoding="base64" compression="zlib">
+   eJztl2mu6yAMRruv7H9f/VFVkRCDZz6DjxS9q76Y4QSM+Xzy8Bg/t2E1bw9/Gb6jZV9e/rxjNLR9zb7jamwe/iLjLPri7INerCUZ/aG0pWlvtz9pDkHyF/mM+peM25Ks9RDVX/te+ftBOWd767f8/ci+fyv/6dqr81fX3m5/CG3928t2f6O+h3x+IPrrxUX4s8rpXiD7ywBy/suA1XqP3jcoWM77Zn/c2np33s7AyB8Cu+5m3DFSftuBx3pva4nT/Xm3Wf54MeVv/s6q1r/V36pOmMU8zd+jPiRk9Tc6Q8vfizb/1f7VxVD9WdePmfxpz4//b5a1dzZ/q/zHbVNLJn+zGMr54QGyv9Wdq/y9RPizOD+oeTGaiP2LMlcPJHuu/L1kqJ+5ROaDVa22ikH1FxEziit/cX1R9sLp/rix3LNGOp/I2mbX+kPpQ4t2/XG+J/J6kOLZH+UcieozY38I/jKvdxR/0livGG3byP6i7h/U8XB+H72rmQ+SDy7lT4eVv0jKn47T/Un2PofT/VmNwas/SxD89dqbnRW3+LO4N5Q/fv2xeq/8ydqTjM2bqPxnWfeWPxlP8y8C5U8HSv2CfN+ZIcn91vd5blsZ/CGQuX5BoPyN+9Ts09v9Uch0/7B6PMY1+r+TmN3zJXfeWYzHt9oN1Z9lrXMSvTl514onscpVljnydn9cl+37t/nL3FcU0fM50V/0UxTFvXwBLxbHXA==
+  </data>
+ </layer>
+ <layer name="wall1" width="80" height="80">
+  <data encoding="base64" compression="zlib">
+   eJztmmluAyEMRnO15v6H6q9IlctisHGeBz+pmmYSlvnwAgyvVx5+/vy9xfXz/8rn2/B8Zm/9LOMaxduxrhP6RZbbgazfbt88n2mG5zN793u3vqz2561f+e936tPkF5mPevda9cgyXlDiX1Yo9pcVSvzLCsX+evFMGxO1cfNz9YIS/2r+Z6svUr8nzv+y2h8p/kVB108b52Vcj4Lsvxkg548MkP03A+T9gwzM9hxav+/N7W/Ub0RPPwIr70bk/ZG9yO8stHybkiMixtH6rK3yFPuLGEdrGy2tKPYX0Q+rrdDjH70Nsn4Z/Lfyhw2y/WXwX7L9ReWP1vxwNn8c7QPdZH8nuMn+TkAZd0o/VqGMe1b9KP2Oyr+jMzC775YJZFi/kcmw/iCTYf2xyiw+9L7bbes00f670x75jG60fjtakM+4fMN/I8pYyq2wo98sbvXeyezGMrJ+kc+zi0U/zbmYWdnR3smu/UVyMsaM9ItuM2N7vbE5OWay7lbMG63xrO150qs7csxW2qLFC4L/rrQl83Urj7dy+ik8/Ff6W8sH5bVXXuvLFLz0i4SkX68vK/plWIOcwiP+lf3p71t/6wFpz7H810ZG/Uj25zF/rvj3H/L8hWR/GfXLYH+n16QWnqbfzf7rsX67Of9mtL8M/jvbF5KfIyHpR/IFLaQ+k/qihdRnki9oIfWZ1BctpD6P3nNp7988f/bg5vzrwc3rDw9uXn94UP5ro/SzUf5ro+zPhmauuHo+w/sMVlEUz+EXGpqRlg==
   </data>
  </layer>
  <layer name="tree" width="80" height="80">
@@ -59,33 +83,17 @@
    eJzt2sEJACAIAECnaP9Re/Suj0FWdxOIYGoYAcDL2ukAAACAJ9k1oDY1CgAArLSwN2TIH9SkLnO8bQDM6A8AAAAAwC7+GwEABnNRjvwB/M3NKwAAAHCDDn1eAWE=
   </data>
  </layer>
- <layer name="steps" width="80" height="80">
-  <data encoding="base64" compression="zlib">
-   eJzt2cEJwCAQAEG7SP+d5hnwlyxIYmbgCnBBDnQMAAAAAAAA3uqYhnv0a/Rr9Gv0a/SD73J/G/0AAAAAAC7eSxv9Gv2anfrN/zc7nGkl/Rr9AHjC/mj0AwAAAAAA4O9OtjkGNA==
-  </data>
- </layer>
- <objectgroup name="knight_objects">
-  <object id="1" name="knight" x="205" y="269" width="42" height="43"/>
+ <objectgroup name="exit">
+  <object id="22" name="exit1" x="2210" y="1356" width="36" height="46"/>
  </objectgroup>
- <objectgroup name="Monster">
-  <object id="2" name="monster1" x="1723" y="181" width="37" height="37"/>
-  <object id="3" name="monster5" x="1759" y="364" width="32" height="38"/>
-  <object id="4" name="monster6" x="1562" y="515" width="34" height="38"/>
-  <object id="5" name="monster3" x="1919" y="84" width="32" height="35"/>
-  <object id="6" name="monster2" x="1453" y="120" width="32" height="41"/>
-  <object id="7" name="monster4" x="1638" y="305" width="42" height="44"/>
-  <object id="9" name="monster7" x="1024" y="855" width="30" height="37"/>
-  <object id="10" name="monster8" x="384" y="988" width="25" height="39"/>
-  <object id="11" name="monster9" x="596" y="1214" width="36" height="36"/>
-  <object id="12" name="monster10" x="491" y="986" width="28" height="35"/>
-  <object id="13" name="monster11" x="756" y="1041" width="31" height="36"/>
-  <object id="14" name="monster12" x="610" y="1324" width="32" height="32"/>
-  <object id="15" name="monster13" x="1277" y="2010" width="37" height="40"/>
-  <object id="16" name="monster14" x="1556" y="2025" width="27" height="31"/>
-  <object id="17" name="monster15" x="1655" y="2312" width="32" height="31"/>
-  <object id="18" name="monster16" x="1618" y="1800" width="32" height="34"/>
-  <object id="19" name="monster17" x="1841" y="1947" width="29" height="33"/>
-  <object id="20" name="monster18" x="1474" y="1694" width="42" height="46"/>
-  <object id="21" name="monster19" x="1545" y="2204" width="41" height="43"/>
+ <objectgroup name="objects">
+  <object id="1" name="PlayerPoint" x="205" y="269" width="42" height="43"/>
+ </objectgroup>
+ <objectgroup name="bullet">
+  <object id="2" name="remote_bullet1" x="1723" y="181" width="37" height="37"/>
+  <object id="3" name="remote_bullet4" x="1759" y="364" width="32" height="38"/>
+  <object id="4" name="remote_bullet5" x="1562" y="515" width="34" height="38"/>
+  <object id="5" name="remote_bullet2" x="1919" y="84" width="32" height="35"/>
+  <object id="7" name="remote_bullet3" x="1638" y="305" width="42" height="44"/>
  </objectgroup>
 </map>

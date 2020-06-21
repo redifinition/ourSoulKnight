@@ -7,9 +7,6 @@ ShotGun::ShotGun() {
 	_attackRadius = 350;
 	_bulletSpeed = 180;
 	_bulletType = SHORTREMOTE;
-
-	//ÎäÆ÷Î»ÖÃ
-	this->setAnchorPoint(Vec2(0.1, 0.1));
 }
 ShotGun::~ShotGun() {
 
@@ -32,7 +29,10 @@ bool ShotGun::init(const std::string& filename)
 	if (!Sprite::initWithFile(filename)) {
 		return false;
 	}
-	this->setScale(0.15);
+	//ÐÞÕýÍ¼Æ¬Ëõ·Å
+	this->setScale(0.14);
+	//ÎäÆ÷Î»ÖÃ
+	this->setAnchorPoint(Vec2(0.3, 0.5));
 	return true;
 }
 
